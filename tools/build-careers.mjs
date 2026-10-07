@@ -50,14 +50,20 @@ function readTxt(file) {
   const hdr = lines[0].split("\t");
   return lines.slice(1).map(l => { const c = l.split("\t"); return Object.fromEntries(hdr.map((h, j) => [h, c[j]])); });
 }
-function onet(name, required = true) {
-  for (const ext of [".txt", ".xlsx"]) {
+// O*NET renames files between releases (31.0 split "Skills" into Essential and Transferable
+// Skills, renamed "Interests" to "Career Interest Types"). Each table lists every name it has used;
+// all that exist are read and combined.
+function onet(names, required = true) {
+  names = [].concat(names);
+  const rows = [], used = [];
+  for (const name of names) for (const ext of [".txt", ".xlsx"]) {
     const f = path.join(DATA, "onet", name + ext);
-    if (fs.existsSync(f)) return ext === ".txt" ? readTxt(f) : readSheetFile(f, [/^O\*NET-SOC Code$/]);
+    if (!fs.existsSync(f)) continue;
+    for (const r of (ext === ".txt" ? readTxt(f) : readSheetFile(f, [/^O\*NET-SOC Code$/]))) rows.push(r);
+    used.push(name + ext); break;
   }
-  if (required) throw new Error(`Missing O*NET file: ${name}`);
-  log(`- Optional O*NET file not found: ${name}`);
-  return [];
+  if (!used.length) { if (required) throw new Error(`Missing O*NET file: ${names.join(" or ")}`); log(`- Optional O*NET file not found: ${names.join(" or ")}`); }
+  return rows;
 }
 const col = (row, re) => { for (const k in row) if (re.test(k)) return row[k]; return undefined; };
 const num = v => { if (v == null || v === "") return null; const n = Number(String(v).replace(/[,$\s]/g, "")); return Number.isFinite(n) ? n : null; };
@@ -146,7 +152,7 @@ for (const r of occData) {
   if (oc.endsWith(".00") || !onetTitle[soc]) { onetTitle[soc] = r.Title; onetDesc[soc] = r.Description; }
 }
 
-const interestRows = onet("Interests");
+const interestRows = onet(["Interests", "Career Interest Types"]);
 const RIASEC = { R: /^Realistic$/, I: /^Investigative$/, A: /^Artistic$/, S: /^Social$/, E: /^Enterprising$/, C: /^Conventional$/ };
 const interest = elements(interestRows, "OI", RIASEC); // 1–7
 
@@ -168,8 +174,9 @@ const act = elements(onet("Work Activities"), "IM", { // importance 1–5
   document: /^Documenting\/Recording Information$/,
   computers: /^Working with Computers$/,
 });
-const skillRows = onet("Skills");
-const skill = elements(skillRows, "LV", { // level 0–7
+const skillRows = onet(["Skills", "Essential Skills", "Transferable Skills"]);
+// Importance (1–5) rather than level: O*NET flags many skill levels as low-confidence ("suppress").
+const skill = elements(skillRows, "IM", {
   programming: /^Programming$/, writing: /^Writing$/, speaking: /^Speaking$/, math: /^Mathematics$/,
   science: /^Science$/, troubleshooting: /^Troubleshooting$/, money: /^Management of Financial Resources$/,
   persuasion: /^Persuasion$/, negotiation: /^Negotiation$/, instructing: /^Instructing$/,
@@ -193,14 +200,14 @@ const ctx = context({
   customers: /^Deal With External Customers/,
   contact: /^Contact With Others$/,
   freedom: /^Freedom to Make Decisions$/,
-  unstructured: /^Structured versus Unstructured Work$/,
+  unstructured: /^Structured versus Unstructured Work$|^Determine Tasks, Priorities and Goals$/,
   repeat: /^Importance of Repeating Same Tasks$/,
   time: /^Time Pressure$/,
   week: /^Duration of Typical Work Week$/,
-  outdoors: /^Outdoors, Exposed to Weather$/,
+  outdoors: /^Outdoors, Exposed to (All )?Weather/,
   proximity: /^Physical Proximity$/,
   publicSpeaking: /^Public Speaking$/,
-  conflict: /^Frequency of Conflict Situations$/,
+  conflict: /^(Frequency of )?Conflict Situations$/,
 });
 const knowledge = elements(onet("Knowledge"), "IM", {
   customer: /^Customer and Personal Service$/, sales: /^Sales and Marketing$/, accounting: /^Economics and Accounting$/,
@@ -219,16 +226,19 @@ for (const r of titleRows) {
   const shown = String(r["Shown in My Next Move"] || "").toUpperCase() === "Y";
   (reportedTitles[soc] ??= []).push({ t, shown });
 }
-const techRows = onet("Technology Skills", false);
+const techRows = onet(["Technology Skills", "Software Skills"], false);
 const tech = {};
 for (const r of techRows) {
   const soc = String(r["O*NET-SOC Code"]).slice(0, 7);
-  (tech[soc] ??= new Set()).add(String(r.Example || "") + " | " + String(r["Commodity Title"] || ""));
+  // Only tools employers list as in demand for this job (otherwise Excel and SQL show up everywhere).
+  const flag = r["In Demand"] ?? r["Hot Technology"];
+  if (String(flag || "").toUpperCase() !== "Y") continue;
+  (tech[soc] ??= new Set()).add(String(r["Workplace Example"] || r.Example || ""));
 }
 
 /* ---------------- raw features (0–1) for the 17 traits ---------------- */
 const im = (k, soc) => act[k]?.[soc] == null ? null : clamp((act[k][soc] - 1) / 4);
-const lv = (k, soc) => skill[k]?.[soc] == null ? null : clamp(skill[k][soc] / 7);
+const lv = (k, soc) => skill[k]?.[soc] == null ? null : clamp((skill[k][soc] - 1) / 4);
 const cx = (k, soc) => ctx[k]?.[soc] ?? null;
 const kn = (k, soc) => knowledge[k]?.[soc] == null ? null : clamp((knowledge[k][soc] - 1) / 4);
 const avg = (...xs) => { const v = xs.filter(x => x != null); return v.length ? mean(v) : null; };
@@ -265,6 +275,26 @@ function rawTraits(soc) {
     pu: avg(im("care", soc), ri("S", soc)),
   };
 }
+// Some occupations have little O*NET data (new or rare ones). Fill each gap with the average
+// of the most specific SOC group that has it (e.g. 29-1240 surgeons, then 29-12, then 29-).
+const RAW = {}, INT = {};
+const ALL_SOCS = Object.keys(oews);
+for (const soc of ALL_SOCS) { RAW[soc] = rawTraits(soc); INT[soc] = Object.fromEntries("RIASEC".split("").map(L => [L, interest[L]?.[soc] ?? null])); }
+const groupCache = {};
+function groupMean(table, key, soc) {
+  for (const n of [6, 5, 4, 3]) {
+    const pre = soc.slice(0, n), ck = `${key}|${pre}`;
+    if (!(ck in groupCache)) { const v = ALL_SOCS.filter(x => x !== soc && x.startsWith(pre)).map(x => table[x][key]).filter(x => x != null); groupCache[ck] = v.length ? mean(v) : null; }
+    if (groupCache[ck] != null) return groupCache[ck];
+  }
+  return null;
+}
+function filled(soc) {
+  const raw = { ...RAW[soc] }, ints = { ...INT[soc] }; let gaps = 0;
+  for (const t in raw) if (raw[t] == null) { raw[t] = groupMean(RAW, t, soc); gaps++; }
+  for (const L in ints) if (ints[L] == null) { ints[L] = groupMean(INT, L, soc); gaps++; }
+  return { raw, ints, gaps };
+}
 const TRAITS = ["c", "tr", "s", "cu", "l", "au", "v", "p", "da", "th", "rp", "h", "o", "w", "pr", "en", "pu"];
 const RULE_TRAITS = new Set(["tr", "rp"]); // already on the app's scale
 
@@ -297,10 +327,10 @@ for (const t of TRAITS) {
 }
 
 /* ---------------- resume skills (SK ids in index.html) ---------------- */
-const TECH = { sql: /\bsql\b|mysql|postgres|oracle database|database management/i, excel: /microsoft excel|spreadsheet/i, bi: /tableau|power bi|qlik|looker/i,
-  python: /\bpython\b/i, cloud: /amazon web services|\baws\b|azure|google cloud/i, linux: /\blinux\b|unix/i, crm: /salesforce|customer relationship management|crm software/i,
-  design: /adobe photoshop|adobe illustrator|indesign|graphics or photo imaging/i, cad: /autocad|solidworks|revit|computer aided design/i, git: /\bgit\b|github/i,
-  ml: /tensorflow|pytorch|machine learning/i, media: /video creation|adobe premiere|final cut|after effects/i };
+const TECH = { sql: /\bsql\b|mysql|postgresql|oracle database|microsoft sql server/i, excel: /microsoft excel/i, bi: /tableau|power bi|qlik|looker/i,
+  python: /\bpython\b/i, cloud: /amazon web services|\baws\b|microsoft azure|google cloud/i, linux: /\blinux\b|\bunix\b/i, crm: /salesforce|hubspot/i,
+  design: /adobe photoshop|adobe illustrator|adobe indesign|figma/i, cad: /autocad|solidworks|revit/i, git: /\bgit\b|github/i,
+  ml: /tensorflow|pytorch|scikit/i, media: /adobe premiere|final cut|adobe after effects|avid media/i };
 function skillsFor(soc) {
   const cand = [];
   const add = (id, score) => { if (score != null) cand.push([id, score]); };
@@ -322,7 +352,6 @@ function skillsFor(soc) {
   add("teaching", kn("education", soc));
   add("handson", avg(kn("mechanical", soc), im("repair", soc)));
   add("engineering", kn("engineering", soc));
-  add("design", kn("design", soc));
   add("counseling", kn("therapy", soc));
   add("safety", kn("safety", soc));
   add("hr", kn("hr", soc));
@@ -333,7 +362,7 @@ function skillsFor(soc) {
   add("pm", avg(im("coord", soc), kn("admin2", soc)));
   add("dataviz", im("analyze", soc) != null ? im("analyze", soc) - .15 : null);
   const t = [...(tech[soc] || [])].join(" ");
-  for (const [id, re] of Object.entries(TECH)) if (re.test(t)) cand.push([id, .8]);
+  for (const [id, re] of Object.entries(TECH)) if (re.test(t)) cand.push([id, id === "excel" ? .56 : .7]);
   const best = {}; for (const [id, s] of cand) if (s != null && (best[id] == null || s > best[id])) best[id] = s;
   return Object.entries(best).filter(([, s]) => s >= .55).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([id]) => id);
 }
@@ -371,10 +400,12 @@ const handSocs = new Set(HAND.flatMap(h => h.soc || []));
 const careers = [], skipped = [];
 for (const soc of Object.keys(oews).sort()) {
   const o = oews[soc];
-  const code = TRAITS.length && ["R", "I", "A", "S", "E", "C"].filter(L => interest[L]?.[soc] != null);
-  if (code.length < 6 || ctx.repeat?.[soc] == null) { skipped.push(`${soc} ${o.title}`); continue; }
-  const r = code.sort((a, b) => interest[b][soc] - interest[a][soc]).slice(0, 3).join("");
-  const raw = rawTraits(soc), d = {};
+  const { raw, ints, gaps } = filled(soc);
+  // "All Other" catch-alls without their own O*NET profile are too vague to fingerprint.
+  if (/all other/i.test(o.title) && (INT[soc].R == null || RAW[soc].v == null)) { skipped.push(`${soc} ${o.title}`); continue; }
+  if (Object.values(ints).some(v => v == null)) { skipped.push(`${soc} ${o.title} (no interest data)`); continue; }
+  const r = "RIASEC".split("").sort((a, b) => ints[b] - ints[a]).slice(0, 3).join("");
+  const d = {};
   for (const t of TRAITS) { const x = raw[t]; if (x == null) continue; d[t] = r2(clamp(fit[t].a + fit[t].b * x)); if (!d[t]) delete d[t]; }
   const e = ep[soc];
   const z = jobZone[soc] != null ? Math.round(jobZone[soc]) : null;
@@ -392,7 +423,7 @@ for (const soc of Object.keys(oews).sort()) {
     step: stepText(soc, e),
     sk: skillsFor(soc), ind: "",
     desc: onetDesc[soc] || "",
-    gen: 1,
+    gen: 1, ...(gaps >= 6 ? { est: 1 } : {}),
     bls: {
       soc, title: o.title, year: OEWS_YEAR,
       pay: { p10: fmtK(o.p.p10), p25: fmtK(o.p.p25), med: fmtK(o.p.med), p75: fmtK(o.p.p75), p90: fmtK(o.p.p90) },
@@ -417,7 +448,8 @@ fs.writeFileSync(path.join(ROOT, "careers-bls.js"), header + careers.map(c => " 
 
 log(`\n## Result\n- ${careers.length} careers written to careers-bls.js`);
 log(`- ${careers.filter(c => handSocs.has(c.bls.soc)).length} of them fold into hand-tuned careers (same SOC code)`);
-log(`- ${skipped.length} occupations skipped (no O*NET interest or work-context data, or incomplete wages)`);
+log(`- ${careers.filter(c => c.est).length} have thin O*NET data, so much of their fingerprint is estimated from similar jobs (marked est)`);
+log(`- ${skipped.length} occupations skipped (vague "All Other" groups without their own data, or incomplete wages)`);
 if (skipped.length) log("\n<details><summary>Skipped occupations</summary>\n\n" + skipped.map(s => "- " + s).join("\n") + "\n</details>");
 const top = [...careers].sort((a, b) => b.pay[1] - a.pay[1]).slice(0, 15);
 log("\n## Highest median pay (spot check)\n" + top.map(c => `- ${c.n}: median ${c.bls.pay.med}, code ${c.r}, edu ${c.edu}`).join("\n"));
