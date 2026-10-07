@@ -36,9 +36,11 @@ jobs:
         # Keeps the exact files each build used, so results can be checked or rebuilt later.
         run: |
           set -e
-          keep="Occupation Data|Interests|Work Context|Work Activities|Skills|Knowledge|Job Zones|Sample of Reported Titles|Technology Skills|VERSION"
+          ls -la data/onet > /tmp/snap-list.txt
           mkdir -p /tmp/snap/onet /tmp/snap/oews
-          for f in data/onet/*; do b=$(basename "$f"); if echo "${b%.*}" | grep -qxE "$keep"; then cp "$f" /tmp/snap/onet/; fi; done
+          # Everything except files too big for GitHub (100 MB limit).
+          find data/onet -maxdepth 1 -type f -size -90M -exec cp {} /tmp/snap/onet/ \;
+          cp /tmp/snap-list.txt /tmp/snap/onet/ALL-FILES.txt
           cp data/oews/* /tmp/snap/oews/ 2>/dev/null || true
           [ -f data/ep-occupation.xlsx ] && cp data/ep-occupation.xlsx /tmp/snap/ || true
           cd /tmp/snap
