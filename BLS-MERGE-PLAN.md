@@ -26,7 +26,10 @@ This file saves progress so work can resume after a break. It lives only on the
 
 ## Steps
 - [ ] 1. Research: BLS top 100 by median pay, with pay percentiles, education,
-       growth, and OOH links
+       growth, and OOH links. (The deep research run did NOT start on Oct 7 —
+       not enough usage left. Gather it directly from bls.gov: OEWS May 2024
+       national data and the OOH pages. Save the result as `data/bls-top100.csv`
+       on this branch and commit before writing any fingerprints.)
 - [ ] 2. Move the existing `C` list out of `index.html` into `careers.js`
 - [ ] 3. Map BLS occupations to existing careers (merge overlaps)
 - [ ] 4. Write fingerprints for the new careers (batches of ~20, commit each batch)
