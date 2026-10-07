@@ -4,7 +4,7 @@
 write-up at [bixjohnson.com/projects/career-combine](https://bixjohnson.com/projects/career-combine)
 
 A free, private career assessment that runs entirely in the browser. You drop in
-your résumé and answer a few rounds of questions about what you enjoy and how you
+your resume and answer a few rounds of questions about what you enjoy and how you
 like to work. You get back a scouting report: 46 careers ranked by fit, the reasons
 behind each one, red flags, and stepping-stone jobs you could land now.
 
@@ -15,7 +15,7 @@ drills and the results come from your answers.
 
 | Section | Questions | What it measures |
 | --- | --- | --- |
-| Check-in | Résumé + basics | Skills found on your résumé, experience, education, and the field you work in |
+| Check-in | Resume + basics | Skills found on your resume, experience, education, and the field you work in |
 | Interests | 30 activities, each rated twice | How much you'd **enjoy** each kind of work and how **good** you are at it now (Holland RIASEC) |
 | Personality | 30 statements | Big Five traits, using public-domain IPIP items |
 | Values | Ranking + 2 sliders | What matters most, plus your pay floor and 5-year pay target |
@@ -40,18 +40,18 @@ current field. Rating things outside your world is how the tool rules careers ou
 - **Your profile:** interest code, Big Five, an "enjoy vs. good at" breakdown,
   work-style meters, and your values.
 - **Stepping-stone jobs:** roles you could likely get hired for soon with skills
-  already on your résumé, and where each one leads.
-- **AI coach summary:** a copy-paste prompt with every answer, your résumé, and
+  already on your resume, and where each one leads.
+- **AI coach summary:** a copy-paste prompt with every answer, your resume, and
   instructions, for Claude, ChatGPT, or any AI assistant to go deeper.
 
 ## Privacy
 
-Nothing leaves the browser. There's no server, account, or tracking. The résumé
+Nothing leaves the browser. There's no server, account, or tracking. The resume
 is read on the visitor's device, and answers are saved in that browser's
 `localStorage` so people can stop and come back. A backup/restore option on the
 start page moves answers between devices.
 
-The only outside requests are Google Fonts, plus two résumé-reading libraries
+The only outside requests are Google Fonts, plus two resume-reading libraries
 loaded from jsDelivr when someone uploads a file:
 [pdf.js](https://github.com/mozilla/pdf.js) for PDFs and
 [mammoth](https://github.com/mwilliamson/mammoth.js) for Word files.
@@ -100,13 +100,28 @@ A career's fit score blends:
   avoid (coding, selling, commission, travel, hours) than when it offers less.
 - **Pay match:** typical pay against your floor and 5-year target, weighted by
   how high you ranked pay.
-- **Smaller boosts:** abilities you rated high, skills on your résumé, and your
+- **Smaller boosts:** abilities you rated high, skills on your resume, and your
   field-question answers.
 
 Dealbreakers subtract points and show up as "Watch out for" flags, for example
 heavy selling when you said you'd avoid it, or a degree you said you won't get.
-Skipped questions are ignored rather than counted as a middle answer, and a flag
-only fires if you actually answered the question behind it.
+
+**Nothing is presumed.** Only real answers count:
+
+- Unanswered questions add nothing. They aren't filled in with a "middle" answer.
+- Pay only matters once you've set your pay numbers.
+- Picking a field doesn't push careers up or down by itself. Your answers to the
+  field questions do, and they count extra because they're things you said directly
+  (like "I'd rather avoid blood completely").
+- No ranking is shown until you've answered at least 20 questions, including some
+  interests or work-style questions.
+- Early scores are pulled toward the middle and grow to full strength as you
+  answer more, so a handful of answers can't look like a sure thing. This changes
+  the numbers, not the order.
+
+**Live matches.** Once there's enough to go on, a bar at the bottom of every
+question page shows your current top matches. It updates after each answer, with
+arrows when a career moves up or down. Tap **Top 5** to expand it.
 
 ## Editing it
 
@@ -126,7 +141,7 @@ data you can edit without touching the logic.
 | Open-ended questions | `OPEN` |
 | Careers | `C` |
 | Stepping-stone jobs | `STEPS` |
-| Skills detected from a résumé | `SK` |
+| Skills detected from a resume | `SK` |
 | How much each trait matters | `SPEC` |
 
 Answer options carry their scoring inline. In `["Love it — run with it",{au:1,v:.9}]`,

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Career Combine</title>
-<meta name="description" content="A free, private career assessment. Upload your résumé, run the drills, and get a scouting report ranking 46 careers by how well they fit you.">
+<meta name="description" content="A free, private career assessment. Upload your resume, run the drills, and get a scouting report ranking 46 careers by how well they fit you.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
@@ -100,7 +100,7 @@ label.f{display:block;font-weight:600;margin:14px 0 6px}
 .intro-list{display:grid;gap:8px;padding:0;margin:12px 0;list-style:none}
 .intro-list li{display:grid;grid-template-columns:auto 1fr;gap:10px}
 .intro-list b{font-family:var(--f-mono);font-weight:500;color:var(--accent);min-width:3ch}
-/* résumé */
+/* resume */
 .drop{border:2px dashed var(--line);border-radius:10px;padding:20px;text-align:center;background:var(--chip);cursor:pointer}
 .drop.over,.drop:hover{border-color:var(--navy)}
 .drop strong{display:block}
@@ -113,6 +113,32 @@ label.f{display:block;font-weight:600;margin:14px 0 6px}
 .skchip.off::before{content:""}
 .addrow{display:flex;gap:8px;margin-top:10px}
 .addrow input{flex:1}
+/* live matches bar */
+.live{position:fixed;left:0;right:0;bottom:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(20,32,43,.08);padding-bottom:env(safe-area-inset-bottom,0px)}
+.live-in{max-width:780px;margin:0 auto;padding:10px 16px}
+.live-row{display:flex;align-items:center;gap:10px;min-height:36px}
+.live-lab{font:500 .7rem var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--accent);white-space:nowrap}
+.live-top{display:flex;gap:6px;flex:1;min-width:0;overflow:hidden}
+.lm{display:inline-flex;align-items:center;gap:6px;white-space:nowrap;font-size:.85rem;border:1px solid var(--line);background:var(--chip);border-radius:999px;padding:3px 10px;min-width:0}
+.lm b{font-family:var(--f-mono);font-weight:500;color:var(--navy)}
+.lm .nm{overflow:hidden;text-overflow:ellipsis}
+.mv{font:500 .72rem var(--f-mono)}
+.mv.up{color:var(--good)}.mv.dn{color:var(--warn)}
+.lm.flash{animation:flash 1.2s ease}
+@keyframes flash{0%{border-color:var(--good);background:var(--navy-soft)}100%{}}
+.live-tog{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:6px 10px;font:600 .8rem var(--f-body);cursor:pointer;white-space:nowrap}
+.live-list{list-style:none;margin:8px 0 2px;padding:0;display:grid;gap:4px}
+.live-list li{display:grid;grid-template-columns:1.6em 1fr auto auto;gap:8px;align-items:center;font-size:.9rem;padding:4px 0;border-top:1px solid var(--line)}
+.live-list .n{font-family:var(--f-mono);color:var(--muted)}
+.live-list .f{font-family:var(--f-mono);color:var(--navy)}
+.live-note{font-size:.8rem;color:var(--muted);margin:6px 0 0}
+.live-bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.live-bar i{display:block;height:100%;background:var(--accent)}
+body.has-live{padding-bottom:84px}
+body.has-live.live-open{padding-bottom:240px}
+@media (max-width:600px){.live-top .lm:nth-child(n+2){display:none}}
+@media (prefers-reduced-motion:reduce){.lm.flash{animation:none}}
+@media print{.live{display:none!important}}
 /* results */
 .top3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
 .top3 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
@@ -141,6 +167,7 @@ label.f{display:block;font-weight:600;margin:14px 0 6px}
 .meter .tr{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
 .meter .tr i{display:block;height:100%;background:var(--navy)}
 .meter .v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;color:var(--muted)}
+.meter.na{opacity:.55}
 .meter .lab small{display:block;color:var(--muted);font-size:.75rem;line-height:1.2}
 .code{font-family:var(--f-display);font-size:2.6rem;letter-spacing:.12em;color:var(--accent);line-height:1}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -172,7 +199,8 @@ footer a{color:var(--navy)}
   </div>
 </header>
 <main class="wrap" id="app"></main>
-<footer><a href="https://bixjohnson.com/projects.html">← More projects by Bix Johnson</a> · <a href="https://github.com/bjohnso88/career-combine" target="_blank" rel="noopener noreferrer">Source on GitHub</a> · Your answers and résumé never leave this browser.</footer>
+<footer><a href="https://bixjohnson.com/projects.html">← More projects by Bix Johnson</a> · <a href="https://github.com/bjohnso88/career-combine" target="_blank" rel="noopener noreferrer">Source on GitHub</a> · Your answers and resume never leave this browser.</footer>
+<aside class="live" id="live" aria-label="Live matches" hidden></aside>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
 <script>
@@ -357,7 +385,7 @@ const SJT=[
   ["Pull a small team together",{l:.9}]]}
 ].map(o=>Object.assign({t:"sjt"},o));
 
-/* Field wording for scenarios. Picked from the résumé + job title, or chosen on the Check-in page. */
+/* Field wording for scenarios. Picked from the resume + job title, or chosen on the Check-in page. */
 const FIELDS={
  general:{label:"General / not sure",cust:"customer",brk:"Something breaks five minutes before an important meeting (a projector, a file, a machine)",boss:"boss",init:"a big new initiative",vend:"vendors",client:"A client",deliv:"work your team just delivered",grow:"Your organization needs to grow",clients:"customers",crunch:"It's the last week of the quarter and your team is behind its goal",event:"launch or event",clash:"two teams",pres:"Mid-presentation",mess:"a messy spreadsheet with 2,000 rows"},
  office:{label:"Office, admin & operations",cust:"coworker",brk:"The shared drive and printer go down right before a big meeting",boss:"manager",init:"a new scheduling or records system",vend:"office vendors",client:"Another department",deliv:"a project your team just wrapped up",grow:"Your company needs to grow",clients:"customers",crunch:"Month-end is two days away and your team is behind",event:"company event",clash:"two departments",pres:"Mid-meeting",mess:"a messy spreadsheet with 2,000 rows"},
@@ -427,7 +455,7 @@ const FIELDQ={
    ["hc1","How do you feel about blood, needles, and bodily fluids?",[
      ["Doesn't faze me",{th:.8},{bed:1,acute:1.5,spec:1},{nurse:.03,fire:.03,allied:.02}],
      ["I can handle it in small doses",{},{bed:.5,spec:.5,ment:.5},{}],
-     ["I'd rather avoid it completely",{th:.3},{adm:1.5,hit:1.5,ment:1,comm:1},{nurse:-.05,allied:-.04,fire:-.04,hadmin:.03}]]],
+     ["I'd rather avoid it completely",{th:.3},{adm:1.5,hit:1.5,ment:1,comm:1},{nurse:-.1,allied:-.08,fire:-.1,hadmin:.04}]]],
    ["hc2","Which pace sounds best?",[
      ["Emergency-level: unpredictable, adrenaline",{p:1,v:1,h:.8},{acute:2},{fire:.03}],
      ["Busy but predictable (a clinic or hospital floor)",{p:.6},{bed:1,spec:1},{}],
@@ -435,7 +463,7 @@ const FIELDQ={
    ["hc3","Twelve-hour shifts, nights, and weekends are…",[
      ["Fine — three long days a week sounds great",{h:.8},{bed:1,acute:1},{nurse:.02}],
      ["OK early on, not forever",{h:.5},{spec:.5,bed:.5},{}],
-     ["A dealbreaker; I want weekday hours",{h:.15},{adm:1,hit:1,comm:1,ment:.5},{nurse:-.03,fire:-.03}]]],
+     ["A dealbreaker; I want weekday hours",{h:.15},{adm:1,hit:1,comm:1,ment:.5},{nurse:-.06,fire:-.06,hadmin:.02}]]],
    ["hc4","When a patient dies or gets terrible news, you…",[
      ["Feel it, but stay steady and keep caring for others",{p:.8,pu:.8},{acute:1,bed:1},{}],
      ["Carry it home with you for a while",{},{adm:.5,hit:.5,comm:.5,spec:.3},{}],
@@ -694,7 +722,7 @@ const OPEN=[
 ].map(([id,text,ph])=>({t:"open",id,text,ph}));
 
 const PAGES=[
- {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your résumé and a few basics. The résumé is read inside your browser only. It's used to spot skills you already have, which powers the \"stepping-stone jobs\" in your results.",items:[],custom:"checkin"},
+ {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your resume and a few basics. The resume is read inside your browser only. It's used to spot skills you already have, which powers the \"stepping-stone jobs\" in your results.",items:[],custom:"checkin"},
  {id:"int1",title:"Interests, part 1",short:"Interests 1",lede:"Rate each activity twice: how much you'd enjoy it as part of a job, and how good you are at it today. These cover every kind of work on purpose, not just your field. If something isn't your world, a quick \"Hate it\" is a useful answer: it's how the combine rules careers out.",items:lik(RI.slice(0,15),"enjoy")},
  {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. If you've never tried something, rate your ability as your best guess. Activities outside your field are there on purpose.",items:lik(RI.slice(15),"enjoy")},
  {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"How accurately does each statement describe you as you generally are now, not as you wish to be? Compare yourself to people your age.",items:lik(B5.slice(0,15),"agree")},
@@ -712,7 +740,7 @@ const PAGES=[
 function allItems(){return PAGES.flatMap(p=>p.items)}
 
 /* ============================================================
-   SKILLS detected from a résumé: id: [label, patterns ("*" = any word ending)]
+   SKILLS detected from a resume: id: [label, patterns ("*" = any word ending)]
    ============================================================ */
 const SK={
   sql:['SQL / databases','sql|mysql|postgres*|sql server|bigquery|snowflake|database*'],
@@ -883,7 +911,7 @@ const YEARS={"0.5":"Under 1 year","2":"1–3 years","5":"3–7 years","10":"7–
 
 const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
 const mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:null;
-const pct=x=>Math.round(x*100);
+const pct=x=>x==null?"–":Math.round(x*100);
 
 function mySkills(){
   const p=state.profile;
@@ -913,16 +941,20 @@ function compute(){
     else if(it.t==="sjt"||it.t==="mc")addObj(it.opts[val]&&it.opts[val][1]);
     else if(it.t==="sl"&&it.ev)it.ev(Number(val),add);
   }
+  // Only real answers count. Areas nobody answered stay empty (null) instead of
+  // being filled in with a middle value, so nothing is presumed.
   const R={},B={},AB={};
-  for(const k in ri)R[k]=mean(ri[k])??.5;
+  const riN=Object.values(ri).reduce((s,a)=>s+a.length,0);
+  for(const k in ri)R[k]=mean(ri[k]);
   const abN=Object.values(ab).reduce((s,a)=>s+a.length,0);
-  for(const k in ab)AB[k]=mean(ab[k])??.5;
-  for(const k in b5)B[k]=mean(b5[k])??.5;
-  const stab=1-B.N;
-  // Interests and personality feed the work-style dimensions with modest weights
-  add("th",R.R,1);add("o",R.R,.4);add("da",R.I,.6);add("w",R.A,.5);add("pr",R.A,.3);
-  add("cu",R.S,1);add("pr",R.S,.3);add("pu",R.S,.6);add("s",R.E,1);add("l",R.E,.6);add("en",R.E,.4);add("da",R.C,.5);
-  add("cu",B.E,.6);add("pr",B.E,.6);add("s",B.E,.4);add("l",B.E,.3);add("p",stab,.7);add("v",B.O,.5);add("au",B.O,.3);add("pu",B.A,.3);
+  for(const k in ab)AB[k]=mean(ab[k]);
+  const b5N=Object.values(b5).reduce((s,a)=>s+a.length,0);
+  for(const k in b5)B[k]=mean(b5[k]);
+  const feed=(k,v,w)=>{if(v!=null)add(k,v,w)};
+  // Interests and personality feed the work-style traits with modest weights
+  feed("th",R.R,1);feed("o",R.R,.4);feed("da",R.I,.6);feed("w",R.A,.5);feed("pr",R.A,.3);
+  feed("cu",R.S,1);feed("pr",R.S,.3);feed("pu",R.S,.6);feed("s",R.E,1);feed("l",R.E,.6);feed("en",R.E,.4);feed("da",R.C,.5);
+  feed("cu",B.E,.6);feed("pr",B.E,.6);feed("s",B.E,.4);feed("l",B.E,.3);feed("p",B.N==null?null:1-B.N,.7);feed("v",B.O,.5);feed("au",B.O,.3);feed("pu",B.A,.3);
   // Values ranking
   const order=A.rank_values;
   if(Array.isArray(order)){
@@ -938,12 +970,16 @@ function compute(){
   }
   const boost={};
   for(const it of fieldItems()){const v=A[it.id];if(v==null)continue;for(const [c,w] of Object.entries(it.opts[v][3]||{}))boost[c]=(boost[c]||0)+w}
-  const minSet=A.s_minpay!=null, minPay=minSet?Number(A.s_minpay):50, target=A.s_target!=null?Number(A.s_target):90;
+  const minSet=A.s_minpay!=null, targetSet=A.s_target!=null;
+  const minPay=minSet?Number(A.s_minpay):null, target=targetSet?Number(A.s_target):null;
   const pr=state.profile, curEdu=pr.edu===""||pr.edu==null?null:Number(pr.edu);
   const sch=A.s_school!=null?Number(A.s_school):null;
   let allowEdu=null;
   if(curEdu!=null&&sch!=null){ allowEdu = sch<=1 ? curEdu : sch<=3 ? Math.max(curEdu,1) : 3; }
-  return {R,B,D,skip,AB,abN,gaps,minPay,minSet,target,curEdu,allowEdu,boost,skills:mySkills(),answered,total:allItems().filter(i=>i.t!=="open").length};
+  const nDims=Object.keys(DIMS).filter(k=>!skip.has(k)).length;
+  // Confidence grows with answers: early scores stay close to the middle so a few answers can't look like a sure thing.
+  const totalQ=allItems().filter(i=>i.t!=="open").length, conf=Math.min(1,.35+.65*answered/(totalQ*.75));
+  return {R,B,D,skip,nDims,conf,riN,b5N,AB,abN,gaps,minPay,minSet,target,targetSet,curEdu,allowEdu,boost,skills:mySkills(),answered,total:allItems().filter(i=>i.t!=="open").length};
 }
 
 function riVec(code){const v={R:0,I:0,A:0,S:0,E:0,C:0};[3,2,1].forEach((w,i)=>{if(code[i])v[code[i]]=w});return v}
@@ -960,7 +996,10 @@ function industryMatch(car){
 }
 
 function scoreCareer(car,P){
-  const U=P.D, interest=(cosineCentered(P.R,riVec(car.r))+1)/2;
+  const U=P.D;
+  // Interest match needs a few interest answers; areas not rated yet sit at the average of the ones that were.
+  let interest=null;
+  if(P.riN>=6){const vals=Object.values(P.R).filter(v=>v!=null), avg=mean(vals), Rf={};for(const k in P.R)Rf[k]=P.R[k]??avg;interest=(cosineCentered(Rf,riVec(car.r))+1)/2}
   let pen=0,wsum=0; const parts=[];
   const spec=Object.assign({},SPEC,{en:[.3+.9*(car.d.en||0),1,1]});
   for(const k in spec){
@@ -969,13 +1008,19 @@ function scoreCareer(car,P){
     const p=w*(diff>0?diff*ov:-diff*un);
     pen+=p; wsum+=w; parts.push({k,cd,ud,p,w,diff});
   }
-  const dimSim=wsum?1-pen/wsum:.7;
-  const mid=car.pay[1], payFit=clamp(.4*Math.min(1,car.pay[0]/P.minPay)+.6*Math.min(1,mid/P.target));
-  const wp=.1+.25*U.pay;
-  const hasAb=P.abN>=6, ability=hasAb?(cosineCentered(P.AB,riVec(car.r))+1)/2:null, wa=hasAb?.12:0;
+  const dimSim=wsum?1-pen/wsum:null;
+  // Pay only counts once you've told us your numbers.
+  let payFit=null;
+  if(P.minSet||P.targetSet){const a=P.minSet?Math.min(1,car.pay[0]/P.minPay):null, b=P.targetSet?Math.min(1,car.pay[1]/P.target):null;
+    payFit=clamp(a!=null&&b!=null?.4*a+.6*b:(a??b))}
+  const mid=car.pay[1];
+  let ability=null; if(P.abN>=6){const vals=Object.values(P.AB).filter(v=>v!=null),avg=mean(vals),Af={};for(const k in P.AB)Af[k]=P.AB[k]??avg;ability=(cosineCentered(Af,riVec(car.r))+1)/2}
   const hit=car.sk.filter(s=>P.skills.has(s)), hasSk=P.skills.size>=3;
-  const skillFit=hasSk?clamp(hit.length/Math.min(3,car.sk.length)):null, ws=hasSk?.1:0;
-  let total=(.33*interest+wa*(ability||0)+ws*(skillFit||0)+.55*dimSim+wp*payFit)/(.88+wa+ws+wp);
+  const skillFit=hasSk?clamp(hit.length/Math.min(3,car.sk.length)):null;
+  // Blend only the parts we have evidence for. Work style counts more as more traits get answered.
+  const comp=[[interest,.33],[ability,.12],[skillFit,.1],[dimSim,.55*Math.min(1,P.nDims/8)],[payFit,.1+.25*U.pay]].filter(([v,w])=>v!=null&&w>0);
+  const cw=comp.reduce((a,[,w])=>a+w,0);
+  let total=cw?comp.reduce((a,[v,w])=>a+v*w,0)/cw:.5;
   const flags=[];
   if(car.d.c>=.55&&U.c<=.35){total-=.08;flags.push("Needs regular coding, more than you said you want")}
   if(car.d.s>=.7&&U.s<=.3){total-=.08;flags.push("Heavy selling, which you said you'd rather avoid")}
@@ -987,23 +1032,25 @@ function scoreCareer(car,P){
   if(car.ease==="Hard"&&U.pat<.35){total-=.03;flags.push("Hard to break into; expect a multi-year path")}
   if(P.allowEdu!=null&&car.edu>P.allowEdu){total-=.05*(car.edu-P.allowEdu);flags.push("Usually needs "+EDU_NEED[car.edu]+", more school than you said you'd take on")}
   const ind=industryMatch(car); if(ind)total+=.02;
-  const fb=clamp(P.boost[car.id]||0,-.08,.08); total+=fb;
-  if(fb<=-.03)flags.push("Clashes with what you said about "+FIELDQ[curField()].name);
+  // Field answers are things you told us directly, so they move the ranking more than general traits.
+  const fb=clamp(1.6*(P.boost[car.id]||0),-.2,.15); total+=fb;
+  if(fb<=-.05)flags.push("Clashes with what you said about "+FIELDQ[curField()].name);
   // reasons
   const pros=parts.filter(x=>x.cd>=.6&&x.ud>=.6).sort((a,b)=>b.w*Math.min(b.cd,b.ud)-a.w*Math.min(a.cd,a.ud)).slice(0,2)
     .map(x=>"You want "+DIMS[x.k]+", and this role is heavy on it.");
   const lows=parts.filter(x=>["c","s","rp","h","tr"].includes(x.k)&&x.cd<=.25&&x.ud<=.3).slice(0,1)
     .map(x=>"Light on "+DIMS[x.k]+", which suits you.");
-  const top2=Object.entries(P.R).sort((a,b)=>b[1]-a[1]).slice(0,2).map(e=>e[0]);
+  const top2=P.riN>=6?Object.entries(P.R).filter(e=>e[1]!=null).sort((a,b)=>b[1]-a[1]).slice(0,2).map(e=>e[0]):[];
   const ints=top2.includes(car.r[0])?["Matches your strongest interest area: "+RNAME[car.r[0]]+" ("+RDESC[car.r[0]]+")."]:[];
-  const topAb=Object.entries(P.AB).sort((a,b)=>b[1]-a[1])[0][0];
-  const abr=hasAb&&car.r[0]===topAb&&P.AB[topAb]>=.6?["Plays to what you're already good at: "+RNAME[topAb].toLowerCase()+" work, so it should be quicker to break in."]:[];
-  const skr=hit.length?["Your résumé already shows "+hit.slice(0,3).map(s=>SK[s][0]).join(", ")+"."]:[];
-  const payr=payFit>=.9?["Pay lines up: about $"+mid+"k a few years in, against your $"+P.target+"k five-year target."]:[];
+  const topAb=(Object.entries(P.AB).filter(e=>e[1]!=null).sort((a,b)=>b[1]-a[1])[0]||[null])[0];
+  const abr=ability!=null&&topAb&&car.r[0]===topAb&&P.AB[topAb]>=.6?["Plays to what you're already good at: "+RNAME[topAb].toLowerCase()+" work, so it should be quicker to break in."]:[];
+  const skr=hit.length?["Your resume already shows "+hit.slice(0,3).map(s=>SK[s][0]).join(", ")+"."]:[];
+  const payr=payFit!=null&&payFit>=.9?["Pay lines up: about $"+mid+"k a few years in, against your $"+P.target+"k five-year target."]:[];
   const cons=parts.filter(x=>x.p>=.18*x.w&&x.p>.08).sort((a,b)=>b.p-a.p).slice(0,2)
     .map(x=>x.diff>0?"Asks for more "+DIMS[x.k]+" than you want.":"Less "+DIMS[x.k]+" than you'd like.");
   const gapsSk=car.sk.filter(s=>!P.skills.has(s));
-  return {car,fit:Math.round(clamp(total)*100),interest,ability,skillFit,dimSim,payFit,ind,hit,gapsSk,why:[...(fb>=.03?["Lines up with what you said about "+FIELDQ[curField()].name+"."]:[]),...ints,...abr,...skr,...pros,...lows,...payr].slice(0,4),cons,flags};
+  const shown=.5+(clamp(total)-.5)*P.conf;
+  return {car,fit:Math.round(clamp(shown)*100),interest,ability,skillFit,dimSim,payFit,ind,hit,gapsSk,why:[...(fb>=.05?["Lines up with what you said about "+FIELDQ[curField()].name+"."]:[]),...ints,...abr,...skr,...pros,...lows,...payr].slice(0,4),cons,flags};
 }
 
 /* ============================================================
@@ -1013,7 +1060,7 @@ const LS_KEY="careerCombine.v2";
 const blankProfile=()=>({name:"",stage:"",years:"",edu:"",job:"",industry:"",target:"",resume:"",auto:[],manual:[],off:[],field:""});
 let state={answers:{},page:-1,profile:blankProfile()};
 try{const s=localStorage.getItem(LS_KEY);if(s){const o=JSON.parse(s);if(o&&o.answers){state=o;state.profile=Object.assign(blankProfile(),o.profile||{})}}}catch(e){}
-function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(state))}catch(e){} updateHeader(); if(typeof updateSkip==='function')updateSkip()}
+function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(state))}catch(e){} updateHeader(); if(typeof updateSkip==='function')updateSkip(); if(typeof scheduleLive==='function')scheduleLive()}
 const app=document.getElementById("app");
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const has=k=>{const v=state.answers[k];return v!==undefined&&v!==null&&v!==""};
@@ -1090,17 +1137,17 @@ function updateSkip(){
   el.textContent=n?n+" left unanswered here. That's fine — skip and come back anytime.":"";
 }
 
-/* ---------- Check-in (résumé + basics) ---------- */
+/* ---------- Check-in (resume + basics) ---------- */
 function opts(map,cur){return '<option value="">Choose…</option>'+Object.entries(map).map(([v,l])=>'<option value="'+esc(v)+'"'+(String(cur)===String(v)?" selected":"")+'>'+esc(l)+'</option>').join("")}
 function renderCheckin(){
   const pr=state.profile;
   app.innerHTML='<div class="kicker">Section 1 of '+PAGES.length+'</div><h2 class="sec">Check-in</h2><p class="lede">'+esc(PAGES[0].lede)+'</p>'+
-  '<div class="q"><div class="qn">Résumé (optional, but it sharpens your results)</div>'+
-   '<div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload résumé file"><strong>Drop a PDF, Word (.docx), or text file</strong><span class="small">or click to choose one</span></div>'+
+  '<div class="q"><div class="qn">Resume (optional, but it sharpens your results)</div>'+
+   '<div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload resume file"><strong>Drop a PDF, Word (.docx), or text file</strong><span class="small">or click to choose one</span></div>'+
    '<input type="file" id="file" accept=".pdf,.docx,.txt,.md" hidden>'+
-   '<div class="status" id="fileStatus" role="status">'+(pr.resume?'Résumé loaded ('+pr.resume.length.toLocaleString()+' characters).':'')+'</div>'+
-   '<details class="note"'+(pr.resume&&!pr._fromFile?" open":"")+'><summary>…or paste the text</summary><textarea id="paste" placeholder="Paste your résumé text here" style="min-height:140px">'+(pr._fromFile?'':esc(pr.resume))+'</textarea><button class="btn sm" id="pasteBtn" style="margin-top:8px">Scan pasted text</button></details>'+
-   '<div class="sub" style="margin-top:16px">Skills on your résumé</div><div class="small">Tap a skill to drop it if we got it wrong. Add anything we missed.</div><div class="skchips" id="skchips"></div>'+
+   '<div class="status" id="fileStatus" role="status">'+(pr.resume?'Resume loaded ('+pr.resume.length.toLocaleString()+' characters).':'')+'</div>'+
+   '<details class="note"'+(pr.resume&&!pr._fromFile?" open":"")+'><summary>…or paste the text</summary><textarea id="paste" placeholder="Paste your resume text here" style="min-height:140px">'+(pr._fromFile?'':esc(pr.resume))+'</textarea><button class="btn sm" id="pasteBtn" style="margin-top:8px">Scan pasted text</button></details>'+
+   '<div class="sub" style="margin-top:16px">Skills on your resume</div><div class="small">Tap a skill to drop it if we got it wrong. Add anything we missed.</div><div class="skchips" id="skchips"></div>'+
    '<div class="addrow"><input type="text" id="addSkill" list="skillList" placeholder="Add a skill (e.g. Excel, sales, teaching)"><datalist id="skillList">'+Object.values(SK).map(([l])=>'<option value="'+esc(l)+'">').join("")+'</datalist><button class="btn sm" id="addSkillBtn">Add</button></div>'+
   '</div>'+
   '<div class="q"><div class="qn">The basics</div>'+
@@ -1120,7 +1167,7 @@ function renderCheckin(){
 function renderSkillChips(){
   const pr=state.profile, el=document.getElementById("skchips"); if(!el)return;
   const all=[...new Set([...(pr.auto||[]),...(pr.manual||[])])];
-  el.innerHTML=all.length?all.map(id=>{const off=(pr.off||[]).includes(id);return '<button class="skchip'+(off?" off":"")+'" data-skill="'+esc(id)+'" aria-pressed="'+!off+'">'+esc(SK[id]?SK[id][0]:id)+'</button>'}).join(""):'<span class="small">None yet. Upload a résumé or add skills below.</span>';
+  el.innerHTML=all.length?all.map(id=>{const off=(pr.off||[]).includes(id);return '<button class="skchip'+(off?" off":"")+'" data-skill="'+esc(id)+'" aria-pressed="'+!off+'">'+esc(SK[id]?SK[id][0]:id)+'</button>'}).join(""):'<span class="small">None yet. Upload a resume or add skills below.</span>';
 }
 function addSkill(){
   const inp=document.getElementById("addSkill"), v=inp.value.trim(); if(!v)return;
@@ -1164,7 +1211,7 @@ function estimateEdu(t){
 }
 function ingest(text,source){
   const st=document.getElementById("fileStatus"), clean=(text||"").trim(), pr=state.profile;
-  if(clean.length<80){st.className="status err";st.textContent=source==="file"?"Couldn't find readable text in that file (it may be a scanned image). Try pasting the text instead.":"That's pretty short. Paste the full résumé text.";return}
+  if(clean.length<80){st.className="status err";st.textContent=source==="file"?"Couldn't find readable text in that file (it may be a scanned image). Try pasting the text instead.":"That's pretty short. Paste the full resume text.";return}
   pr.resume=clean.slice(0,20000);pr._fromFile=source==="file";pr.auto=detectSkills(clean);
   const y=estimateYears(clean);
   if(pr.years===""&&y)pr.years=y<1?"0.5":y<3?"2":y<7?"5":y<15?"10":"18";
@@ -1193,64 +1240,84 @@ async function handleFile(f){
 function renderStart(){
   const scored=allItems().filter(i=>i.t!=="open"), n=scored.filter(isAns).length;
   app.innerHTML='<div class="kicker">Free · private · about 35–45 minutes</div><h2 class="sec">Find the career that fits how you actually work</h2>'+
-  '<p class="lede">'+(allItems().length)+' questions in '+PAGES.length+' short sections, plus your résumé. Answers save automatically in this browser, so you can stop and pick up later. Nothing is uploaded anywhere.</p>'+
+  '<p class="lede">'+(allItems().length)+' questions in '+PAGES.length+' short sections, plus your resume. Answers save automatically in this browser, so you can stop and pick up later. Nothing is uploaded anywhere.</p>'+
   '<div class="panel"><strong>What you\'ll do</strong><ul class="intro-list">'+
-  '<li><b>1</b><span>Drop in your résumé. It\'s read in your browser to spot the skills you already have.</span></li>'+
+  '<li><b>1</b><span>Drop in your resume. It\'s read in your browser to spot the skills you already have.</span></li>'+
   '<li><b>30</b><span>Work activities, each rated twice: how much you\'d enjoy it and how good you are at it. Based on the Holland (RIASEC) model the U.S. Department of Labor uses in O*NET.</span></li>'+
   '<li><b>30</b><span>Personality items from the public-domain IPIP Big Five inventory.</span></li>'+
   '<li><b>10</b><span>A values ranking and sliders for pay, travel, coding, hours, school, and where you work.</span></li>'+
   '<li><b>30</b><span>True/false and this-or-that gut calls.</span></li>'+
   '<li><b>12</b><span>Work scenarios: what would you actually do?</span></li>'+
   '<li><b>6</b><span>Questions about your career path: where you are and what\'s in the way.</span></li>'+
-  '<li><b>4–6</b><span>Questions made for your field (legal, healthcare, education, trades, and more), unlocked by your résumé.</span></li>'+
+  '<li><b>4–6</b><span>Questions made for your field (legal, healthcare, education, trades, and more), unlocked by your resume.</span></li>'+
   '<li><b>8</b><span>Open-ended questions for an AI coach to read later.</span></li></ul>'+
   '<p class="small">At the end you get '+C.length+' careers ranked by fit with reasons and red flags, your personality and interest profile, stepping-stone jobs you could land now, and a summary to paste into Claude or ChatGPT for a deeper read.</p></div>'+
   '<div class="nav"><span></span><button class="btn pri" data-go="'+(n||checkinDone()?firstUnansweredPage():0)+'">'+(n?"Pick up where you left off →":"Start the combine →")+'</button></div>'+
   '<div class="panel"><strong>Backup and restore</strong><p class="small">Answers live only in this browser. Copy a backup if you might switch devices, and paste it here to restore.</p>'+
   '<textarea id="in-backup" placeholder="Paste a backup here to restore"></textarea><div class="nav"><button class="btn" data-act="copybackup">Copy backup</button><button class="btn" data-act="restore">Restore from pasted backup</button><button class="btn ghost" data-act="reset">Start over</button></div>'+
-  '<div id="resetconfirm" hidden><p class="flag">This erases every answer and your résumé from this browser.</p><button class="btn pri" data-act="resetyes">Yes, erase everything</button></div></div>';
+  '<div id="resetconfirm" hidden><p class="flag">This erases every answer and your resume from this browser.</p><button class="btn pri" data-act="resetyes">Yes, erase everything</button></div></div>';
   updateHeader();
 }
 function firstUnansweredPage(){if(!checkinDone())return 0;for(let i=1;i<PAGES.length;i++)if(PAGES[i].items.some(it=>it.t!=="open"&&!isAns(it)))return i;return 99}
 
-function meter(label,sub,x){return '<div class="meter"><div class="lab">'+esc(label)+(sub?'<small>'+esc(sub)+'</small>':'')+'</div><div class="tr"><i style="width:'+pct(x)+'%"></i></div><div class="v">'+pct(x)+'</div></div>'}
+function meter(label,sub,x){return '<div class="meter'+(x==null?' na':'')+'"><div class="lab">'+esc(label)+(sub?'<small>'+esc(sub)+'</small>':'')+'</div><div class="tr"><i style="width:'+(x==null?0:pct(x))+'%"></i></div><div class="v">'+(x==null?'–':pct(x))+'</div></div>'}
 
+/* Enough real answers to rank careers? Needs a spread of answers, not just a few. */
+const READY_AT=20;
+function readiness(P){
+  const enough=P.answered>=READY_AT&&(P.riN>=6||P.nDims>=6);
+  return {ready:enough,need:Math.max(0,READY_AT-P.answered)};
+}
 function analyze(){
   const P=compute();
   const scored=C.map(c=>scoreCareer(c,P)).sort((a,b)=>b.fit-a.fit);
-  const code=Object.entries(P.R).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]).join("");
-  const B=P.B, mbti=(B.E>=.5?"E":"I")+(B.O>=.5?"N":"S")+(B.A>=.5?"F":"T")+(B.C>=.5?"J":"P");
-  return {P,scored,code,mbti};
+  const code=P.riN>=6?Object.entries(P.R).filter(e=>e[1]!=null).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]).join(""):"";
+  const B=P.B, L=(v,a,b)=>v==null?"?":v>=.5?a:b, mbti=P.b5N>=10?L(B.E,"E","I")+L(B.O,"N","S")+L(B.A,"F","T")+L(B.C,"J","P"):"";
+  return {P,scored,code,mbti,ready:readiness(P)};
 }
 
 function renderResults(){
-  const {P,scored,code,mbti}=analyze();
+  const {P,scored,code,mbti,ready}=analyze();
   const top=scored.slice(0,10), low=P.answered<P.total*.6, pr=state.profile;
   const indMatches=scored.filter(s=>s.ind&&!top.includes(s)).slice(0,3);
   const vals=Array.isArray(state.answers.rank_values)?state.answers.rank_values.map(k=>VALUES.find(v=>v[0]===k)[1].split(" — ")[0]):null;
   let h='<div class="kicker">'+(pr.name?esc(pr.name)+"'s scouting report":"Your scouting report")+'</div><h2 class="sec">Best-fit careers</h2>';
-  if(low)h+='<div class="warnbox"><strong>Partial results.</strong> You\'ve answered '+P.answered+' of '+P.total+' scored questions. The ranking firms up as you answer more. <button class="btn sm" data-go="'+firstUnansweredPage()+'">Keep going</button></div>';
+  if(!ready.ready){
+    h+='<div class="panel"><strong>Not enough to go on yet.</strong><p>Your matches are built only from your answers, so nothing gets assumed. You\'ve answered '+P.answered+' question'+(P.answered===1?'':'s')+'. Answer '+ready.need+' more'+(P.riN<6?', including some in the Interests sections,':'')+' and your first matches will show up here. They sharpen the more you answer.</p>'+
+      '<div class="nav" style="margin-top:8px"><button class="btn pri" data-go="'+firstUnansweredPage()+'">Keep going →</button></div></div>';
+    h+=dirsPanel();
+    h+='<div class="nav"><button class="btn ghost" data-go="'+(PAGES.length-1)+'">← Back to questions</button><button class="btn" data-go="-1">Backup & settings</button></div>';
+    app.innerHTML=h; updateHeader(); return;
+  }
+  if(low)h+='<div class="warnbox"><strong>Early read.</strong> You\'ve answered '+P.answered+' of '+P.total+' scored questions, and these are based only on those. The ranking firms up as you answer more. <button class="btn sm" data-go="'+firstUnansweredPage()+'">Keep going</button></div>';
   h+='<div class="top3">'+top.slice(0,3).map((s,i)=>'<div class="card"><div class="rk">#'+(i+1)+(s.ind?' · '+esc(pr.industry.trim()):'')+'</div><div class="nm">'+esc(s.car.n)+'</div><div class="pc">'+s.fit+'%</div><div class="small">'+esc(s.car.start)+' → '+esc(s.car.end)+'</div></div>').join("")+'</div>';
-  h+='<p class="small">Fit blends your interests (about a third), work-style match (about half), pay fit (weighted by how much you ranked pay), and smaller boosts for abilities you rated high and skills on your résumé. Dealbreakers subtract points.</p>';
+  h+='<p class="small">Fit blends your interests (about a third), work-style match (about half), pay fit (weighted by how much you ranked pay), and smaller boosts for abilities you rated high and skills on your resume. Only parts you\'ve answered count. Dealbreakers subtract points.</p>';
   h+=top.map((s,i)=>resultCard(s,i+1,i<3)).join("");
   h+=dirsPanel();
   if(indMatches.length)h+='<h2 class="sec">Through your industry lens</h2><p class="lede">Further down the list, but these connect to '+esc(pr.industry.trim())+'.</p>'+indMatches.map(s=>resultCard(s,"+",false)).join("");
-  h+='<h2 class="sec">Your profile</h2><div class="grid2"><div class="panel"><strong>Interest code</strong><div class="code">'+code+'</div><p class="small">Your top three Holland interest areas, in order. Careers whose code starts with your top letters score higher.</p>'+
-    Object.entries(P.R).sort((a,b)=>b[1]-a[1]).map(([k,v])=>meter(k+" · "+RNAME[k],RDESC[k],v)).join("")+'</div>'+
-    '<div class="panel"><strong>Big Five personality</strong>'+["O","C","E","A","N"].map(k=>{const v=k==="N"?1-P.B.N:P.B[k];return meter(B5NAME[k],v>=.5?B5DESC[k][1]:B5DESC[k][0],v)}).join("")+
-    '<p class="small">For fun, the closest Myers-Briggs letters are <strong>'+mbti+'</strong>. Take that lightly: MBTI types don\'t predict job fit well, which is why the scoring uses Big Five and RIASEC instead.</p></div></div>';
+  const riPanel=P.riN>=6
+    ?'<strong>Interest code</strong><div class="code">'+code+'</div><p class="small">Your top three Holland interest areas, in order. Careers whose code starts with your top letters score higher.</p>'+
+      Object.entries(P.R).sort((a,b)=>(b[1]??-1)-(a[1]??-1)).map(([k,v])=>meter(k+" · "+RNAME[k],RDESC[k],v)).join("")
+    :'<strong>Interest code</strong><p class="small">Answer the Interests sections to see this.</p>';
+  const b5Panel=P.b5N>=5
+    ?'<strong>Big Five personality</strong>'+["O","C","E","A","N"].map(k=>{const raw=P.B[k], v=raw==null?null:(k==="N"?1-raw:raw);return meter(B5NAME[k],v==null?"Not answered yet":v>=.5?B5DESC[k][1]:B5DESC[k][0],v)}).join("")+
+      (mbti&&!mbti.includes("?")?'<p class="small">For fun, the closest Myers-Briggs letters are <strong>'+mbti+'</strong>. Take that lightly: MBTI types don\'t predict job fit well, which is why the scoring uses Big Five and RIASEC instead.</p>':'')
+    :'<strong>Big Five personality</strong><p class="small">Answer the Personality sections to see this.</p>';
+  h+='<h2 class="sec">Your profile</h2><div class="grid2"><div class="panel">'+riPanel+'</div><div class="panel">'+b5Panel+'</div></div>';
   h+=strengthsPanel(P);
   h+=stepsPanel(scored,P);
-  h+='<div class="grid2"><div class="panel"><strong>Work style</strong>'+["tr","c","s","cu","l","au","v","p","da","th","rp","h","o","pu"].map(k=>meter(cap(DIMS[k]),null,P.D[k])).join("")+'<p class="small">0 = avoid, 100 = want a lot. For long hours, this is your tolerance.</p></div>'+
+  const ws=["tr","c","s","cu","l","au","v","p","da","th","rp","h","o","pu"].filter(k=>!P.skip.has(k));
+  const payLine=P.minSet||P.targetSet?'<p><strong>Pay:</strong> '+(P.minSet?'$'+P.minPay+'k minimum now':'no minimum set')+', '+(P.targetSet?'$'+P.target+'k target in 5 years':'no 5-year target set')+'.</p>':'<p class="small">Pay not set yet.</p>';
+  h+='<div class="grid2"><div class="panel"><strong>Work style</strong>'+(ws.length?ws.map(k=>meter(cap(DIMS[k]),null,P.D[k])).join("")+'<p class="small">0 = avoid, 100 = want a lot. For long hours, this is your tolerance. Traits you haven\'t answered anything about are left out.</p>':'<p class="small">Answer the work style, true/false, and scenario sections to see this.</p>')+'</div>'+
     '<div class="panel"><strong>What matters most</strong>'+(vals?'<ol>'+vals.map(v=>'<li>'+esc(v)+'</li>').join("")+'</ol>':'<p class="small">Not ranked yet.</p>')+
-    '<p><strong>Pay:</strong> $'+P.minPay+'k minimum now, $'+P.target+'k target in 5 years.</p>'+meter("Pay priority",null,P.D.pay)+meter("Patience for a longer path",null,P.D.pat)+'</div></div>';
-  h+='<h2 class="sec">Take it to an AI coach</h2><p class="lede">Copy this and paste it into Claude, ChatGPT, or any AI assistant. It includes every answer, your notes, your résumé, and the full ranking, plus instructions, so the AI can go much deeper than the scoring here.</p>'+
+    payLine+'</div></div>';
+  h+='<h2 class="sec">Take it to an AI coach</h2><p class="lede">Copy this and paste it into Claude, ChatGPT, or any AI assistant. It includes every answer, your notes, your resume, and the full ranking, plus instructions, so the AI can go much deeper than the scoring here.</p>'+
     '<div class="nav noprint" style="margin-top:0"><button class="btn pri" data-act="copysum">Copy summary for AI</button><button class="btn" data-act="print">Print / save as PDF</button><button class="btn" data-act="copybackup">Copy answer backup</button></div><pre class="sum" id="sumtext">'+esc(summaryText({P,scored,code,mbti}))+'</pre>';
   h+='<div class="panel"><details class="method"><summary>How this works and its limits</summary><div class="small" style="margin-top:8px;display:grid;gap:8px">'+
     '<p><b>Interests (RIASEC).</b> Holland\'s six interest types are the backbone of O*NET, the U.S. Labor Department\'s occupation database. Meta-analysis (Nye et al., 2012) found interest–job fit relates to job performance and staying in a job. Each activity is also rated for ability, because interests and abilities are related but distinct (Ackerman &amp; Heggestad, 1997): what you enjoy predicts staying power, while what you\'re already good at shapes how fast you can break in.</p>'+
     '<p><b>Personality (Big Five).</b> The 30 items come from Goldberg\'s public-domain IPIP markers. The Big Five has decades of evidence linking it to work outcomes (Barrick &amp; Mount, 1991). MBTI is popular but has weak test-retest reliability (Pittenger, 2005), so it\'s shown only for fun.</p>'+
     '<p><b>Values and work style.</b> The ranking follows O*NET\'s work-values set, with pay, variety, and purpose split out. Person–job fit on needs and supplies predicts satisfaction (Kristof-Brown et al., 2005). Scenario questions use the situational-judgment format, which captures how you\'d act rather than how you see yourself (McDaniel et al., 2001).</p>'+
-    '<p><b>Résumé.</b> Your résumé is read in your browser and matched against a skill list by keyword. It finds evidence, not proficiency, so check the skill chips. It gives a small boost to careers that use skills you already have and powers the stepping-stone jobs.</p>'+
+    '<p><b>Resume.</b> Your resume is read in your browser and matched against a skill list by keyword. It finds evidence, not proficiency, so check the skill chips. It gives a small boost to careers that use skills you already have and powers the stepping-stone jobs.</p>'+
     '<p><b>Scoring.</b> Every answer adds evidence to 17 work-style dimensions. Each career has a demand level on the same dimensions. Fit penalizes gaps, more heavily when a job demands more of something you want to avoid (coding, selling, commission, travel, hours) than when it offers less. Career profiles and pay are rough U.S. estimates, not O*NET data. Check the Bureau of Labor Statistics Occupational Outlook Handbook or local postings for real numbers.</p>'+
     '<p><b>Limits.</b> This is a short self-report tool, not a validated assessment. Career profiles are judgment calls, and how you feel today shifts answers. Use the top 5–10 as a shortlist to test against real job postings and conversations, not as a verdict.</p></div></details></div>';
   h+='<div class="nav"><button class="btn ghost" data-go="'+(PAGES.length-1)+'">← Back to questions</button><button class="btn" data-go="-1">Backup & settings</button></div>';
@@ -1276,8 +1343,8 @@ function stepping(scored,P){
 }
 function stepsPanel(scored,P){
   const list=stepping(scored,P);
-  if(!list)return '<h2 class="sec">Stepping-stone jobs</h2><p class="lede">Add your résumé or at least two skills in the Check-in section to see jobs you could get hired for soon that lead toward your top careers.</p>';
-  return '<h2 class="sec">Stepping-stone jobs</h2><p class="lede">Jobs you could likely land soon with skills already on your résumé, ranked by how ready you are and how well they lead to your top-fit careers. Starting lower is fine when the next step is clear.</p>'+
+  if(!list)return '<h2 class="sec">Stepping-stone jobs</h2><p class="lede">Add your resume or at least two skills in the Check-in section to see jobs you could get hired for soon that lead toward your top careers.</p>';
+  return '<h2 class="sec">Stepping-stone jobs</h2><p class="lede">Jobs you could likely land soon with skills already on your resume, ranked by how ready you are and how well they lead to your top-fit careers. Starting lower is fine when the next step is clear.</p>'+
    list.slice(0,6).map((x,i)=>'<details class="res"'+(i<2?" open":"")+'><summary><span class="no">S'+(i+1)+'</span><span class="nm">'+esc(x.st.n)+'<small>'+esc(x.st.pay)+' · leads to '+esc(x.tg[0].n)+'</small></span><span class="fit">'+pct(x.ready)+'% ready</span><span class="fitbar"><i style="width:'+pct(x.ready)+'%"></i></span></summary>'+
    '<div class="body"><div class="small">'+esc(x.st.why)+'</div>'+
    (x.have.length?'<div><span class="good">You already have</span> <span class="small">'+esc(x.have.join(", "))+'</span></div>':'')+
@@ -1297,12 +1364,12 @@ function strengthsPanel(P){
   if(P.abN<6)return '';
   const {sweet,hidden,grow}=splitGaps(P);
   const list=(arr,empty)=>arr.length?'<ul class="pairs">'+arr.slice(0,6).map(x=>'<li>'+esc(x.text)+' <span class="small">(enjoy '+x.e+'/5 · skill '+x.s+'/5)</span></li>').join("")+'</ul>':'<p class="small">'+empty+'</p>';
-  const abCode=Object.entries(P.AB).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]).join("");
+  const abCode=Object.entries(P.AB).filter(e=>e[1]!=null).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]).join("");
   return '<div class="panel"><strong>Enjoy vs. good at</strong><p class="small">Your skill code is <b>'+abCode+'</b> (what you\'re good at), next to your interest code above (what you enjoy). Careers are ranked mostly on enjoyment, with a smaller boost when they use abilities you already have.</p>'+
    '<div class="grid2"><div><span class="good">Sweet spot</span><p class="small">You enjoy these and you\'re good at them. Build a career around these.</p>'+list(sweet,"Nothing scored high on both yet.")+
    '<span class="flag">Good at, but not into it</span><p class="small">Useful for getting hired, but a job built on these may wear you out.</p>'+list(hidden,"None — what you\'re good at, you also like.")+'</div>'+
    '<div><span style="color:var(--navy);font-weight:600">Love it, still building</span><p class="small">Worth investing in: these are where training or a certification pays off most.</p>'+list(grow,"None flagged.")+'</div></div>'+
-   '<div>'+Object.entries(P.AB).sort((a,b)=>b[1]-a[1]).map(([k,v])=>meter(k+" · "+RNAME[k]+" skill",null,v)).join("")+'</div></div>';
+   '<div>'+Object.entries(P.AB).sort((a,b)=>(b[1]??-1)-(a[1]??-1)).map(([k,v])=>meter(k+" · "+RNAME[k]+" skill",null,v)).join("")+'</div></div>';
 }
 function resultCard(s,rank,open){
   const c=s.car, pr=state.profile;
@@ -1314,7 +1381,7 @@ function resultCard(s,rank,open){
   '<div class="facts"><div><span>Pay (entry · yr 4 · senior)</span>$'+c.pay[0]+'k · $'+c.pay[1]+'k · $'+c.pay[2]+'k</div><div><span>Travel</span>'+esc(c.trv)+'</div><div><span>Work-life</span>'+esc(c.wlb)+'</div><div><span>Ease of entry</span>'+esc(c.ease)+'</div><div><span>Typical education</span>'+esc(cap(EDU_NEED[c.edu]))+'</div><div><span>AI exposure</span>'+esc(c.ai)+'</div><div><span>Interest code</span>'+c.r+'</div></div>'+
   (mySkillsCount()?'<div class="small"><strong>Skills to build:</strong> '+(s.gapsSk.length?esc(s.gapsSk.slice(0,3).map(k=>SK[k][0]).join(", ")):"none of the core ones — go deeper")+'</div>':'')+
   '<div class="small"><strong>Search for:</strong> '+esc(c.titles)+'</div><div class="small"><strong>First move:</strong> '+esc(c.step)+'</div>'+
-  '<div class="small">Interest match '+pct(s.interest)+(s.ability!=null?' · ability match '+pct(s.ability):'')+(s.skillFit!=null?' · résumé match '+pct(s.skillFit):'')+' · work-style match '+pct(s.dimSim)+' · pay match '+pct(s.payFit)+'</div></div></details>';
+  '<div class="small">'+[["Interest match",s.interest],["ability match",s.ability],["resume match",s.skillFit],["work-style match",s.dimSim],["pay match",s.payFit]].filter(x=>x[1]!=null).map(x=>x[0]+' '+pct(x[1])).join(' · ').replace(/^./,c=>c.toUpperCase())+'</div></div></details>';
 }
 function mySkillsCount(){return mySkills().size}
 
@@ -1332,12 +1399,12 @@ function ansText(it){
 }
 function summaryText({P,scored,code,mbti}){
   const A=state.answers, pr=state.profile, L=[];
-  L.push("You are an experienced, honest career coach. I just took the Career Combine, a self-assessment. My full results, answers, and résumé are below. Please:");
+  L.push("You are an experienced, honest career coach. I just took the Career Combine, a self-assessment. My full results, answers, and resume are below. Please:");
   L.push("1. Tell me in plain language what my results say about how I work best. Be honest, not flattering, and point out anything that seems contradictory.");
   L.push("2. Rank the 3–5 careers you think fit me best (you can disagree with the Combine's ranking). For each: why it fits, my strongest evidence, my biggest gaps, and realistic pay where I live (ask my location if it matters).");
   L.push("3. For my top path, name 2–3 stepping-stone job titles I could realistically get in the next 6 months with skills I already have, even if they're lower level.");
   L.push("4. Give me a 90-day plan: what to learn, what to build to prove it, and how many applications to send each week.");
-  L.push("5. Tell me what on my résumé to lead with or rewrite for that path.");
+  L.push("5. Tell me what on my resume to lead with or rewrite for that path.");
   L.push("Ask me up to 3 follow-up questions first if something important is missing.");
   L.push("");
   L.push("CAREER COMBINE — RESULTS ("+new Date().toLocaleDateString()+")");
@@ -1348,19 +1415,19 @@ function summaryText({P,scored,code,mbti}){
   if(pr.industry)L.push("Dream industry: "+pr.industry);
   if(pr.target)L.push("A job I'm curious about: "+pr.target);
   L.push("");
-  L.push("RIASEC code: "+code+" | "+Object.entries(P.R).sort((a,b)=>b[1]-a[1]).map(([k,v])=>k+" "+pct(v)).join(", "));
-  L.push("Big Five: "+["O","C","E","A"].map(k=>k+" "+pct(P.B[k])).join(", ")+", Neuroticism "+pct(P.B.N)+" | MBTI approx (low validity): "+mbti);
-  if(P.abN){const g=splitGaps(P);L.push("Ability code (what I'm good at): "+Object.entries(P.AB).sort((a,b)=>b[1]-a[1]).map(([k,v])=>k+" "+pct(v)).join(", "));
+  L.push(P.riN>=6?"RIASEC code: "+code+" | "+Object.entries(P.R).sort((a,b)=>(b[1]??-1)-(a[1]??-1)).map(([k,v])=>k+" "+pct(v)).join(", "):"RIASEC: not enough interest answers yet");
+  L.push(P.b5N>=5?"Big Five: "+["O","C","E","A"].map(k=>k+" "+pct(P.B[k])).join(", ")+", Neuroticism "+pct(P.B.N)+(mbti?" | MBTI approx (low validity): "+mbti:""):"Big Five: not enough personality answers yet");
+  if(P.abN){const g=splitGaps(P);L.push("Ability code (what I'm good at): "+Object.entries(P.AB).sort((a,b)=>(b[1]??-1)-(a[1]??-1)).map(([k,v])=>k+" "+pct(v)).join(", "));
     L.push("Sweet spot (enjoy + skilled): "+(g.sweet.map(x=>x.text).join("; ")||"none"));
     L.push("Good at but not into it: "+(g.hidden.map(x=>x.text).join("; ")||"none"));
     L.push("Love it, still building: "+(g.grow.map(x=>x.text).join("; ")||"none"));}
   L.push("Values order: "+(Array.isArray(A.rank_values)?A.rank_values.map(k=>VALUES.find(v=>v[0]===k)[1].split(" — ")[0]).join(" > "):"not ranked"));
-  L.push("Pay: min $"+P.minPay+"k, 5-yr target $"+P.target+"k");
-  L.push("Work-style dims (0-100): "+Object.keys(DIMS).map(k=>DIMS[k]+" "+pct(P.D[k])).join(", ")+", pay priority "+pct(P.D.pay)+", patience for a longer path "+pct(P.D.pat));
-  L.push("Skills found on résumé (confirmed): "+([...P.skills].map(s=>SK[s][0]).join(", ")||"none"));
+  L.push("Pay: min "+(P.minSet?"$"+P.minPay+"k":"not set")+", 5-yr target "+(P.targetSet?"$"+P.target+"k":"not set"));
+  L.push("Work-style dims (0-100, unanswered left out): "+Object.keys(DIMS).filter(k=>!P.skip.has(k)).map(k=>DIMS[k]+" "+pct(P.D[k])).join(", ")+", pay priority "+pct(P.D.pay)+", patience for a longer path "+pct(P.D.pat));
+  L.push("Skills found on resume (confirmed): "+([...P.skills].map(s=>SK[s][0]).join(", ")||"none"));
   L.push("");
   L.push("TOP 15:");
-  scored.slice(0,15).forEach((s,i)=>L.push((i+1)+". "+s.car.n+" — "+s.fit+"% (int "+pct(s.interest)+(s.ability!=null?", ability "+pct(s.ability):"")+(s.skillFit!=null?", résumé "+pct(s.skillFit):"")+", style "+pct(s.dimSim)+", pay "+pct(s.payFit)+")"+(s.flags.length?" | flags: "+s.flags.join("; "):"")));
+  scored.slice(0,15).forEach((s,i)=>L.push((i+1)+". "+s.car.n+" — "+s.fit+"% ("+[["int",s.interest],["ability",s.ability],["resume",s.skillFit],["style",s.dimSim],["pay",s.payFit]].filter(x=>x[1]!=null).map(x=>x[0]+" "+pct(x[1])).join(", ")+")"+(s.flags.length?" | flags: "+s.flags.join("; "):"")));
   L.push("BOTTOM 5: "+scored.slice(-5).map(s=>s.car.n+" "+s.fit+"%").join(", "));
   const stp=stepping(scored,P);
   if(stp){L.push("");L.push("TOP STEPPING-STONE JOBS:");stp.slice(0,6).forEach((x,i)=>L.push((i+1)+". "+x.st.n+" — "+pct(x.ready)+"% ready → leads to "+x.tg.slice(0,3).map(t=>t.n+" ("+t.fit+"%)").join(", ")+(x.need.length?" | gaps: "+x.need.join(", "):"")))}
@@ -1387,7 +1454,7 @@ function summaryText({P,scored,code,mbti}){
   L.push("");
   L.push("RAW INTERESTS enjoy/skill (1-5): "+RI.map(x=>x[0]+"="+(A[x[0]]??"-")+"/"+(A[x[0]+"_ab"]??"-")).join(" "));
   L.push("RAW BIG FIVE (1-5): "+B5.map(x=>x[0]+"="+(A[x[0]]??"-")).join(" "));
-  if(pr.resume){L.push("");L.push("MY RÉSUMÉ:");L.push(pr.resume.slice(0,8000))}
+  if(pr.resume){L.push("");L.push("MY RESUME:");L.push(pr.resume.slice(0,8000))}
   return L.join("\n");
 }
 
@@ -1433,7 +1500,7 @@ app.addEventListener("click",e=>{
 });
 app.addEventListener("click",e=>{const a=e.target.closest("[data-gofield]");if(a){e.preventDefault();go(0);setTimeout(()=>{const f=document.getElementById("p-field");if(f){f.scrollIntoView({block:"center"});f.focus()}},50)}});
 document.getElementById("chips").addEventListener("click",e=>{const b=e.target.closest("button[data-go]");if(b)go(Number(b.dataset.go))});
-function go(p){state.page=Math.max(-1,p);save();render();window.scrollTo({top:0})}
+function go(p){state.page=Math.max(-1,p);save();render();updateLive();window.scrollTo({top:0})}
 app.addEventListener("input",e=>{
   const t=e.target;
   if(t.dataset.sl){const it=allItems().find(x=>x.id===t.dataset.sl);state.answers[it.id]=Number(t.value);
@@ -1446,6 +1513,43 @@ app.addEventListener("input",e=>{
 app.addEventListener("change",e=>{const t=e.target;if(!t.dataset.pf)return;const pr=state.profile;pr[t.dataset.pf]=t.value.trim();
   save()});
 
+
+/* ============================================================
+   LIVE MATCHES — top careers update as you answer
+   ============================================================ */
+const live={open:false,prev:null,moves:{},lastTop:null};
+let liveTimer=null;
+function scheduleLive(){clearTimeout(liveTimer);liveTimer=setTimeout(updateLive,120)}
+function updateLive(){
+  const el=document.getElementById("live"); if(!el)return;
+  const p=state.page, onQuestions=p>=0&&p<PAGES.length;
+  el.hidden=!onQuestions; document.body.classList.toggle("has-live",onQuestions); document.body.classList.toggle("live-open",onQuestions&&live.open);
+  if(!onQuestions)return;
+  const P=compute(), r=readiness(P);
+  if(!r.ready){
+    live.prev=null;
+    el.innerHTML='<div class="live-in"><div class="live-row"><span class="live-lab">Live matches</span><div class="live-bar" aria-hidden="true"><i style="width:'+Math.round(100*Math.min(1,P.answered/READY_AT))+'%"></i></div><span class="small">'+(r.need?r.need+' more answer'+(r.need===1?'':'s')+' to unlock':'Answer a few Interests to unlock')+'</span></div></div>';
+    return;
+  }
+  const scored=C.map(c=>scoreCareer(c,P)).sort((a,b)=>b.fit-a.fit), ranks={};
+  scored.forEach((s,i)=>ranks[s.car.id]=i);
+  // Arrows show how each top-5 career moved on your last answer that changed the order.
+  const changed=!!live.prev&&scored.slice(0,5).some((s,i)=>live.prev[s.car.id]!==i);
+  if(changed){live.moves={};scored.slice(0,5).forEach((s,i)=>{const was=live.prev[s.car.id];if(was!==i)live.moves[s.car.id]=was-i})}
+  live.prev=ranks;
+  const arrow=id=>{const d=live.moves[id];return d?'<span class="mv '+(d>0?'up':'dn')+'">'+(d>0?'▲':'▼')+Math.abs(d)+'</span>':''};
+  const top=scored.slice(0,5);
+  el.innerHTML='<div class="live-in"><div class="live-row"><span class="live-lab">Live matches</span><div class="live-top">'+
+    top.slice(0,3).map((s,i)=>'<span class="lm'+(changed&&live.moves[s.car.id]?' flash':'')+'"><span class="nm">'+(i+1)+'. '+esc(s.car.n)+'</span><b>'+s.fit+'</b>'+arrow(s.car.id)+'</span>').join("")+
+    '</div><button class="live-tog" data-livetog="1" aria-expanded="'+live.open+'">'+(live.open?'Hide':'Top 5')+'</button></div>'+
+    (live.open?'<ol class="live-list">'+top.map((s,i)=>'<li><span class="n">'+(i+1)+'</span><span>'+esc(s.car.n)+'</span>'+arrow(s.car.id)+'<span class="f">'+s.fit+'%</span></li>').join("")+'</ol><p class="live-note">Based only on your '+P.answered+' answers so far. <a href="#" data-goresults="1">See full results →</a></p>':'')+
+    '</div>';
+}
+document.getElementById("live").addEventListener("click",e=>{
+  if(e.target.closest("[data-livetog]")){live.open=!live.open;updateLive();return}
+  if(e.target.closest("[data-goresults]")){e.preventDefault();go(99)}
+});
+
 /* Theme toggle */
 document.getElementById("themeBtn").addEventListener("click",()=>{
   const r=document.documentElement, dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
@@ -1454,6 +1558,7 @@ document.getElementById("themeBtn").addEventListener("click",()=>{
 try{const t=localStorage.getItem("careerCombine.theme");if(t)document.documentElement.dataset.theme=t}catch(e){}
 
 render();
+updateLive();
 window.__combine={get state(){return state},set state(v){state=v},analyze,detectSkills,go,render};
 </script>
 </body>
