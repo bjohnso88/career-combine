@@ -156,6 +156,12 @@ body.has-live.live-open{padding-bottom:240px}
 .res .fitbar i{display:block;height:100%;background:var(--navy)}
 .res .body{padding:0 16px 16px;display:grid;gap:10px}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px 14px;font-size:.85rem}
+.bls{border-top:1px dashed var(--line);padding-top:8px;font-size:.85rem}
+.bls .src{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.bls a{color:inherit}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}
+.desc{color:var(--muted);font-size:.9rem;margin:0}
+input[type=search]{width:100%;font:inherit;color:var(--ink);background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:10px}
 .facts div span{display:block;font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .why{margin:4px 0 0;padding-left:20px}
 .why li{margin:2px 0}
@@ -203,6 +209,8 @@ footer a{color:var(--navy)}
 <aside class="live" id="live" aria-label="Live matches" hidden></aside>
 <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
 
+<script src="careers.js"></script>
+<script src="careers-bls.js"></script>
 <script>
 "use strict";
 /* ============================================================
@@ -816,58 +824,22 @@ function detectSkills(text){
   return out;
 }
 
-/* ============================================================
-   CAREER POOL — demand levels (0–1) + facts. pay = [entry, ~yr 4, senior] in $k, rough U.S. figures
-   (OTE for commission roles). edu: 0 none · 1 cert/associate · 2 bachelor's · 3 graduate/license
-   ============================================================ */
-const C=[
- {id:"se",n:"Sales / Solutions Engineer",r:"EIS",pay:[95,160,240],d:{c:.35,tr:.4,s:.65,cu:.9,l:.4,au:.65,v:.7,p:.65,da:.4,th:.3,rp:.45,h:.6,o:.4,w:.4,pr:.9,en:.2,pu:.3},ease:"Medium",ai:"Low–Med",trv:"15–30%",wlb:"Mixed",edu:2,start:"Associate Solutions Engineer",end:"Director of Solutions Engineering",titles:"Associate Sales Engineer, Solutions Consultant, Pre-Sales Engineer",step:"1–2 years in technical support or implementation at a software company, then move over.",sk:["presenting","troubleshooting","sales","customer","product","communication"],ind:"tech software saas"},
- {id:"impl",n:"Implementation Consultant",r:"SCI",pay:[65,100,150],d:{c:.25,tr:.35,s:.2,cu:.85,l:.4,au:.55,v:.65,p:.6,da:.45,th:.35,rp:.1,h:.6,o:.45,w:.5,pr:.65,pu:.35},ease:"Easy",ai:"Medium",trv:"0–30%",wlb:"Mixed",edu:1,start:"Implementation Specialist",end:"Director of Professional Services",titles:"Implementation Specialist, Onboarding Specialist, Implementation Consultant",step:"Frame past work as rolling out systems and training people on them.",sk:["training","customer","pm","documentation","troubleshooting"],ind:"tech software healthcare education"},
- {id:"csm",n:"Customer Success / Account Manager",r:"SEC",pay:[60,95,160],d:{c:.1,tr:.2,s:.45,cu:1,l:.35,au:.55,v:.55,p:.5,da:.35,th:.15,rp:.3,h:.45,o:.2,w:.4,pr:.7,pu:.4},ease:"Easy",ai:"Med–High",trv:"5–20%",wlb:"Good",edu:1,start:"Customer Success Associate",end:"VP of Customer Success",titles:"Customer Success Associate, Account Manager, Client Success Specialist",step:"Lead with customer-facing results: retention, satisfaction scores, upsells.",sk:["customer","communication","crm","training","troubleshooting"],ind:"tech software saas"},
- {id:"sales",n:"Sales (SDR → Account Executive)",r:"ESC",pay:[65,140,250],d:{c:0,tr:.25,s:1,cu:.9,l:.35,au:.6,v:.55,p:.9,da:.2,th:.05,rp:.95,h:.7,o:.2,en:.4,w:.3,pr:.8,pu:.2},ease:"Easy",ai:"Med–High",trv:"0–30%",wlb:"Demanding",edu:0,start:"Sales Development Representative",end:"VP of Sales",titles:"Sales Development Rep, Business Development Rep, Account Executive",step:"Pick an industry you know and pitch your background to companies that sell into it.",sk:["sales","negotiation","crm","communication","customer","presenting"],ind:"tech medical saas sports"},
- {id:"revops",n:"Revenue / Sales Operations",r:"CEI",pay:[70,110,170],d:{c:.4,tr:.05,s:.35,cu:.45,l:.5,au:.6,v:.5,p:.55,da:.85,th:.1,rp:.15,h:.5,o:.1,w:.4,pr:.5,pu:.2},ease:"Medium",ai:"Medium",trv:"0–5%",wlb:"Good",edu:2,start:"Sales Operations Analyst",end:"VP of Revenue Operations",titles:"Sales Operations Analyst, Revenue Operations Analyst, CRM Analyst",step:"Salesforce Administrator certification plus one sample sales dashboard.",sk:["crm","excel","dataviz","sql","process"],ind:"tech saas"},
- {id:"data",n:"Data / BI Analyst",r:"ICE",pay:[65,95,150],d:{c:.65,tr:.05,s:0,cu:.3,l:.25,au:.6,v:.45,p:.45,da:1,th:.1,rp:.05,h:.45,o:.05,w:.4,pr:.45,pu:.3},ease:"Medium",ai:"High",trv:"0–5%",wlb:"Good",edu:2,start:"Junior Data Analyst",end:"Director of Analytics",titles:"Data Analyst, Reporting Analyst, Business Intelligence Analyst",step:"Learn SQL plus Power BI or Tableau and publish one dashboard on public data.",sk:["sql","excel","bi","dataviz","python","stats"],ind:"sports healthcare finance retail tech"},
- {id:"ds",n:"Data Scientist / ML",r:"ICA",pay:[95,140,210],d:{c:.9,tr:.05,s:0,cu:.2,l:.25,au:.7,v:.5,p:.5,da:1,th:.05,rp:.05,h:.5,o:.05,w:.5,pr:.45,pu:.35},ease:"Hard",ai:"Medium",trv:"0–5%",wlb:"Good",edu:3,start:"Data Analyst (first)",end:"Head of Data Science",titles:"Data Scientist, Machine Learning Engineer, Quantitative Analyst",step:"Start as an analyst and build two public modeling projects in Python.",sk:["python","stats","ml","sql","math"],ind:"tech sports finance healthcare"},
- {id:"swe",n:"Software Developer",r:"IRC",pay:[80,130,200],d:{c:1,tr:.05,s:0,cu:.2,l:.3,au:.7,v:.5,p:.55,da:.5,th:.2,rp:.05,h:.6,o:.1,w:.35,pr:.3,en:.3,pu:.3},ease:"Medium",ai:"Med–High",trv:"0–5%",wlb:"Good",edu:1,start:"Junior Developer",end:"Staff Engineer / Engineering Manager",titles:"Junior Software Developer, Web Developer, Software Engineer I",step:"Ship 2–3 real projects on GitHub; bootcamp or CS degree both work.",sk:["programming","git","python","cloud"],ind:"tech gaming sports"},
- {id:"cyber",n:"Cybersecurity Analyst",r:"ICR",pay:[75,115,170],d:{c:.45,tr:.1,s:0,cu:.35,l:.3,au:.55,v:.6,p:.75,da:.6,th:.4,rp:.05,h:.6,o:.3,w:.5,pr:.3,pu:.5},ease:"Medium",ai:"Low–Med",trv:"0–10%",wlb:"Mixed",edu:1,start:"SOC Analyst",end:"Security Engineer / CISO",titles:"SOC Analyst, Security Analyst, Cybersecurity Specialist",step:"Help-desk experience plus CompTIA Security+.",sk:["security","networking","linux","troubleshooting","scripting"],ind:"tech government finance healthcare"},
- {id:"grc",n:"GRC / Compliance Analyst",r:"CIE",pay:[65,100,160],d:{c:.1,tr:.1,s:.05,cu:.45,l:.4,au:.55,v:.4,p:.45,da:.55,th:.1,rp:.05,h:.45,o:.15,w:.8,pr:.45,pu:.4},ease:"Medium",ai:"Low–Med",trv:"0–10%",wlb:"Good",edu:2,start:"GRC / IT Compliance Analyst",end:"Director of GRC",titles:"GRC Analyst, IT Compliance Analyst, Risk Analyst",step:"An entry security cert (Security+) plus any audit, policy, or compliance work you've done.",sk:["compliance","risk","documentation","security","excel"],ind:"finance healthcare government tech"},
- {id:"itsup",n:"IT Support → Systems Admin",r:"RCI",pay:[45,75,130],d:{c:.25,tr:.15,s:0,cu:.75,l:.35,au:.45,v:.6,p:.6,da:.3,th:.8,rp:.05,h:.5,o:.7,w:.35,pr:.3,pu:.4},ease:"Easy",ai:"Medium",trv:"Low",wlb:"Mixed",edu:0,start:"Help Desk Technician",end:"IT Manager / IT Director",titles:"Help Desk Technician, IT Support Specialist, Desktop Support",step:"CompTIA A+ gets most people in the door.",sk:["troubleshooting","endpoint","networking","customer"],ind:"education healthcare tech"},
- {id:"cloud",n:"Cloud / DevOps Engineer",r:"IRC",pay:[85,135,200],d:{c:.75,tr:.05,s:0,cu:.2,l:.3,au:.6,v:.5,p:.7,da:.4,th:.4,rp:.05,h:.65,o:.1,w:.4,pr:.25,pu:.2},ease:"Hard",ai:"Medium",trv:"0–5%",wlb:"Mixed",edu:1,start:"Cloud Support Associate",end:"Principal Engineer",titles:"Cloud Support Associate, Junior DevOps Engineer, Systems Engineer",step:"Sysadmin or support experience plus an AWS or Azure associate cert.",sk:["cloud","linux","scripting","networking"],ind:"tech"},
- {id:"ba",n:"Business Systems Analyst",r:"CIS",pay:[65,95,140],d:{c:.25,tr:.1,s:.05,cu:.6,l:.35,au:.5,v:.45,p:.45,da:.7,th:.15,rp:.05,h:.4,o:.2,w:.7,pr:.5,pu:.3},ease:"Easy",ai:"Med–High",trv:"0–10%",wlb:"Good",edu:2,start:"Business Analyst I",end:"Director of Business Systems",titles:"Business Analyst, Business Systems Analyst, Systems Analyst",step:"SQL basics plus a before/after process map of something you improved.",sk:["requirements","process","excel","sql","documentation"],ind:"healthcare finance tech"},
- {id:"pm",n:"Product Manager",r:"EIA",pay:[95,150,250],d:{c:.25,tr:.1,s:.25,cu:.65,l:.7,au:.75,v:.8,p:.7,da:.65,th:.1,rp:.1,h:.7,o:.2,en:.4,w:.7,pr:.75,pu:.4},ease:"Hard",ai:"Low–Med",trv:"0–10%",wlb:"Mixed",edu:2,start:"Associate Product Manager",end:"VP of Product",titles:"Associate Product Manager, Product Analyst, Product Owner",step:"Start as a BA, analyst, or in customer success, then ask to own a small feature.",sk:["product","requirements","communication","dataviz","leadership"],ind:"tech gaming sports"},
- {id:"proj",n:"Project / Program Manager",r:"ECS",pay:[60,95,150],d:{c:.05,tr:.1,s:.1,cu:.6,l:.85,au:.5,v:.55,p:.65,da:.45,th:.15,rp:.05,h:.55,o:.35,w:.6,pr:.65,pu:.35},ease:"Easy",ai:"Medium",trv:"0–10%",wlb:"Mixed",edu:1,start:"Project Coordinator",end:"PMO Director",titles:"Project Coordinator, Junior Project Manager, Program Coordinator",step:"CAPM certification and lead one project end to end at your current job.",sk:["pm","communication","leadership","budgeting","documentation"],ind:"construction healthcare tech"},
- {id:"ux",n:"UX / Product Designer",r:"AIS",pay:[70,110,170],d:{c:.2,tr:.05,s:.15,cu:.5,l:.35,au:.65,v:.65,p:.55,da:.45,th:.1,rp:.05,h:.5,o:.15,w:.5,pr:.6,pu:.5},ease:"Hard",ai:"Medium",trv:"0–5%",wlb:"Good",edu:1,start:"Junior UX Designer",end:"Design Director",titles:"UX Designer, Product Designer, UI Designer",step:"A 3-project portfolio with real case studies, not just screenshots.",sk:["ux","design","research","presenting"],ind:"tech gaming"},
- {id:"mkt",n:"Digital Marketing",r:"AEI",pay:[50,80,140],d:{c:.1,tr:.15,s:.45,cu:.5,l:.4,au:.6,v:.75,p:.6,da:.55,th:.05,rp:.15,h:.55,o:.2,w:.75,pr:.6,en:.3,pu:.35},ease:"Easy",ai:"High",trv:"0–15%",wlb:"Mixed",edu:1,start:"Marketing Coordinator",end:"Chief Marketing Officer",titles:"Marketing Coordinator, Digital Marketing Specialist, Social Media Specialist",step:"Grow one account or run a small campaign and report the numbers.",sk:["marketing","social","writing","dataviz","design"],ind:"sports entertainment retail"},
- {id:"writer",n:"Writer / Communications",r:"ASE",pay:[45,70,120],d:{c:0,tr:.1,s:.15,cu:.3,l:.2,au:.8,v:.6,p:.55,da:.15,th:0,rp:.1,h:.5,o:.15,w:1,pr:.4,en:.3,pu:.55},ease:"Medium",ai:"High",trv:"0–10%",wlb:"Good",edu:1,start:"Content Writer",end:"Communications Director",titles:"Content Writer, Copywriter, Communications Specialist",step:"Publish five strong writing samples on one topic.",sk:["writing","communication","research","social"],ind:"media nonprofit"},
- {id:"media",n:"Video, Photo & Graphic Design",r:"ARE",pay:[40,65,110],d:{c:.05,tr:.35,s:.2,cu:.45,l:.25,au:.8,v:.8,p:.65,da:.05,th:.6,rp:.3,h:.65,o:.55,w:.3,pr:.4,en:.55,pu:.45},ease:"Medium",ai:"High",trv:"10–40%",wlb:"Mixed",edu:0,start:"Production Assistant / Junior Designer",end:"Creative Director",titles:"Video Editor, Graphic Designer, Photographer, Content Creator",step:"Build a reel or portfolio of 6–8 strong pieces.",sk:["media","design","social","marketing"],ind:"media entertainment sports"},
- {id:"fin",n:"Financial Analyst",r:"CIE",pay:[65,100,160],d:{c:.25,tr:.05,s:.1,cu:.3,l:.35,au:.5,v:.45,p:.65,da:.95,th:0,rp:.15,h:.65,o:.15,w:.45,pr:.55,pu:.2},ease:"Medium",ai:"Medium",trv:"0–5%",wlb:"Mixed",edu:2,start:"Financial Analyst",end:"CFO",titles:"Financial Analyst, FP&A Analyst, Investment Analyst",step:"Advanced Excel modeling; finance or accounting coursework helps.",sk:["finance","excel","accounting","budgeting","dataviz"],ind:"finance"},
- {id:"acct",n:"Accountant / Auditor",r:"CEI",pay:[55,85,140],d:{c:.05,tr:.1,s:0,cu:.35,l:.3,au:.45,v:.3,p:.6,da:.85,th:0,rp:.05,h:.6,o:.2,w:.35,pr:.25,pu:.25},ease:"Medium",ai:"High",trv:"0–15%",wlb:"Mixed (busy season)",edu:2,start:"Staff Accountant",end:"Controller / CFO",titles:"Staff Accountant, Audit Associate, Bookkeeper",step:"Accounting coursework; the CPA opens the top-paying doors.",sk:["accounting","excel","compliance","finance"],ind:"finance"},
- {id:"advisor",n:"Financial Advisor / Banker",r:"ESC",pay:[50,110,220],d:{c:0,tr:.15,s:.85,cu:.95,l:.3,au:.85,v:.55,p:.65,da:.45,th:0,rp:.8,h:.6,o:.3,en:.6,w:.25,pr:.65,pu:.5},ease:"Medium",ai:"Low–Med",trv:"0–15%",wlb:"Mixed",edu:1,start:"Personal Banker / Advisor Trainee",end:"Practice Owner",titles:"Financial Advisor Trainee, Personal Banker, Insurance Agent",step:"Pass the SIE exam and land a trainee program at a bank or firm.",sk:["sales","finance","communication","crm"],ind:"finance"},
- {id:"ops",n:"Operations / Supply Chain",r:"ECR",pay:[55,85,140],d:{c:.05,tr:.2,s:.15,cu:.55,l:.8,au:.5,v:.65,p:.75,da:.55,th:.45,rp:.1,h:.7,o:.75,w:.3,pr:.45,pu:.3},ease:"Easy",ai:"Medium",trv:"0–20%",wlb:"Demanding",edu:1,start:"Operations Coordinator",end:"VP of Operations",titles:"Operations Coordinator, Logistics Analyst, Supply Chain Analyst, Shift Supervisor",step:"Fix one bottleneck where you work and measure the time or money saved.",sk:["operations","process","leadership","excel","pm"],ind:"manufacturing retail logistics healthcare sports"},
- {id:"hr",n:"HR / Recruiter",r:"SEC",pay:[50,80,130],d:{c:0,tr:.1,s:.45,cu:.95,l:.45,au:.5,v:.55,p:.55,da:.3,th:0,rp:.2,h:.5,o:.4,w:.5,pr:.6,pu:.55},ease:"Easy",ai:"Med–High",trv:"0–15%",wlb:"Good",edu:1,start:"Recruiting Coordinator / HR Assistant",end:"Head of People",titles:"Recruiter, HR Generalist, Recruiting Coordinator",step:"Agency recruiting hires for drive; the aPHR helps for HR roles.",sk:["recruiting","hr","communication","training"],ind:"tech healthcare"},
- {id:"teach",n:"Teacher",r:"SAE",pay:[45,60,85],d:{c:0,tr:0,s:.15,cu:1,l:.7,au:.5,v:.65,p:.6,da:.25,th:.2,rp:0,h:.6,o:1,w:.45,pr:.9,pu:1},ease:"Medium",ai:"Low",trv:"None",wlb:"Mixed",edu:2,start:"Substitute / Paraprofessional",end:"Principal / District Leader",titles:"Teacher, Substitute Teacher, Paraprofessional",step:"Substitute or work as a para to test it; most states require a license.",sk:["teaching","curriculum","presenting","communication"],ind:"education sports"},
- {id:"idtrain",n:"Instructional Designer / Trainer",r:"ASI",pay:[60,85,120],d:{c:.1,tr:.15,s:.1,cu:.55,l:.4,au:.65,v:.6,p:.45,da:.3,th:.1,rp:.05,h:.45,o:.15,w:.75,pr:.75,pu:.65},ease:"Medium",ai:"Med–High",trv:"0–20%",wlb:"Good",edu:2,start:"Corporate Trainer",end:"Director of Learning",titles:"Instructional Designer, Corporate Trainer, Learning Specialist",step:"Build one short e-learning module as a portfolio piece.",sk:["curriculum","training","writing","design","presenting"],ind:"education healthcare tech"},
- {id:"nurse",n:"Registered Nurse",r:"SIR",pay:[75,90,120],d:{c:0,tr:.1,s:0,cu:1,l:.5,au:.4,v:.75,p:.95,da:.4,th:.7,rp:0,h:.8,o:1,w:.35,pr:.35,pu:1},ease:"Medium",ai:"Low",trv:"Low (travel nursing optional)",wlb:"Demanding",edu:2,start:"CNA (to test it) → RN",end:"Nurse Practitioner / Nurse Manager",titles:"Registered Nurse, LPN, Nursing Assistant",step:"Start CNA training to test the fit; an ADN or BSN gets you to RN.",sk:["healthcare","communication","customer"],ind:"healthcare"},
- {id:"allied",n:"Allied Health Technologist",r:"RSI",pay:[50,70,95],d:{c:.05,tr:.05,s:0,cu:.85,l:.25,au:.45,v:.5,p:.7,da:.35,th:.85,rp:0,h:.5,o:1,w:.2,pr:.2,pu:.85},ease:"Medium",ai:"Low",trv:"None",wlb:"Good",edu:1,start:"Technologist / Technician",end:"Lead Technologist / Department Manager",titles:"Radiologic Technologist, Respiratory Therapist, Surgical Tech, PT Assistant",step:"Most are 2-year programs with strong job placement.",sk:["healthcare","handson","customer"],ind:"healthcare"},
- {id:"hadmin",n:"Healthcare Admin / Health IT",r:"CSE",pay:[55,85,140],d:{c:.1,tr:.05,s:.05,cu:.6,l:.55,au:.45,v:.5,p:.6,da:.6,th:.15,rp:.05,h:.5,o:.6,w:.5,pr:.45,pu:.75},ease:"Medium",ai:"Medium",trv:"0–10%",wlb:"Good",edu:2,start:"Patient Access Rep / Clinic Coordinator",end:"Health System Director",titles:"Clinic Coordinator, Health Information Specialist, Practice Manager",step:"Front-desk or patient-access jobs are the usual door in.",sk:["healthcare","operations","compliance","excel"],ind:"healthcare"},
- {id:"counsel",n:"Counselor / Social Worker",r:"SAI",pay:[45,60,85],d:{c:0,tr:.1,s:0,cu:1,l:.3,au:.5,v:.6,p:.7,da:.2,th:0,rp:0,h:.55,o:.85,w:.6,pr:.35,pu:1},ease:"Hard",ai:"Low",trv:"Low",wlb:"Mixed",edu:3,start:"Case Aide / Peer Support",end:"Licensed Therapist / Clinical Director",titles:"Case Manager, School Counselor, Social Worker",step:"Case-aide or peer-support work; licensure needs a master's.",sk:["counseling","communication","documentation"],ind:"healthcare education nonprofit government"},
- {id:"trades",n:"Skilled Trades",r:"RIC",pay:[45,75,110],d:{c:.05,tr:.3,s:.15,cu:.5,l:.4,au:.65,v:.65,p:.6,da:.15,th:1,rp:.05,h:.6,o:1,en:.45,w:.05,pr:.15,pu:.45},ease:"Easy",ai:"Low",trv:"Local",wlb:"Mixed",edu:0,start:"Apprentice",end:"Master / Contractor",titles:"Electrician Apprentice, HVAC Technician, Plumber Apprentice",step:"Apply to a union or employer apprenticeship — you get paid to learn.",sk:["handson","safety","troubleshooting","math"],ind:"construction energy"},
- {id:"eng",n:"Engineer (Civil, Mechanical, Electrical)",r:"IRC",pay:[75,105,150],d:{c:.35,tr:.2,s:.05,cu:.35,l:.4,au:.55,v:.55,p:.6,da:.65,th:.65,rp:.05,h:.55,o:.5,w:.55,pr:.4,pu:.45},ease:"Hard",ai:"Low–Med",trv:"0–25%",wlb:"Good",edu:2,start:"Engineer I / Engineering Technician",end:"Principal Engineer",titles:"Engineer I, Engineering Technician, CAD Designer",step:"An accredited engineering degree; technicians can start with a 2-year program.",sk:["engineering","cad","math","pm"],ind:"manufacturing construction energy"},
- {id:"sci",n:"Scientist / Researcher",r:"IRA",pay:[55,85,130],d:{c:.4,tr:.1,s:0,cu:.2,l:.3,au:.7,v:.45,p:.45,da:.85,th:.7,rp:0,h:.55,o:.7,w:.75,pr:.45,pu:.6},ease:"Hard",ai:"Low–Med",trv:"0–10%",wlb:"Good",edu:3,start:"Lab Technician / Research Assistant",end:"Principal Scientist",titles:"Research Assistant, Lab Technician, Research Scientist",step:"Lab roles need a science bachelor's; research careers need grad school.",sk:["research","lab","stats","writing"],ind:"healthcare biotech environment"},
- {id:"consult",n:"Management / Tech Consulting",r:"EIC",pay:[80,130,250],d:{c:.3,tr:.75,s:.35,cu:.85,l:.6,au:.5,v:.9,p:.85,da:.65,th:.1,rp:.2,h:.9,o:.75,w:.75,pr:.85,pu:.3},ease:"Hard",ai:"Medium",trv:"50–80%",wlb:"Demanding",edu:2,start:"Associate Consultant",end:"Partner",titles:"Associate Consultant, Consulting Analyst, Technology Consulting Analyst",step:"Practice case interviews; big firms hire analysts every fall.",sk:["strategy","presenting","excel","communication","research"],ind:"tech healthcare finance sports"},
- {id:"entre",n:"Entrepreneur / Small Business Owner",r:"EAR",pay:[30,80,250],d:{c:.15,tr:.3,s:.85,cu:.85,l:.75,au:1,v:.95,p:.85,da:.45,th:.45,rp:1,h:.9,o:.55,en:1,w:.45,pr:.75,pu:.6},ease:"Medium",ai:"Low",trv:"Varies",wlb:"Demanding",edu:0,start:"Side hustle or freelancing",end:"Business owner",titles:"Self-employed, founder, freelancer",step:"Land three paying customers on the side before you quit anything.",sk:["sales","marketing","budgeting","leadership","operations"],ind:""},
- {id:"sportsbiz",n:"Sports & Entertainment Business",r:"ESC",pay:[45,70,130],d:{c:.05,tr:.35,s:.6,cu:.85,l:.45,au:.5,v:.8,p:.8,da:.4,th:.3,rp:.45,h:.85,o:.8,w:.4,pr:.7,pu:.75},ease:"Hard",ai:"Low–Med",trv:"Local + events",wlb:"Demanding",edu:1,start:"Ticket Sales Rep / Event Staff",end:"VP of Business Operations",titles:"Inside Sales Rep (team), Partnership Coordinator, Team Operations Assistant",step:"Ticket sales is the classic way in; work game days to build contacts.",sk:["sports","events","sales","marketing","communication"],ind:"sports entertainment music"},
- {id:"event",n:"Event Planner / Producer",r:"ESA",pay:[45,65,110],d:{c:0,tr:.55,s:.4,cu:.85,l:.65,au:.55,v:.9,p:.9,da:.2,th:.6,rp:.1,h:.85,o:.95,w:.35,pr:.55,pu:.5},ease:"Easy",ai:"Low",trv:"20–60%",wlb:"Demanding",edu:1,start:"Event Coordinator / AV Technician",end:"Director of Events",titles:"Event Coordinator, Event Producer, Venue Coordinator, AV Technician",step:"Work events (venues, conferences, weddings) and track the budgets you handled.",sk:["events","operations","customer","pm"],ind:"sports entertainment hospitality music"},
- {id:"realestate",n:"Real Estate Agent / Property Manager",r:"ESC",pay:[40,80,180],d:{c:0,tr:.3,s:.9,cu:.95,l:.3,au:.9,v:.75,p:.7,da:.35,th:.2,rp:1,h:.75,o:.85,en:.75,w:.25,pr:.65,pu:.4},ease:"Easy",ai:"Low–Med",trv:"Local",wlb:"Demanding",edu:0,start:"Licensed Agent / Leasing Consultant",end:"Broker / Owner",titles:"Real Estate Agent, Leasing Consultant, Property Manager",step:"Get your state license (a few weeks of coursework); expect a slow first year.",sk:["sales","negotiation","customer","marketing"],ind:"real estate housing"},
- {id:"legal",n:"Paralegal",r:"CIE",pay:[45,62,90],d:{c:0,tr:.1,s:.05,cu:.6,l:.35,au:.45,v:.55,p:.75,da:.45,th:0,rp:.05,h:.6,o:.6,w:.85,pr:.45,pu:.45},ease:"Easy",ai:"Med–High",trv:"0–10%",wlb:"Mixed",edu:1,start:"Legal Assistant",end:"Senior Paralegal / Paralegal Manager",titles:"Paralegal, Legal Assistant, Litigation Paralegal",step:"A paralegal certificate; specializing in one practice area raises pay.",sk:["legal","writing","research","documentation"],ind:"legal government"},
- {id:"attorney",n:"Attorney",r:"EIS",pay:[70,120,220],d:{c:0,tr:.2,s:.35,cu:.8,l:.6,au:.65,v:.7,p:.85,da:.5,th:0,rp:.1,h:.75,o:.7,w:.95,pr:.85,pu:.65},ease:"Hard",ai:"Medium",trv:"0–20%",wlb:"Demanding (varies a lot by practice area)",edu:3,start:"Law Clerk / Associate Attorney",end:"Partner / Judge",titles:"Associate Attorney, Staff Attorney, Public Defender, Assistant District Attorney",step:"Law school (3 years) and the bar exam. Working as a paralegal first is common and helps admissions.",sk:["legal","writing","research","presenting"],ind:"legal government nonprofit"},
- {id:"ea",n:"Executive Assistant / Office Manager",r:"CES",pay:[45,65,100],d:{c:0,tr:.15,s:.1,cu:.8,l:.45,au:.45,v:.75,p:.65,da:.45,th:.2,rp:0,h:.55,o:.85,w:.6,pr:.4,pu:.45},ease:"Easy",ai:"High",trv:"Low",wlb:"Good",edu:0,start:"Administrative Assistant",end:"Chief of Staff / Director of Operations",titles:"Administrative Assistant, Executive Assistant, Office Manager",step:"Own one leader's calendar, travel, and projects and become the person they can't work without.",sk:["pm","communication","excel","documentation"],ind:"legal healthcare tech finance"},
- {id:"contracts",n:"Contracts Manager",r:"CEI",pay:[60,90,140],d:{c:0,tr:.1,s:.3,cu:.6,l:.4,au:.55,v:.5,p:.65,da:.5,th:0,rp:.05,h:.55,o:.4,w:.85,pr:.45,pu:.3},ease:"Medium",ai:"Med–High",trv:"0–10%",wlb:"Good",edu:1,start:"Contracts Administrator",end:"Director of Contracts",titles:"Contracts Administrator, Contract Specialist, Procurement Specialist",step:"Legal-assistant or purchasing experience plus a contract-management certification (such as NCMA's).",sk:["legal","negotiation","documentation","compliance"],ind:"legal government tech healthcare"},
- {id:"legalops",n:"Legal Operations / E-Discovery",r:"CIE",pay:[60,90,140],d:{c:.3,tr:.1,s:.05,cu:.45,l:.4,au:.55,v:.5,p:.65,da:.75,th:.1,rp:.05,h:.6,o:.3,w:.55,pr:.4,pu:.3},ease:"Medium",ai:"Medium",trv:"0–10%",wlb:"Mixed",edu:1,start:"Litigation Support / E-Discovery Specialist",end:"Director of Legal Operations",titles:"Litigation Support Specialist, E-Discovery Analyst, Legal Operations Analyst",step:"Get certified on an e-discovery review platform (Relativity is the big one) and lead with your legal experience.",sk:["legal","documentation","excel","sql"],ind:"legal tech"},
- {id:"policy",n:"Public Policy / Government Analyst",r:"ISC",pay:[55,80,120],d:{c:.1,tr:.15,s:.1,cu:.5,l:.4,au:.55,v:.6,p:.55,da:.6,th:0,rp:0,h:.5,o:.4,w:.85,pr:.6,pu:.95},ease:"Medium",ai:"Medium",trv:"0–15%",wlb:"Good",edu:2,start:"Program Assistant / Legislative Aide",end:"Policy Director",titles:"Policy Analyst, Program Analyst, Legislative Aide",step:"Write a 2-page brief on a local issue; government and nonprofit boards post entry roles.",sk:["policy","research","writing","dataviz"],ind:"government nonprofit"},
- {id:"fire",n:"Firefighter / EMT / Public Safety",r:"RSE",pay:[45,70,100],d:{c:0,tr:.1,s:0,cu:.8,l:.5,au:.35,v:.85,p:1,da:.1,th:.9,rp:0,h:.85,o:1,w:.15,pr:.25,pu:1},ease:"Medium",ai:"Low",trv:"Local",wlb:"Demanding (shifts)",edu:1,start:"EMT",end:"Captain / Chief",titles:"EMT, Firefighter, Paramedic, Police Officer",step:"EMT-Basic is a one-semester course and opens most public-safety doors.",sk:["healthcare","safety","handson","communication"],ind:"government public safety"},
- {id:"hosp",n:"Hospitality / Restaurant Management",r:"ERS",pay:[40,60,100],d:{c:0,tr:.1,s:.45,cu:1,l:.75,au:.5,v:.8,p:.85,da:.3,th:.55,rp:.3,h:.85,o:1,en:.4,w:.15,pr:.45,pu:.5},ease:"Easy",ai:"Low",trv:"Low",wlb:"Demanding",edu:0,start:"Shift Lead",end:"General Manager / Owner",titles:"Shift Supervisor, Assistant Manager, Front Desk Lead",step:"Ask for shift-lead duties; management-trainee programs hire fast.",sk:["customer","leadership","operations"],ind:"hospitality food travel sports"}
-];
+/* Fold generated BLS careers into the hand-tuned ones that cover the same SOC codes.
+   Hand-tuned careers keep their own fingerprint and pay (which includes commission for sales roles);
+   they gain a "bls" block with the official numbers for display. Everything else is added as-is. */
+function mergeCareers(hand,bls){
+  const bySoc={}; bls.forEach(b=>{if(b.bls)bySoc[b.bls.soc]=b});
+  const covered=new Set();
+  const out=hand.map(h=>{
+    const m=(h.soc||[]).map(code=>bySoc[code]).filter(Boolean);
+    m.forEach(b=>covered.add(b.bls.soc));
+    return m.length?Object.assign({},h,{bls:m[0].bls,blsAll:m.map(b=>b.bls)}):h;
+  });
+  bls.forEach(b=>{if(!b.bls||!covered.has(b.bls.soc))out.push(b)});
+  return out;
+}
+/* Careers live in careers.js (hand-tuned) and careers-bls.js (generated). See mergeCareers(). */
+const C=mergeCareers(typeof CAREERS_HAND!=="undefined"?CAREERS_HAND:[],typeof CAREERS_BLS!=="undefined"?CAREERS_BLS:[]);
 
 /* Stepping-stone jobs: entry roles you can likely land soon, each leading toward target careers */
 const STEPS=[
@@ -1031,6 +1003,12 @@ function scoreCareer(car,P){
   if(P.minSet&&car.pay[0]<P.minPay-10){total-=.04;flags.push("Typical starting pay ($"+car.pay[0]+"k) is under your minimum ($"+P.minPay+"k)")}
   if(car.ease==="Hard"&&U.pat<.35){total-=.03;flags.push("Hard to break into; expect a multi-year path")}
   if(P.allowEdu!=null&&car.edu>P.allowEdu){total-=.05*(car.edu-P.allowEdu);flags.push("Usually needs "+EDU_NEED[car.edu]+", more school than you said you'd take on")}
+  // BLS says some jobs (most managers, for example) are usually reached after years in a related job.
+  const yrs=parseFloat(state.profile.years), exp=car.bls&&car.bls.exp;
+  if(exp&&!isNaN(yrs)){
+    if(/5 years or more/i.test(exp)&&yrs<5){total-=.07;flags.push("Usually needs 5+ years in a related job first, so it's a later step rather than a starting point")}
+    else if(/less than 5/i.test(exp)&&yrs<1){total-=.03;flags.push("Usually needs some experience in a related job first")}
+  }
   const ind=industryMatch(car); if(ind)total+=.02;
   // Field answers are things you told us directly, so they move the ranking more than general traits.
   const fb=clamp(1.6*(P.boost[car.id]||0),-.2,.15); total+=fb;
@@ -1276,6 +1254,15 @@ function analyze(){
   return {P,scored,code,mbti,ready:readiness(P)};
 }
 
+let lastScored=[];
+/* Career lookup on the results page: every word must appear in the name or job titles. */
+function searchCareers(q){
+  const words=q.toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>=2);
+  if(!words.length)return [];
+  const exact=x=>x.s.car.n.toLowerCase()===q.trim().toLowerCase()?1:0;
+  return lastScored.map((s,i)=>({s,i,t:(s.car.n+' '+(s.car.titles||'')).toLowerCase()})).filter(x=>words.every(w=>x.t.includes(w)))
+    .sort((a,b)=>(exact(b)-exact(a))||(b.s.car.n.toLowerCase().includes(words[0])-a.s.car.n.toLowerCase().includes(words[0]))||a.i-b.i).slice(0,8);
+}
 function renderResults(){
   const {P,scored,code,mbti,ready}=analyze();
   const top=scored.slice(0,10), low=P.answered<P.total*.6, pr=state.profile;
@@ -1290,9 +1277,12 @@ function renderResults(){
     app.innerHTML=h; updateHeader(); return;
   }
   if(low)h+='<div class="warnbox"><strong>Early read.</strong> You\'ve answered '+P.answered+' of '+P.total+' scored questions, and these are based only on those. The ranking firms up as you answer more. <button class="btn sm" data-go="'+firstUnansweredPage()+'">Keep going</button></div>';
-  h+='<div class="top3">'+top.slice(0,3).map((s,i)=>'<div class="card"><div class="rk">#'+(i+1)+(s.ind?' · '+esc(pr.industry.trim()):'')+'</div><div class="nm">'+esc(s.car.n)+'</div><div class="pc">'+s.fit+'%</div><div class="small">'+esc(s.car.start)+' → '+esc(s.car.end)+'</div></div>').join("")+'</div>';
+  h+='<div class="top3">'+top.slice(0,3).map((s,i)=>'<div class="card"><div class="rk">#'+(i+1)+(s.ind?' · '+esc(pr.industry.trim()):'')+'</div><div class="nm">'+esc(s.car.n)+'</div><div class="pc">'+s.fit+'%</div><div class="small">'+esc(subline(s.car))+'</div></div>').join("")+'</div>';
   h+='<p class="small">Fit blends your interests (about a third), work-style match (about half), pay fit (weighted by how much you ranked pay), and smaller boosts for abilities you rated high and skills on your resume. Only parts you\'ve answered count. Dealbreakers subtract points.</p>';
+  lastScored=scored;
   h+=top.map((s,i)=>resultCard(s,i+1,i<3)).join("");
+  h+='<h2 class="sec">Look up any career</h2><p class="lede">All '+scored.length.toLocaleString("en-US")+' careers are scored for you. Search to see where any job lands.</p>'+
+    '<input type="search" id="careerSearch" placeholder="Try nurse, electrician, pilot, accountant…" aria-label="Search careers" autocomplete="off"><div id="searchOut"></div>';
   h+=dirsPanel();
   if(indMatches.length)h+='<h2 class="sec">Through your industry lens</h2><p class="lede">Further down the list, but these connect to '+esc(pr.industry.trim())+'.</p>'+indMatches.map(s=>resultCard(s,"+",false)).join("");
   const riPanel=P.riN>=6
@@ -1318,8 +1308,9 @@ function renderResults(){
     '<p><b>Personality (Big Five).</b> The 30 items come from Goldberg\'s public-domain IPIP markers. The Big Five has decades of evidence linking it to work outcomes (Barrick &amp; Mount, 1991). MBTI is popular but has weak test-retest reliability (Pittenger, 2005), so it\'s shown only for fun.</p>'+
     '<p><b>Values and work style.</b> The ranking follows O*NET\'s work-values set, with pay, variety, and purpose split out. Person–job fit on needs and supplies predicts satisfaction (Kristof-Brown et al., 2005). Scenario questions use the situational-judgment format, which captures how you\'d act rather than how you see yourself (McDaniel et al., 2001).</p>'+
     '<p><b>Resume.</b> Your resume is read in your browser and matched against a skill list by keyword. It finds evidence, not proficiency, so check the skill chips. It gives a small boost to careers that use skills you already have and powers the stepping-stone jobs.</p>'+
-    '<p><b>Scoring.</b> Every answer adds evidence to 17 work-style dimensions. Each career has a demand level on the same dimensions. Fit penalizes gaps, more heavily when a job demands more of something you want to avoid (coding, selling, commission, travel, hours) than when it offers less. Career profiles and pay are rough U.S. estimates, not O*NET data. Check the Bureau of Labor Statistics Occupational Outlook Handbook or local postings for real numbers.</p>'+
-    '<p><b>Limits.</b> This is a short self-report tool, not a validated assessment. Career profiles are judgment calls, and how you feel today shifts answers. Use the top 5–10 as a shortlist to test against real job postings and conversations, not as a verdict.</p></div></details></div>';
+    '<p><b>Scoring.</b> Every answer adds evidence to 17 work-style dimensions. Each career has a demand level on the same dimensions. Fit penalizes gaps, more heavily when a job demands more of something you want to avoid (coding, selling, commission, travel, hours) than when it offers less. The hand-tuned careers use judgment-call profiles and pay. Every other U.S. occupation is built from data: pay from the Bureau of Labor Statistics, and the work-style profile from O*NET ratings of what each job involves, scaled to match the hand-tuned ones. Check local postings for what employers near you pay.</p>'+
+    '<p><b>Data sources.</b> Pay, employment, and growth come from the U.S. Bureau of Labor Statistics. This app includes information from <a href="https://www.onetonline.org/" target="_blank" rel="noopener noreferrer">O*NET OnLine</a> and the O*NET Database by the U.S. Department of Labor, Employment and Training Administration (USDOL/ETA), used under the <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener noreferrer">CC BY 4.0</a> license. USDOL/ETA has not approved, endorsed, or tested these modifications. O*NET® is a trademark of USDOL/ETA.</p>'+
+    '<p><b>Limits.</b> This is a short self-report tool, not a validated assessment. Career profiles are estimates, and how you feel today shifts answers. Use the top 5–10 as a shortlist to test against real job postings and conversations, not as a verdict.</p></div></details></div>';
   h+='<div class="nav"><button class="btn ghost" data-go="'+(PAGES.length-1)+'">← Back to questions</button><button class="btn" data-go="-1">Backup & settings</button></div>';
   app.innerHTML=h; updateHeader();
 }
@@ -1371,16 +1362,44 @@ function strengthsPanel(P){
    '<div><span style="color:var(--navy);font-weight:600">Love it, still building</span><p class="small">Worth investing in: these are where training or a certification pays off most.</p>'+list(grow,"None flagged.")+'</div></div>'+
    '<div>'+Object.entries(P.AB).sort((a,b)=>(b[1]??-1)-(a[1]??-1)).map(([k,v])=>meter(k+" · "+RNAME[k]+" skill",null,v)).join("")+'</div></div>';
 }
+/* One-line summary under a career's name: the hand-tuned path, or BLS pay and education for generated careers. */
+function subline(c){
+  if(c.start&&c.end)return c.start+" → "+c.end;
+  return (c.bls?"Median pay "+c.bls.pay.med+" · ":"")+cap(EDU_NEED[c.edu]);
+}
+/* Official BLS numbers, with links, for careers tied to a BLS occupation. */
+function blsBlock(c){
+  const b=c.bls; if(!b)return '';
+  const n=x=>Number(x).toLocaleString("en-US");
+  const parts=['<strong>Median pay '+esc(b.pay.med)+'</strong> (middle half earn '+esc(b.pay.p25)+'–'+esc(b.pay.p75)+'; top 10% earn '+esc(b.pay.p90)+'+)'];
+  if(b.emp)parts.push(n(b.emp)+' people do this job in the U.S.');
+  if(b.growth!=null)parts.push('Projected growth '+(b.growth>0?'+':'')+b.growth+'% over 10 years'+(b.openings?', about '+n(b.openings)+' openings a year':''));
+  if(b.edu&&!c.gen)parts.push('Typical entry: '+esc(b.edu.toLowerCase())+(b.exp&&!/^none$/i.test(b.exp)?', plus '+esc(b.exp.toLowerCase())+' of related experience':''));
+  const others=(c.blsAll||[]).slice(1).map(x=>x.title);
+  return '<div class="bls"><div class="src">Official numbers · BLS '+esc(b.year||'')+(others.length?' · '+esc(b.title):'')+'</div><p style="margin:4px 0">'+parts.join(' · ').replace(/([^.])$/,'$1.')+'</p>'+
+    (others.length?'<div class="small">Also covers: '+esc(others.join(", "))+'</div>':'')+
+    '<div class="small"><a href="'+esc(b.url)+'" target="_blank" rel="noopener noreferrer">BLS wage data</a>'+(b.onet?' · <a href="'+esc(b.onet)+'" target="_blank" rel="noopener noreferrer">What the job involves (O*NET)</a>':'')+'</div></div>';
+}
+function relBlock(c){
+  if(!c.rel||!lastScored.length)return '';
+  const rows=c.rel.map(code=>{const i=lastScored.findIndex(x=>(x.car.soc||[]).includes(code)||(x.car.bls&&x.car.bls.soc===code));return i<0?null:{s:lastScored[i],i}})
+    .filter((x,j,a)=>x&&a.findIndex(y=>y&&y.i===x.i)===j&&x.s.car!==c).sort((a,b)=>a.i-b.i);
+  if(!rows.length)return '';
+  return '<div class="small"><strong>Specific jobs in this group:</strong> '+rows.map(x=>'<button type="button" class="linkbtn" data-find="'+esc(x.s.car.n)+'">'+esc(x.s.car.n)+'</button> '+x.s.fit+'%').join(' · ')+'</div>';
+}
 function resultCard(s,rank,open){
   const c=s.car, pr=state.profile;
   const watch=[...s.flags,...s.cons.filter(x=>!s.flags.some(f=>f.toLowerCase().includes(x.split(" ").pop().replace(".",""))))].slice(0,4);
-  return '<details class="res"'+(open?" open":"")+'><summary><span class="no">'+rank+'</span><span class="nm">'+esc(c.n)+(s.ind?'<span class="tag ind">'+esc(pr.industry.trim())+'</span>':'')+'<small>'+esc(c.start)+' → '+esc(c.end)+'</small></span><span class="fit">'+s.fit+'%</span><span class="fitbar"><i style="width:'+s.fit+'%"></i></span></summary>'+
+  return '<details class="res"'+(open?" open":"")+'><summary><span class="no">'+rank+'</span><span class="nm">'+esc(c.n)+(s.ind?'<span class="tag ind">'+esc(pr.industry.trim())+'</span>':'')+'<small>'+esc(subline(c))+'</small></span><span class="fit">'+s.fit+'%</span><span class="fitbar"><i style="width:'+s.fit+'%"></i></span></summary>'+
   '<div class="body">'+
+  (c.desc?'<p class="desc">'+esc(c.desc)+'</p>':'')+
   (s.why.length?'<div><span class="good">Why it fits</span><ul class="why">'+s.why.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>':'')+
   (watch.length?'<div><span class="flag">Watch out for</span><ul class="why">'+watch.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>':'')+
   '<div class="facts"><div><span>Pay (entry · yr 4 · senior)</span>$'+c.pay[0]+'k · $'+c.pay[1]+'k · $'+c.pay[2]+'k</div><div><span>Travel</span>'+esc(c.trv)+'</div><div><span>Work-life</span>'+esc(c.wlb)+'</div><div><span>Ease of entry</span>'+esc(c.ease)+'</div><div><span>Typical education</span>'+esc(cap(EDU_NEED[c.edu]))+'</div><div><span>AI exposure</span>'+esc(c.ai)+'</div><div><span>Interest code</span>'+c.r+'</div></div>'+
   (mySkillsCount()?'<div class="small"><strong>Skills to build:</strong> '+(s.gapsSk.length?esc(s.gapsSk.slice(0,3).map(k=>SK[k][0]).join(", ")):"none of the core ones — go deeper")+'</div>':'')+
-  '<div class="small"><strong>Search for:</strong> '+esc(c.titles)+'</div><div class="small"><strong>First move:</strong> '+esc(c.step)+'</div>'+
+  '<div class="small"><strong>Search for:</strong> '+esc(c.titles)+'</div>'+(c.step?'<div class="small"><strong>'+(c.gen?'Path in':'First move')+':</strong> '+esc(c.step)+'</div>':'')+
+  blsBlock(c)+relBlock(c)+
+  (c.gen?'<div class="small">'+(c.est?'This job has little O*NET data, so much of its profile is estimated from similar jobs. ':'')+'Profile computed from O*NET job data; AI exposure not rated yet.</div>':'')+
   '<div class="small">'+[["Interest match",s.interest],["ability match",s.ability],["resume match",s.skillFit],["work-style match",s.dimSim],["pay match",s.payFit]].filter(x=>x[1]!=null).map(x=>x[0]+' '+pct(x[1])).join(' · ').replace(/^./,c=>c.toUpperCase())+'</div></div></details>';
 }
 function mySkillsCount(){return mySkills().size}
@@ -1498,11 +1517,19 @@ app.addEventListener("click",e=>{
   if(act==="reset"){document.getElementById("resetconfirm").hidden=false;return}
   if(act==="resetyes"){state={answers:{},page:-1,profile:blankProfile()};save();render();toast("Everything erased");return}
 });
+app.addEventListener("click",e=>{const f=e.target.closest("[data-find]");if(!f)return;
+  const box=document.getElementById("careerSearch");if(!box)return;
+  box.value=f.dataset.find;box.dispatchEvent(new Event("input",{bubbles:true}));box.scrollIntoView({behavior:"smooth",block:"start"})});
 app.addEventListener("click",e=>{const a=e.target.closest("[data-gofield]");if(a){e.preventDefault();go(0);setTimeout(()=>{const f=document.getElementById("p-field");if(f){f.scrollIntoView({block:"center"});f.focus()}},50)}});
 document.getElementById("chips").addEventListener("click",e=>{const b=e.target.closest("button[data-go]");if(b)go(Number(b.dataset.go))});
 function go(p){state.page=Math.max(-1,p);save();render();updateLive();window.scrollTo({top:0})}
 app.addEventListener("input",e=>{
   const t=e.target;
+  if(t.id==="careerSearch"){const out=document.getElementById("searchOut"),q=t.value.trim();
+    if(!q){out.innerHTML="";return}
+    const hits=searchCareers(q);
+    out.innerHTML=hits.length?hits.map((x,j)=>resultCard(x.s,"#"+(x.i+1),hits.length===1||(j===0&&x.s.car.n.toLowerCase()===q.toLowerCase()))).join(""):'<p class="small">No career matches “'+esc(q)+'”. Try a broader word.</p>';
+    return}
   if(t.dataset.sl){const it=allItems().find(x=>x.id===t.dataset.sl);state.answers[it.id]=Number(t.value);
     const v=document.getElementById("val-"+it.id);v.textContent=it.fmt(Number(t.value));v.classList.remove("unset");
     document.getElementById("q-"+it.id).classList.add("ans");const c=document.getElementById("clr-"+it.id);if(c)c.hidden=false;save()}
