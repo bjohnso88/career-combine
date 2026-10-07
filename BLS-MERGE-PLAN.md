@@ -62,9 +62,12 @@ Bix: "Ultimately I want as many jobs as there are to be options."
 - [x] 2. Move the existing `C` list out of `index.html` into `careers.js`
        (now `CAREERS_HAND`, each with `soc` codes; `mergeCareers()` in index.html
        folds generated `CAREERS_BLS` entries from `careers-bls.js` into them)
-- [ ] 3. Map BLS occupations to existing careers (merge overlaps)
-- [ ] 4. Write fingerprints for the new careers (batches of ~20, commit each batch)
-- [ ] 5. Show the new BLS info on results cards; update STEPS links if needed
+- [x] 3. Map BLS occupations to existing careers (merge overlaps) — `soc` on each hand-tuned career
+- [x] 4. Fingerprints are computed by `tools/build-careers.mjs` (O*NET 31.0), not hand-written
+- [ ] 4b. BLOCKED on Bix: add the two BLS files (OEWS national zip + occupation.xlsx)
+       to `source-data/bls/`, then the GitHub Action builds `careers-bls.js`
+- [x] 5. Show the new BLS info on results cards; search box for any career
+       (tested with placeholder wages: 802 careers, no errors, no sideways scroll on phones)
 - [ ] 6. Test in a browser (including phone size); check all careers score
 - [ ] 7. Update README (career count, `careers.js`, data sources and limits)
 - [ ] 8. Open the pull request; delete this file

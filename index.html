@@ -156,6 +156,11 @@ body.has-live.live-open{padding-bottom:240px}
 .res .fitbar i{display:block;height:100%;background:var(--navy)}
 .res .body{padding:0 16px 16px;display:grid;gap:10px}
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px 14px;font-size:.85rem}
+.bls{border-top:1px dashed var(--line);padding-top:8px;font-size:.85rem}
+.bls .src{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.bls a{color:inherit}
+.desc{color:var(--muted);font-size:.9rem;margin:0}
+input[type=search]{width:100%;font:inherit;color:var(--ink);background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:10px}
 .facts div span{display:block;font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .why{margin:4px 0 0;padding-left:20px}
 .why li{margin:2px 0}
@@ -1242,6 +1247,14 @@ function analyze(){
   return {P,scored,code,mbti,ready:readiness(P)};
 }
 
+let lastScored=[];
+/* Career lookup on the results page: every word must appear in the name or job titles. */
+function searchCareers(q){
+  const words=q.toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>=2);
+  if(!words.length)return [];
+  return lastScored.map((s,i)=>({s,i,t:(s.car.n+' '+(s.car.titles||'')).toLowerCase()})).filter(x=>words.every(w=>x.t.includes(w)))
+    .sort((a,b)=>(b.s.car.n.toLowerCase().includes(words[0])-a.s.car.n.toLowerCase().includes(words[0]))||a.i-b.i).slice(0,8);
+}
 function renderResults(){
   const {P,scored,code,mbti,ready}=analyze();
   const top=scored.slice(0,10), low=P.answered<P.total*.6, pr=state.profile;
@@ -1256,9 +1269,12 @@ function renderResults(){
     app.innerHTML=h; updateHeader(); return;
   }
   if(low)h+='<div class="warnbox"><strong>Early read.</strong> You\'ve answered '+P.answered+' of '+P.total+' scored questions, and these are based only on those. The ranking firms up as you answer more. <button class="btn sm" data-go="'+firstUnansweredPage()+'">Keep going</button></div>';
-  h+='<div class="top3">'+top.slice(0,3).map((s,i)=>'<div class="card"><div class="rk">#'+(i+1)+(s.ind?' · '+esc(pr.industry.trim()):'')+'</div><div class="nm">'+esc(s.car.n)+'</div><div class="pc">'+s.fit+'%</div><div class="small">'+esc(s.car.start)+' → '+esc(s.car.end)+'</div></div>').join("")+'</div>';
+  h+='<div class="top3">'+top.slice(0,3).map((s,i)=>'<div class="card"><div class="rk">#'+(i+1)+(s.ind?' · '+esc(pr.industry.trim()):'')+'</div><div class="nm">'+esc(s.car.n)+'</div><div class="pc">'+s.fit+'%</div><div class="small">'+esc(subline(s.car))+'</div></div>').join("")+'</div>';
   h+='<p class="small">Fit blends your interests (about a third), work-style match (about half), pay fit (weighted by how much you ranked pay), and smaller boosts for abilities you rated high and skills on your resume. Only parts you\'ve answered count. Dealbreakers subtract points.</p>';
   h+=top.map((s,i)=>resultCard(s,i+1,i<3)).join("");
+  lastScored=scored;
+  h+='<h2 class="sec">Look up any career</h2><p class="lede">All '+scored.length.toLocaleString("en-US")+' careers are scored for you. Search to see where any job lands.</p>'+
+    '<input type="search" id="careerSearch" placeholder="Try nurse, electrician, pilot, accountant…" aria-label="Search careers" autocomplete="off"><div id="searchOut"></div>';
   h+=dirsPanel();
   if(indMatches.length)h+='<h2 class="sec">Through your industry lens</h2><p class="lede">Further down the list, but these connect to '+esc(pr.industry.trim())+'.</p>'+indMatches.map(s=>resultCard(s,"+",false)).join("");
   const riPanel=P.riN>=6
@@ -1284,8 +1300,8 @@ function renderResults(){
     '<p><b>Personality (Big Five).</b> The 30 items come from Goldberg\'s public-domain IPIP markers. The Big Five has decades of evidence linking it to work outcomes (Barrick &amp; Mount, 1991). MBTI is popular but has weak test-retest reliability (Pittenger, 2005), so it\'s shown only for fun.</p>'+
     '<p><b>Values and work style.</b> The ranking follows O*NET\'s work-values set, with pay, variety, and purpose split out. Person–job fit on needs and supplies predicts satisfaction (Kristof-Brown et al., 2005). Scenario questions use the situational-judgment format, which captures how you\'d act rather than how you see yourself (McDaniel et al., 2001).</p>'+
     '<p><b>Resume.</b> Your resume is read in your browser and matched against a skill list by keyword. It finds evidence, not proficiency, so check the skill chips. It gives a small boost to careers that use skills you already have and powers the stepping-stone jobs.</p>'+
-    '<p><b>Scoring.</b> Every answer adds evidence to 17 work-style dimensions. Each career has a demand level on the same dimensions. Fit penalizes gaps, more heavily when a job demands more of something you want to avoid (coding, selling, commission, travel, hours) than when it offers less. Career profiles and pay are rough U.S. estimates, not O*NET data. Check the Bureau of Labor Statistics Occupational Outlook Handbook or local postings for real numbers.</p>'+
-    '<p><b>Limits.</b> This is a short self-report tool, not a validated assessment. Career profiles are judgment calls, and how you feel today shifts answers. Use the top 5–10 as a shortlist to test against real job postings and conversations, not as a verdict.</p></div></details></div>';
+    '<p><b>Scoring.</b> Every answer adds evidence to 17 work-style dimensions. Each career has a demand level on the same dimensions. Fit penalizes gaps, more heavily when a job demands more of something you want to avoid (coding, selling, commission, travel, hours) than when it offers less. The hand-tuned careers use judgment-call profiles and pay. Every other U.S. occupation is built from data: pay from the Bureau of Labor Statistics, and the work-style profile from O*NET ratings of what each job involves, scaled to match the hand-tuned ones. Check local postings for what employers near you pay.</p>'+
+    '<p><b>Limits.</b> This is a short self-report tool, not a validated assessment. Career profiles are estimates, and how you feel today shifts answers. Use the top 5–10 as a shortlist to test against real job postings and conversations, not as a verdict.</p></div></details></div>';
   h+='<div class="nav"><button class="btn ghost" data-go="'+(PAGES.length-1)+'">← Back to questions</button><button class="btn" data-go="-1">Backup & settings</button></div>';
   app.innerHTML=h; updateHeader();
 }
@@ -1337,16 +1353,37 @@ function strengthsPanel(P){
    '<div><span style="color:var(--navy);font-weight:600">Love it, still building</span><p class="small">Worth investing in: these are where training or a certification pays off most.</p>'+list(grow,"None flagged.")+'</div></div>'+
    '<div>'+Object.entries(P.AB).sort((a,b)=>(b[1]??-1)-(a[1]??-1)).map(([k,v])=>meter(k+" · "+RNAME[k]+" skill",null,v)).join("")+'</div></div>';
 }
+/* One-line summary under a career's name: the hand-tuned path, or BLS pay and education for generated careers. */
+function subline(c){
+  if(c.start&&c.end)return c.start+" → "+c.end;
+  return (c.bls?"Median pay "+c.bls.pay.med+" · ":"")+cap(EDU_NEED[c.edu]);
+}
+/* Official BLS numbers, with links, for careers tied to a BLS occupation. */
+function blsBlock(c){
+  const b=c.bls; if(!b)return '';
+  const n=x=>Number(x).toLocaleString("en-US");
+  const parts=['<strong>Median pay '+esc(b.pay.med)+'</strong> (middle half earn '+esc(b.pay.p25)+'–'+esc(b.pay.p75)+'; top 10% earn '+esc(b.pay.p90)+'+)'];
+  if(b.emp)parts.push(n(b.emp)+' people do this job in the U.S.');
+  if(b.growth!=null)parts.push('Projected growth '+(b.growth>0?'+':'')+b.growth+'% over 10 years'+(b.openings?', about '+n(b.openings)+' openings a year':''));
+  if(b.edu)parts.push('Typical entry: '+esc(b.edu.toLowerCase())+(b.exp&&!/^none$/i.test(b.exp)?', plus '+esc(b.exp.toLowerCase())+' of related experience':''));
+  const others=(c.blsAll||[]).slice(1).map(x=>x.title);
+  return '<div class="bls"><div class="src">Official numbers · BLS '+esc(b.year||'')+(others.length?' · '+esc(b.title):'')+'</div><p style="margin:4px 0">'+parts.join(' · ')+'.</p>'+
+    (others.length?'<div class="small">Also covers: '+esc(others.join(", "))+'</div>':'')+
+    '<div class="small"><a href="'+esc(b.url)+'" target="_blank" rel="noopener noreferrer">BLS wage data</a>'+(b.onet?' · <a href="'+esc(b.onet)+'" target="_blank" rel="noopener noreferrer">What the job involves (O*NET)</a>':'')+'</div></div>';
+}
 function resultCard(s,rank,open){
   const c=s.car, pr=state.profile;
   const watch=[...s.flags,...s.cons.filter(x=>!s.flags.some(f=>f.toLowerCase().includes(x.split(" ").pop().replace(".",""))))].slice(0,4);
-  return '<details class="res"'+(open?" open":"")+'><summary><span class="no">'+rank+'</span><span class="nm">'+esc(c.n)+(s.ind?'<span class="tag ind">'+esc(pr.industry.trim())+'</span>':'')+'<small>'+esc(c.start)+' → '+esc(c.end)+'</small></span><span class="fit">'+s.fit+'%</span><span class="fitbar"><i style="width:'+s.fit+'%"></i></span></summary>'+
+  return '<details class="res"'+(open?" open":"")+'><summary><span class="no">'+rank+'</span><span class="nm">'+esc(c.n)+(s.ind?'<span class="tag ind">'+esc(pr.industry.trim())+'</span>':'')+'<small>'+esc(subline(c))+'</small></span><span class="fit">'+s.fit+'%</span><span class="fitbar"><i style="width:'+s.fit+'%"></i></span></summary>'+
   '<div class="body">'+
+  (c.desc?'<p class="desc">'+esc(c.desc)+'</p>':'')+
   (s.why.length?'<div><span class="good">Why it fits</span><ul class="why">'+s.why.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>':'')+
   (watch.length?'<div><span class="flag">Watch out for</span><ul class="why">'+watch.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>':'')+
   '<div class="facts"><div><span>Pay (entry · yr 4 · senior)</span>$'+c.pay[0]+'k · $'+c.pay[1]+'k · $'+c.pay[2]+'k</div><div><span>Travel</span>'+esc(c.trv)+'</div><div><span>Work-life</span>'+esc(c.wlb)+'</div><div><span>Ease of entry</span>'+esc(c.ease)+'</div><div><span>Typical education</span>'+esc(cap(EDU_NEED[c.edu]))+'</div><div><span>AI exposure</span>'+esc(c.ai)+'</div><div><span>Interest code</span>'+c.r+'</div></div>'+
   (mySkillsCount()?'<div class="small"><strong>Skills to build:</strong> '+(s.gapsSk.length?esc(s.gapsSk.slice(0,3).map(k=>SK[k][0]).join(", ")):"none of the core ones — go deeper")+'</div>':'')+
-  '<div class="small"><strong>Search for:</strong> '+esc(c.titles)+'</div><div class="small"><strong>First move:</strong> '+esc(c.step)+'</div>'+
+  '<div class="small"><strong>Search for:</strong> '+esc(c.titles)+'</div>'+(c.step?'<div class="small"><strong>'+(c.gen?'Path in':'First move')+':</strong> '+esc(c.step)+'</div>':'')+
+  blsBlock(c)+
+  (c.gen?'<div class="small">'+(c.est?'This job has little O*NET data, so much of its profile is estimated from similar jobs. ':'')+'Profile computed from O*NET job data; AI exposure not rated yet.</div>':'')+
   '<div class="small">'+[["Interest match",s.interest],["ability match",s.ability],["resume match",s.skillFit],["work-style match",s.dimSim],["pay match",s.payFit]].filter(x=>x[1]!=null).map(x=>x[0]+' '+pct(x[1])).join(' · ').replace(/^./,c=>c.toUpperCase())+'</div></div></details>';
 }
 function mySkillsCount(){return mySkills().size}
@@ -1469,6 +1506,11 @@ document.getElementById("chips").addEventListener("click",e=>{const b=e.target.c
 function go(p){state.page=Math.max(-1,p);save();render();updateLive();window.scrollTo({top:0})}
 app.addEventListener("input",e=>{
   const t=e.target;
+  if(t.id==="careerSearch"){const out=document.getElementById("searchOut"),q=t.value.trim();
+    if(!q){out.innerHTML="";return}
+    const hits=searchCareers(q);
+    out.innerHTML=hits.length?hits.map(x=>resultCard(x.s,"#"+(x.i+1),hits.length===1)).join(""):'<p class="small">No career matches “'+esc(q)+'”. Try a broader word.</p>';
+    return}
   if(t.dataset.sl){const it=allItems().find(x=>x.id===t.dataset.sl);state.answers[it.id]=Number(t.value);
     const v=document.getElementById("val-"+it.id);v.textContent=it.fmt(Number(t.value));v.classList.remove("unset");
     document.getElementById("q-"+it.id).classList.add("ans");const c=document.getElementById("clr-"+it.id);if(c)c.hidden=false;save()}
