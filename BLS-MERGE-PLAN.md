@@ -11,6 +11,31 @@ This file saves progress so work can resume after a break. It lives only on the
 - Open it as a **pull request**, not straight to `main`. Bix approves before merging.
 - Resume automatically at 1:20 pm Central if the session runs out.
 
+## Scope change (Oct 7, later)
+Bix: "Ultimately I want as many jobs as there are to be options."
+- Goal is now **every BLS occupation** (~800 detailed occupations with national
+  wage data), not just the top 100 by pay. The top-100-by-pay list is still a
+  good first batch, since those are the highest-value adds.
+- Hand-writing 800 fingerprints isn't realistic or trustworthy. Instead,
+  **compute fingerprints from public data**:
+  - Pay, education, employment, growth: BLS OEWS national data + Employment Projections.
+  - RIASEC code: O*NET interest scores.
+  - The 17 trait demand levels: O*NET Work Context / Work Activities (e.g. travel,
+    selling, hours, outdoor/on-site, programming, public speaking, etc.).
+  - Write a script (`tools/build-careers.js`) that turns those files into
+    `careers.js`, so it can be re-run when BLS updates.
+- Bix's 46 hand-tuned careers stay as-is and win over computed ones when they
+  cover the same job (keep the BLS link/pay block on them).
+- With hundreds of careers, keep top-10 results, add a **search box** so users
+  can look up any job's fit, and consider loading `careers.js` only when results
+  are first needed.
+- **Data access problem:** this workspace can't download from bls.gov or
+  onetcenter.org (network blocked). Options, in order: (1) find an official copy
+  on GitHub/npm, which are reachable; (2) ask Bix to download two free files and
+  add them to the repo — O*NET "Database (text files)" zip from
+  onetcenter.org/database.html, and the OEWS "National" xlsx from
+  bls.gov/oes/tables.htm. Give him one click-by-click step at a time.
+
 ## Decisions
 - **Careers move into their own file, `careers.js`**, loaded by `index.html` with
   `<script src="careers.js">`. A `.js` file works both when opening `index.html`
