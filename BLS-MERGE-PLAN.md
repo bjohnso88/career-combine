@@ -42,8 +42,12 @@ Bix: "Ultimately I want as many jobs as there are to be options."
   directly on a laptop and on Cloudflare. (A `.json` file would break when opened
   locally, because browsers block reading files that way.)
 - Existing 46 careers stay. Where a BLS occupation is the same job as an existing
-  career, it is merged into that career (BLS pay and education win) instead of
-  being added twice.
+  career, it is merged into that career instead of being added twice. The
+  hand-tuned fingerprint and pay are kept for scoring (sales pay includes
+  commission, which BLS wages leave out); the official BLS numbers are shown
+  alongside on the card. Umbrella careers (Skilled Trades, Engineer, Scientist,
+  Allied Health, etc.) have no SOC codes yet, so specific jobs like Electrician
+  still appear separately. Bix to decide whether to fold those in.
 - Each career gets a `bls` field: official occupation title, SOC code, median pay,
   employment, projected growth, and a link to its Occupational Outlook Handbook page.
 - Pay format stays `[entry, ~year 4, senior]` in $k. Entry ≈ BLS 10th–25th
@@ -55,7 +59,9 @@ Bix: "Ultimately I want as many jobs as there are to be options."
        not enough usage left. Gather it directly from bls.gov: OEWS May 2024
        national data and the OOH pages. Save the result as `data/bls-top100.csv`
        on this branch and commit before writing any fingerprints.)
-- [ ] 2. Move the existing `C` list out of `index.html` into `careers.js`
+- [x] 2. Move the existing `C` list out of `index.html` into `careers.js`
+       (now `CAREERS_HAND`, each with `soc` codes; `mergeCareers()` in index.html
+       folds generated `CAREERS_BLS` entries from `careers-bls.js` into them)
 - [ ] 3. Map BLS occupations to existing careers (merge overlaps)
 - [ ] 4. Write fingerprints for the new careers (batches of ~20, commit each batch)
 - [ ] 5. Show the new BLS info on results cards; update STEPS links if needed
