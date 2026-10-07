@@ -1,0 +1,1457 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Career Combine</title>
+<meta name="description" content="A free, private career assessment. Upload your résumé, run the drills, and get a scouting report ranking 46 careers by how well they fit you.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* One narrow column, sticky progress header, one short section per screen; results read like a scouting report */
+:root{
+  --bg:#eef2f5; --surface:#ffffff; --ink:#14202b; --muted:#5a6b79; --line:#d5dde4;
+  --accent:#c8102e; --accent-ink:#ffffff; --navy:#1d4e89; --navy-soft:#e3ecf6;
+  --good:#2c7a4b; --warn:#a45f00; --chip:#f4f7f9;
+  --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0d141a; --surface:#15202a; --ink:#e5ecf1; --muted:#95a6b3; --line:#27353f;
+  --accent:#ff4d5e; --accent-ink:#1a0005; --navy:#86b5ec; --navy-soft:#1a2b3d;
+  --good:#5cc28a; --warn:#e3a84d; --chip:#1b2833; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0d141a; --surface:#15202a; --ink:#e5ecf1; --muted:#95a6b3; --line:#27353f;
+  --accent:#ff4d5e; --accent-ink:#1a0005; --navy:#86b5ec; --navy-soft:#1a2b3d;
+  --good:#5cc28a; --warn:#e3a84d; --chip:#1b2833; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased}
+[hidden]{display:none!important}
+.wrap{max-width:780px;margin:0 auto;padding-inline:16px;padding-block:0 48px}
+header.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)}
+.top-inner{max-width:780px;margin:0 auto;padding:10px 16px;display:flex;flex-direction:column;gap:8px}
+.brand{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand h1{font-family:var(--f-display);font-weight:700;font-size:1.6rem;letter-spacing:.02em;text-transform:uppercase;margin:0;line-height:1}
+.brand h1 span{color:var(--accent)}
+.brand-r{display:flex;align-items:center;gap:10px}
+.meta{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.themebtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;width:32px;height:32px;cursor:pointer;font-size:14px}
+.bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
+.chips button{flex:0 0 auto;font:500 .78rem var(--f-body);border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:4px 10px;cursor:pointer;white-space:nowrap}
+.chips button.cur{background:var(--navy);color:var(--surface);border-color:var(--navy)}
+.chips button.full::after{content:" ✓";color:var(--good)}
+.chips button.cur.full::after{color:inherit}
+h2.sec{font-family:var(--f-display);font-size:2.1rem;line-height:1.05;margin:28px 0 4px;text-transform:uppercase;letter-spacing:.01em;text-wrap:balance}
+.kicker{font-family:var(--f-mono);font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-top:24px}
+.lede{color:var(--muted);margin:6px 0 18px;max-width:62ch}
+.q{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px;margin-bottom:12px}
+.q.ans{border-left:4px solid var(--good)}
+.q .qt{font-weight:600;margin:0 0 10px;max-width:65ch}
+.q .qn{font-family:var(--f-mono);font-size:.72rem;color:var(--muted);margin-bottom:4px}
+.lik{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}
+.opt{font:500 .85rem var(--f-body);border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:8px;padding:9px 6px;cursor:pointer;text-align:center;min-width:0}
+.opt:hover{border-color:var(--navy)}
+.opt.on{background:var(--navy);border-color:var(--navy);color:var(--surface)}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible,.drop:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.sub{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:10px 0 6px}
+.sub:first-of-type{margin-top:0}
+.pairs{display:grid;gap:4px;margin:6px 0 0;padding-left:18px}
+.stack{display:flex;flex-direction:column;gap:8px}
+.stack .opt{text-align:left;padding:11px 12px}
+details.note{margin-top:10px}
+details.note summary{cursor:pointer;font:500 .85rem var(--f-body);color:var(--navy);list-style:none;display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--navy);border-radius:999px;padding:5px 12px;background:var(--navy-soft)}
+details.note summary::-webkit-details-marker{display:none}
+details.note summary:hover,details.note[open] summary{border-style:solid}
+details.note textarea{min-height:64px;margin-top:6px;font-size:.92rem}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:stretch}
+.vs .or{align-self:center;font-family:var(--f-display);font-weight:700;color:var(--muted)}
+.vs .opt{padding:14px 10px}
+.sl{display:flex;flex-direction:column;gap:6px}
+.sl input[type=range]{width:100%;accent-color:var(--accent)}
+.sl .ends{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);gap:8px}
+.sl .val{font-family:var(--f-mono);font-size:1.1rem;color:var(--navy);font-variant-numeric:tabular-nums}
+.sl .val.unset{color:var(--muted)}
+textarea,input[type=text],select{width:100%;font:inherit;color:var(--ink);background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:10px}
+textarea{min-height:90px;resize:vertical}
+label.f{display:block;font-weight:600;margin:14px 0 6px}
+.rank{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
+.rank li{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.rank .pos{font-family:var(--f-mono);color:var(--accent);font-weight:500}
+.rank .mv{display:flex;gap:4px}
+.rank .mv button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;width:34px;height:30px;cursor:pointer}
+.small{font-size:.82rem;color:var(--muted)}
+.nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
+.btn{font:600 .95rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:11px 18px;cursor:pointer}
+.btn.pri{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.ghost{background:transparent}
+.btn.sm{padding:7px 12px;font-size:.85rem}
+.skipline{font-size:.85rem;color:var(--muted);margin-top:8px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;margin:14px 0}
+.intro-list{display:grid;gap:8px;padding:0;margin:12px 0;list-style:none}
+.intro-list li{display:grid;grid-template-columns:auto 1fr;gap:10px}
+.intro-list b{font-family:var(--f-mono);font-weight:500;color:var(--accent);min-width:3ch}
+/* résumé */
+.drop{border:2px dashed var(--line);border-radius:10px;padding:20px;text-align:center;background:var(--chip);cursor:pointer}
+.drop.over,.drop:hover{border-color:var(--navy)}
+.drop strong{display:block}
+.status{margin-top:8px;font-size:.9rem;min-height:1.3em}
+.status.ok{color:var(--good)}.status.err{color:var(--warn)}
+.skchips{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.skchip{font:500 .82rem var(--f-body);border:1px solid var(--navy);background:var(--navy-soft);color:var(--ink);border-radius:999px;padding:4px 10px;cursor:pointer}
+.skchip::before{content:"✓ ";color:var(--good);font-weight:700}
+.skchip.off{border-color:var(--line);background:var(--chip);text-decoration:line-through;opacity:.6}
+.skchip.off::before{content:""}
+.addrow{display:flex;gap:8px;margin-top:10px}
+.addrow input{flex:1}
+/* results */
+.top3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
+.top3 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
+.top3 .card .rk{font-family:var(--f-mono);font-size:.75rem;color:var(--muted)}
+.top3 .card .nm{font-family:var(--f-display);font-size:1.35rem;line-height:1.1;margin:4px 0;font-weight:700}
+.top3 .card .pc{font-family:var(--f-display);font-size:2.4rem;color:var(--accent);line-height:1}
+.res{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
+.res summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:2.2em 1fr auto;gap:10px;align-items:center}
+.res summary::-webkit-details-marker{display:none}
+.res .no{font-family:var(--f-mono);color:var(--muted)}
+.res .nm{font-weight:600;min-width:0}
+.res .nm small{display:block;font-weight:400;color:var(--muted);font-size:.82rem}
+.res .fit{font-family:var(--f-mono);font-variant-numeric:tabular-nums;font-size:1.05rem;color:var(--navy)}
+.res .fitbar{grid-column:2/4;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.res .fitbar i{display:block;height:100%;background:var(--navy)}
+.res .body{padding:0 16px 16px;display:grid;gap:10px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:6px 14px;font-size:.85rem}
+.facts div span{display:block;font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.why{margin:4px 0 0;padding-left:20px}
+.why li{margin:2px 0}
+.tag{display:inline-block;font:500 .72rem var(--f-mono);padding:2px 7px;border-radius:999px;border:1px solid var(--line);margin-left:6px;vertical-align:middle;color:var(--muted)}
+.tag.ind{color:var(--accent);border-color:var(--accent)}
+.flag{color:var(--warn);font-weight:600}
+.good{color:var(--good);font-weight:600}
+.meter{display:grid;grid-template-columns:minmax(110px,180px) 1fr 3.2em;gap:10px;align-items:center;margin:6px 0;font-size:.9rem}
+.meter .tr{height:10px;background:var(--line);border-radius:5px;overflow:hidden}
+.meter .tr i{display:block;height:100%;background:var(--navy)}
+.meter .v{font-family:var(--f-mono);font-variant-numeric:tabular-nums;text-align:right;color:var(--muted)}
+.meter .lab small{display:block;color:var(--muted);font-size:.75rem;line-height:1.2}
+.code{font-family:var(--f-display);font-size:2.6rem;letter-spacing:.12em;color:var(--accent);line-height:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid2>*{min-width:0}
+pre.sum{white-space:pre-wrap;word-break:break-word;font:400 .78rem/1.45 var(--f-mono);background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:12px;max-height:340px;overflow:auto}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:8px;font-size:.9rem;z-index:9}
+.warnbox{border:1px solid var(--warn);background:var(--chip);border-radius:10px;padding:12px 14px;margin:12px 0}
+details.method summary{cursor:pointer;font-weight:600}
+footer{border-top:1px solid var(--line);padding:18px 16px 36px;text-align:center;font-size:.85rem;color:var(--muted)}
+footer a{color:var(--navy)}
+@media (max-width:600px){
+  .lik{grid-template-columns:1fr}
+  .lik .opt{text-align:left;padding:10px 12px}
+  .top3,.grid2,.vs,.row2{grid-template-columns:1fr}
+  .vs .or{justify-self:center}
+  h2.sec{font-size:1.8rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media print{header.top,.nav,footer,.noprint,details.note{display:none!important}.res,.panel{break-inside:avoid}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="top-inner">
+    <div class="brand"><h1>Career <span>Combine</span></h1><div class="brand-r"><div class="meta" id="meta">0 / 0 answered</div><button class="themebtn" id="themeBtn" aria-label="Toggle dark mode" title="Toggle dark mode">◐</button></div></div>
+    <div class="bar" aria-hidden="true"><i id="barfill"></i></div>
+    <nav class="chips" id="chips" aria-label="Sections"></nav>
+  </div>
+</header>
+<main class="wrap" id="app"></main>
+<footer>Career Combine · a project by <a href="https://bixjohnson.com">Bix Johnson</a> · Your answers and résumé never leave this browser.</footer>
+<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+"use strict";
+/* ============================================================
+   DIMENSIONS (all 0–1; for the person = preference/tolerance, for a career = demand)
+   c coding · tr travel · s selling · cu people/customers · l leading people · au independence
+   v variety · p pressure · da data · th hands-on/physical · rp commission pay · h long hours
+   o on-site/field · w writing · pr presenting · en building your own thing · pu purpose/helping
+   Person-only: pay (pay priority) · pat (patience for a longer path)
+   ============================================================ */
+const ENJOY=["Hate it","Dislike","Not sure","Like","Love it"];
+const AGREE=["Very inaccurate","Inaccurate","Neutral","Accurate","Very accurate"];
+const ABIL=["Can't do it","Shaky","Can do OK","Comfortable","Easily"];
+
+/* Holland RIASEC work activities, written in the style of the O*NET Interest Profiler */
+const RI=[
+ ["ri1","Install and set up equipment or machines","R"],
+ ["ri2","Figure out why a problem keeps happening when nobody else can","I"],
+ ["ri3","Design how something looks (a logo, a page, a space)","A"],
+ ["ri4","Teach a group how to do something new","S"],
+ ["ri5","Pitch an idea to a skeptical boss and win them over","E"],
+ ["ri6","Keep records or files clean, organized, and accurate","C"],
+ ["ri7","Repair equipment, vehicles, or devices when they break","R"],
+ ["ri8","Dig into numbers or records to explain what changed","I"],
+ ["ri9","Write something original: a story, article, or marketing copy","A"],
+ ["ri10","Coach someone until they're confident on their own","S"],
+ ["ri11","Negotiate a price or a contract","E"],
+ ["ri12","Build a step-by-step process everyone has to follow","C"],
+ ["ri13","Build or assemble things with your hands","R"],
+ ["ri14","Use data or statistics to predict how something will turn out","I"],
+ ["ri15","Shoot or edit photos or video","A"],
+ ["ri16","Calm down a frustrated {cust} and solve their problem","S"],
+ ["ri17","Lead a team to hit a goal by a deadline","E"],
+ ["ri18","Track a project's budget, dates, and tasks","C"],
+ ["ri19","Work outdoors or on a job site instead of at a desk","R"],
+ ["ri20","Research a complicated topic in depth","I"],
+ ["ri21","Come up with a brand, campaign, or creative concept","A"],
+ ["ri22","Care for someone who is sick, hurt, or struggling","S"],
+ ["ri23","Sell a product or service and earn commission on it","E"],
+ ["ri24","Check documents for errors and rule-breaking","C"],
+ ["ri25","Operate tools, vehicles, or specialized equipment","R"],
+ ["ri26","Test which of two approaches works better","I"],
+ ["ri27","Perform, present creatively, or entertain an audience","A"],
+ ["ri28","Help a community or group that needs support","S"],
+ ["ri29","Start your own business or side hustle","E"],
+ ["ri30","Manage schedules, files, and paperwork for a team","C"]
+];
+function itemText(it){return it.text}
+/* Big Five: public-domain IPIP items (Goldberg's 50-item Big-Five factor markers). k=+1 keyed, -1 reverse keyed */
+const B5=[
+ ["b1","Am the life of the party.","E",1],["b2","Get stressed out easily.","N",1],["b3","Am always prepared.","C",1],
+ ["b4","Am interested in people.","A",1],["b5","Have a vivid imagination.","O",1],["b6","Don't talk a lot.","E",-1],
+ ["b7","Am relaxed most of the time.","N",-1],["b8","Leave my belongings around.","C",-1],["b9","Feel little concern for others.","A",-1],
+ ["b10","Am not interested in abstract ideas.","O",-1],["b11","Feel comfortable around people.","E",1],["b12","Worry about things.","N",1],
+ ["b13","Pay attention to details.","C",1],["b14","Sympathize with others' feelings.","A",1],["b15","Have excellent ideas.","O",1],
+ ["b16","Keep in the background.","E",-1],["b17","Seldom feel blue.","N",-1],["b18","Make a mess of things.","C",-1],
+ ["b19","Am not really interested in others.","A",-1],["b20","Do not have a good imagination.","O",-1],["b21","Start conversations.","E",1],
+ ["b22","Get upset easily.","N",1],["b23","Get chores done right away.","C",1],["b24","Make people feel at ease.","A",1],
+ ["b25","Am quick to understand things.","O",1],["b26","Am quiet around strangers.","E",-1],["b27","Get irritated easily.","N",1],
+ ["b28","Shirk my duties.","C",-1],["b29","Insult people.","A",-1],["b30","Have difficulty understanding abstract ideas.","O",-1]
+];
+const lik=(arr,scale)=>arr.map(([id,text,x,k])=>scale==="enjoy"?{t:"lik",id,text,scale,ri:x}:{t:"lik",id,text,scale,b5:x,k});
+
+const VALUES=[
+ ["pay","Pay and financial security"],["ach","Achievement — seeing results from my work"],
+ ["ind","Independence — doing things my way"],["rec","Recognition — status, title, being known"],
+ ["rel","Relationships — a team I like working with"],["sup","Support — a good boss and a stable company"],
+ ["var","Variety and adventure — new places, new problems"],["pur","Purpose — helping people or making a difference"]
+];
+
+const SCHOOL=["None","A few online courses","A certification (a few months)","A 1–2 year program","A 4-year degree or more"];
+const SLIDERS=[
+ {t:"sl",id:"s_minpay",text:"Lowest yearly pay you'd accept for your next job",min:20,max:150,step:5,def:50,lo:"$20k",hi:"$150k",fmt:v=>"$"+v+"k"},
+ {t:"sl",id:"s_target",text:"Yearly pay you want to be making in 5 years",min:40,max:300,step:10,def:90,lo:"$40k",hi:"$300k+",fmt:v=>"$"+v+"k"},
+ {t:"sl",id:"s_travel",text:"Ideal share of your work week spent traveling",min:0,max:80,step:5,def:15,lo:"Never",hi:"80% — on the road most weeks",fmt:v=>v+"%",ev:(v,add)=>add("tr",Math.min(1,v/70),3)},
+ {t:"sl",id:"s_coding",text:"How much coding or technical scripting you're OK doing long-term",min:0,max:100,step:5,def:20,lo:"None at all",hi:"Coding most days",fmt:v=>v+"%",ev:(v,add)=>add("c",v/100,3)},
+ {t:"sl",id:"s_comm",text:"How you'd want to be paid",min:0,max:100,step:5,def:20,lo:"100% fixed salary",hi:"Mostly commission, uncapped",fmt:v=>v<10?"All salary":v<40?"Mostly salary":v<70?"Salary + big bonus":"Heavy commission",ev:(v,add)=>add("rp",v/100,3)},
+ {t:"sl",id:"s_hours",text:"Most hours a week you'd regularly work for noticeably higher pay",min:30,max:65,step:1,def:45,lo:"30",hi:"65",fmt:v=>v+" hrs",ev:(v,add)=>add("h",Math.max(0,(v-38)/27),3)},
+ {t:"sl",id:"s_onsite",text:"Where you'd want to work",min:0,max:100,step:5,def:40,lo:"Fully remote",hi:"Out in the field / on-site",fmt:v=>v<20?"Remote":v<45?"Hybrid":v<75?"Mostly in person":"In the field",ev:(v,add)=>add("o",v/100,2.5)},
+ {t:"sl",id:"s_people",text:"How much of your day you'd want spent with people",min:0,max:100,step:5,def:50,lo:"Heads-down alone",hi:"With people all day",fmt:v=>v+"%",ev:(v,add)=>{add("cu",v/100,2.5);add("pr",v/100,.6)}},
+ {t:"sl",id:"s_school",text:"How much more school or training you'd take on for the right career",min:0,max:4,step:1,def:1,lo:"None",hi:"4-year degree or more",fmt:v=>SCHOOL[v],ev:(v,add)=>add("pat",v/4,2)}
+];
+
+const TF=[
+ ["tf1","I'd rather have a job where every week looks different.",{v:1},{v:.2}],
+ ["tf2","Cold-calling strangers sounds miserable.",{s:.1,rp:.3},{s:.85}],
+ ["tf3","I'm OK being on call some nights or weekends.",{h:.85},{h:.2}],
+ ["tf4","I'd take a pay cut to work in an industry I love.",{pu:.7,pay:.4},{pay:.85}],
+ ["tf5","I enjoy presenting to a room full of people.",{pr:1},{pr:.15}],
+ ["tf6","I'd enjoy living out of a suitcase two to four days a week.",{tr:.9},{tr:.1}],
+ ["tf7","I want to be managing people within five years.",{l:1},{l:.2}],
+ ["tf8","Writing long documents drains me.",{w:.1},{w:.8}],
+ ["tf9","Pressure and deadlines help me focus.",{p:.9},{p:.3}],
+ ["tf10","I'd like to own my own business someday.",{en:1},{en:.1}],
+ ["tf11","Commission-based pay would stress me out.",{rp:.1},{rp:.8}],
+ ["tf12","I like being the person who explains complicated things in plain English.",{cu:.9,pr:.7},{cu:.4}],
+ ["tf13","I get bored once I've mastered something.",{v:.9},{v:.35}],
+ ["tf14","I'd study on nights and weekends for a certification if it raised my pay.",{pay:.9,pat:.7},{pay:.5,pat:.3}],
+ ["tf15","I'd be happy working with numbers and spreadsheets most of the day.",{da:1},{da:.2}],
+ ["tf16","I want my work to directly help people.",{pu:1,cu:.7},{pu:.35}],
+ ["tf17","Physical work (on my feet, lifting, outdoors) beats sitting all day.",{th:.9,o:.9},{th:.2,o:.3}],
+ ["tf18","I'd rather follow a proven playbook than invent my own.",{au:.25,en:.1},{au:.85}]
+].map(([id,text,T,F])=>({t:"tf",id,text,T,F}));
+
+const AB=[
+ ["ab1","Build the solution","Sell the solution",{th:.6,da:.6,s:.1},{s:.9,cu:.8}],
+ ["ab2","Be the go-to expert on one thing","Know a little about everything",{v:.2},{v:.9}],
+ ["ab3","More money doing work that bores you","Less money doing work you love",{pay:1},{pay:.3,pu:.6}],
+ ["ab4","Clear rules and a playbook","Freedom to figure it out yourself",{au:.2},{au:1,v:.7}],
+ ["ab5","A few long-term {clients} you know well","Lots of short projects with new people",{v:.3,cu:.8},{v:.9}],
+ ["ab6","Lead the team","Be the trusted expert advisor",{l:1},{l:.3}],
+ ["ab7","Big, stable company","Fast-moving startup",{rp:.2,p:.4},{rp:.7,p:.8,en:.6}],
+ ["ab8","Same workplace every day","A different city most weeks",{tr:0},{tr:1}],
+ ["ab9","A day spent with people","A day spent with data and systems",{cu:1,da:.2},{da:.9,cu:.2}],
+ ["ab10","Five hours of calls","Five hours of writing",{cu:1,w:.2},{w:.9,cu:.3}],
+ ["ab11","Bonus tied to the team's results","Bonus tied to your own results",{rp:.3},{rp:.8,s:.7}],
+ ["ab12","Hands on tools and equipment","Hands on a keyboard",{th:1,o:.8},{th:.2,da:.6}]
+].map(([id,a,b,A,B])=>({t:"ab",id,a,b,A,B}));
+
+/* Scenarios use {tokens} that are filled in for the person's field (see FIELDS). Answer options keep the same scoring in every field. */
+const SJT=[
+ {id:"sj1",text:"{brk}. What do you do?",opts:[
+  ["Jump in and fix it myself, fast",{th:.9,o:.8,p:.7}],
+  ["Walk a coworker through fixing it so they learn it",{cu:.8,pr:.6}],
+  ["Find a workaround now, dig into the root cause later",{da:.6,c:.4,p:.6}],
+  ["Fix it, then pitch my {boss} on a way to stop it happening again",{en:.6,s:.6,l:.6}]]},
+ {id:"sj2",text:"Your {boss} asks for one volunteer. Which do you grab?",opts:[
+  ["Lead the rollout of {init}",{l:1,pr:.6}],
+  ["Build a report that shows leadership what's really going on",{da:1,c:.4}],
+  ["Train everyone on {init}",{pr:1,cu:.8}],
+  ["Compare {vend} and negotiate the price",{s:.9,rp:.6}]]},
+ {id:"sj3",text:"{client} is unhappy with {deliv}. First move?",opts:[
+  ["Call them right away and hear them out",{cu:1,p:.6}],
+  ["Dig into the details to see what actually went wrong",{da:.9,c:.3}],
+  ["Pull the team together, make a plan, and own the timeline",{l:.9}],
+  ["Fix it, then suggest a bigger change that prevents it for good",{s:.9,rp:.5}]]},
+ {id:"sj4",text:"You get a free afternoon at work with nothing urgent. You'd most likely…",opts:[
+  ["Learn a new technical skill or tool",{c:.7,da:.7}],
+  ["Study for a certification",{pay:.8,pat:.8}],
+  ["Reach out to people who have jobs I want",{cu:.7,s:.6,en:.4}],
+  ["Work on my side project or business",{en:1,au:.8}]]},
+ {id:"sj5",text:"{grow}. Which part do you want?",opts:[
+  ["Crunch the numbers on what to charge or where to invest",{da:1,c:.4}],
+  ["Reach out to potential {clients} directly",{s:1,rp:.6,cu:.8}],
+  ["Create the campaign that gets people's attention",{w:.7,pr:.6,v:.7}],
+  ["Redesign how the work gets done so it scales",{l:.6,da:.5,th:.3}]]},
+ {id:"sj6",text:"{crunch}. You…",opts:[
+  ["Push harder: make the calls and chase people down",{s:.9,p:.9,rp:.8}],
+  ["Analyze where things are stalling",{da:.9}],
+  ["Rally the team and divide up the work",{l:1}],
+  ["Stay calm and stick to the process",{p:.3,v:.3}]]},
+ {id:"sj7",text:"The night before a big {event}, something goes seriously wrong at 9 p.m. You…",opts:[
+  ["Stay late and fix it hands-on",{th:.7,p:1,h:.9}],
+  ["Document what failed and ask to push the date",{p:.3,h:.2}],
+  ["Call in an expert and escalate",{cu:.6,p:.6}],
+  ["Take charge and coordinate everyone involved",{l:1,p:.8,h:.7}]]},
+ {id:"sj8",text:"Four offers land on the same day. Which do you take?",opts:[
+  ["$70k salary, fully remote, normal hours",{o:0,tr:0,rp:.1,pay:.6}],
+  ["$55k base + $45k commission target",{rp:1,s:.8,pay:.9}],
+  ["$80k salary, 60% travel",{tr:1,o:.9,pay:1}],
+  ["$55k doing work that feels truly meaningful",{pu:1,pay:.2}]]},
+ {id:"sj9",text:"In a meeting, {clash} strongly disagree. You…",opts:[
+  ["Translate each side so they understand each other",{cu:.8,pr:.7}],
+  ["Pull the facts that settle it",{da:1}],
+  ["Make the call and move things forward",{l:1,au:.8}],
+  ["Stay out of it — not my fight",{l:.1,cu:.2}]]},
+ {id:"sj10",text:"{pres}, someone asks a question you can't answer. You…",opts:[
+  ["Say you'll find out and follow up today",{cu:.6,p:.4}],
+  ["Work it out live on the spot",{p:.9,c:.4}],
+  ["Bring in a coworker who knows",{l:.4,cu:.6}],
+  ["Steer back to the bigger problem they care about",{s:.9,pr:.8}]]},
+ {id:"sj11",text:"You inherit {mess}. You…",opts:[
+  ["Clean it up carefully, one by one",{da:.7,v:.2}],
+  ["Automate it with formulas, a script, or a better system",{c:.9,da:.9}],
+  ["Ask what it's for before touching it",{cu:.6,l:.5}],
+  ["Find someone else to handle it",{da:.1}]]},
+ {id:"sj12",text:"Your {boss} hands you a vague project with no instructions. You…",opts:[
+  ["Love it — run with it",{au:1,v:.9}],
+  ["Ask for clearer goals before starting",{au:.3}],
+  ["Research how others have done it first",{da:.7,au:.6}],
+  ["Pull a small team together",{l:.9}]]}
+].map(o=>Object.assign({t:"sjt"},o));
+
+/* Field wording for scenarios. Picked from the résumé + job title, or chosen on the Check-in page. */
+const FIELDS={
+ general:{label:"General / not sure",cust:"customer",brk:"Something breaks five minutes before an important meeting (a projector, a file, a machine)",boss:"boss",init:"a big new initiative",vend:"vendors",client:"A client",deliv:"work your team just delivered",grow:"Your organization needs to grow",clients:"customers",crunch:"It's the last week of the quarter and your team is behind its goal",event:"launch or event",clash:"two teams",pres:"Mid-presentation",mess:"a messy spreadsheet with 2,000 rows"},
+ office:{label:"Office, admin & operations",cust:"coworker",brk:"The shared drive and printer go down right before a big meeting",boss:"manager",init:"a new scheduling or records system",vend:"office vendors",client:"Another department",deliv:"a project your team just wrapped up",grow:"Your company needs to grow",clients:"customers",crunch:"Month-end is two days away and your team is behind",event:"company event",clash:"two departments",pres:"Mid-meeting",mess:"a messy spreadsheet with 2,000 rows"},
+ legal:{label:"Legal",cust:"client",brk:"The e-filing system crashes an hour before a court deadline",boss:"supervising attorney",init:"a new case-management system",vend:"legal software vendors",client:"A client",deliv:"how their case is being handled",grow:"Your firm wants to bring in more clients",clients:"clients",crunch:"A big filing deadline is days away and your team is behind",event:"trial date or major filing",clash:"two attorneys",pres:"Mid-meeting with a client",mess:"a disorganized set of 2,000 case documents"},
+ healthcare:{label:"Healthcare",cust:"patient",brk:"A piece of equipment acts up right before a patient's appointment",boss:"manager",init:"a new charting or scheduling process",vend:"medical suppliers",client:"A patient's family",deliv:"the care their loved one received",grow:"Your clinic wants to serve more patients",clients:"patients",crunch:"Your unit is short-staffed and falling behind this week",event:"system go-live or inspection",clash:"a doctor and a nurse",pres:"Mid-briefing",mess:"a backlog of 2,000 messy patient records"},
+ education:{label:"Education & coaching",cust:"parent",brk:"The classroom projector dies five minutes before class",boss:"principal",init:"a new curriculum or classroom tool",vend:"curriculum vendors",client:"A parent",deliv:"how their kid's year is going",grow:"Your school wants more families to enroll",clients:"families",crunch:"Testing is a week away and your class is behind",event:"school event",clash:"two teachers",pres:"Mid-lesson",mess:"a messy gradebook with 2,000 entries"},
+ tech:{label:"Tech & IT",cust:"user",brk:"A system goes down five minutes before a big client demo",boss:"manager",init:"a new software system",vend:"software vendors",client:"A client",deliv:"a feature your team just shipped",grow:"Your company needs to grow",clients:"customers",crunch:"It's the last week of the sprint and your team is behind",event:"software launch",clash:"the engineers and the sales team",pres:"Mid-demo",mess:"a messy database export with 2,000 rows"},
+ trades:{label:"Skilled trades & field work",cust:"homeowner",brk:"A key tool or machine fails at the start of a job",boss:"foreman",init:"a new safety program",vend:"suppliers",client:"A homeowner",deliv:"a job your crew just finished",grow:"Your company wants more jobs on the books",clients:"customers",crunch:"The job is due Friday and your crew is behind",event:"job or inspection",clash:"two crew leads",pres:"Mid-walkthrough with a customer",mess:"a disorganized parts inventory with 2,000 items"},
+ finance:{label:"Finance & accounting",cust:"client",brk:"A key report breaks the morning numbers are due to leadership",boss:"manager",init:"a new accounting system",vend:"software vendors",client:"A client",deliv:"a report your team just delivered",grow:"Your firm wants to grow",clients:"clients",crunch:"Month-end close is two days away and your team is behind",event:"audit or quarter close",clash:"two departments",pres:"Mid-presentation",mess:"a messy ledger with 2,000 transactions"},
+ creative:{label:"Creative, media & marketing",cust:"client",brk:"Your editing software crashes the morning a project is due",boss:"creative director",init:"a new brand or content plan",vend:"freelancers and agencies",client:"A client",deliv:"a design your team just delivered",grow:"Your agency wants more clients",clients:"clients",crunch:"A campaign launches Monday and your team is behind",event:"campaign launch",clash:"the creative team and the client",pres:"Mid-pitch",mess:"a messy folder of 2,000 unlabeled files"},
+ service:{label:"Retail, hospitality & sales",cust:"customer",brk:"The point-of-sale system goes down in the middle of a rush",boss:"manager",init:"a new ordering or rewards system",vend:"suppliers",client:"A customer",deliv:"their order or visit",grow:"Your business wants more customers",clients:"customers",crunch:"It's the last week of the month and your store is behind its sales goal",event:"grand opening or big event",clash:"two shift leads",pres:"Mid-meeting with your team",mess:"a messy inventory sheet with 2,000 items"},
+ science:{label:"Science & research",cust:"colleague",brk:"An instrument fails halfway through an experiment",boss:"lab lead",init:"a new lab protocol",vend:"lab suppliers",client:"A partner team",deliv:"results your lab just shared",grow:"Your lab needs more funding",clients:"funders and partners",crunch:"A grant deadline is days away and your team is behind",event:"experiment or submission",clash:"two researchers",pres:"Mid-presentation",mess:"a messy dataset with 2,000 rows"}
+};
+function curField(){const f=state.profile.field;return f&&FIELDS[f]?f:"general"}
+function T(s){const F=FIELDS[curField()]||FIELDS.general;return String(s).replace(/\{(\w+)\}/g,(m,k)=>F[k]??FIELDS.general[k]??m)}
+
+/* ============================================================
+   FIELD QUESTIONS — shown only for the person's field.
+   Option = [label, work-style effects, direction points, career fit nudges]
+   ============================================================ */
+const FIELDQ={
+ legal:{name:"law",dirs:{
+   fam:["Family law","Divorce, custody, and adoption. Emotional, people-heavy, and meaningful.","Family law paralegal, Family law attorney, Guardian ad litem coordinator"],
+   crim:["Criminal law","Prosecution or defense. High stakes and courtroom-heavy.","Criminal defense paralegal, Public defender, Prosecutor"],
+   corp:["Corporate & transactional","Contracts, deals, and business clients. Top pay, long hours.","Corporate paralegal, Contracts manager, Corporate attorney"],
+   pub:["Immigration & public interest","Legal aid, nonprofits, and government. Mission over money.","Immigration paralegal, Legal aid case manager, Public interest attorney"],
+   lit:["Civil litigation","Lawsuits, discovery, and trial prep.","Litigation paralegal, Trial assistant, Litigation attorney"],
+   ops:["Legal operations & e-discovery","The tech and data side of law.","E-discovery analyst, Litigation support specialist, Legal operations analyst"],
+   comp:["Compliance & contracts (in-house)","Keeping a company within the rules, usually with steady hours.","Compliance analyst, Contracts administrator, Privacy specialist"]},
+  qs:[
+   ["lg1","How do you feel about becoming a lawyer someday?",[
+     ["I want to go to law school",{pat:.9,pr:.6},{crim:1,fam:1,corp:1,pub:1,lit:1},{attorney:.07}],
+     ["Maybe, if the right reason came up",{pat:.6},{},{attorney:.03,legal:.02}],
+     ["I'd rather grow without law school (paralegal, ops, compliance)",{},{ops:1,comp:1,corp:.5},{legal:.04,contracts:.04,legalops:.04,grc:.02,attorney:-.05}],
+     ["I'm thinking about leaving law entirely",{},{},{legal:-.06,attorney:-.07,contracts:-.02}]]],
+   ["lg2","Which kind of cases would you most want to spend your days on?",[
+     ["Families: divorce, custody, adoption",{pu:.8,cu:.8,p:.7},{fam:2},{attorney:.02,counsel:.02}],
+     ["Criminal cases, prosecution or defense",{p:.9,pr:.8,pu:.7},{crim:2},{attorney:.02}],
+     ["Businesses: contracts, deals, corporate clients",{da:.5,pay:.8},{corp:2,comp:.5},{contracts:.03}],
+     ["Helping people who can't afford help (immigration, legal aid)",{pu:1,cu:.8},{pub:2},{policy:.03,attorney:.01}],
+     ["Lawsuits and trials — building the case",{p:.8,w:.7},{lit:2},{legal:.02,legalops:.02}]]],
+   ["lg3","Working for someone you believe did something wrong (or a company whose choices you disagree with) would…",[
+     ["Not bother me — everyone deserves representation",{},{crim:1,corp:1,lit:.5},{}],
+     ["Bother me some, but I could do it",{},{lit:.5,comp:.3},{}],
+     ["Really bother me — I need to believe in the side I'm on",{pu:.9},{pub:1.5,fam:.5,comp:.3},{}]]],
+   ["lg4","How do you feel about clients going through the worst moments of their lives?",[
+     ["It's why I'd do this — I want to be there for them",{pu:1,cu:1},{fam:1.5,pub:1,crim:.5},{counsel:.02}],
+     ["I can handle it, but I need breaks from it",{cu:.6},{lit:.5,crim:.3},{}],
+     ["I'd rather the work be about documents and deals than emotions",{cu:.3},{corp:1,ops:1,comp:1},{}]]],
+   ["lg5","Big-firm life (long hours, big pay) or steady hours for less?",[
+     ["Big firm: long hours, big pay",{h:.9,pay:1,p:.9},{corp:1.5,lit:1},{}],
+     ["Somewhere in the middle",{h:.5},{lit:.5,crim:.3,fam:.3},{}],
+     ["Steady hours matter more than top pay",{h:.15},{comp:1.5,pub:.7,ops:.5},{}]]],
+   ["lg6","Courtroom or behind the scenes?",[
+     ["In the courtroom, on my feet",{pr:1,p:.8},{crim:1.5,lit:1,fam:.5},{attorney:.03}],
+     ["Supporting the trial team behind the scenes",{pr:.4},{lit:1,ops:.5},{legal:.03}],
+     ["Nowhere near a courtroom",{pr:.3},{corp:1,comp:1,ops:1},{contracts:.02,legalops:.02,attorney:-.02}]]]]},
+ healthcare:{name:"healthcare",dirs:{
+   bed:["Bedside care","Nursing and patient care on a floor or in a clinic.","CNA, LPN, Registered Nurse"],
+   spec:["Specialized clinical tech","Imaging, respiratory, surgical, or lab roles with a 1–2 year program.","Radiologic Technologist, Respiratory Therapist, Surgical Tech"],
+   acute:["Emergency & critical care","ER, ICU, EMS — fast, high-stakes, adrenaline.","EMT, Paramedic, ER or ICU Nurse"],
+   ment:["Mental & behavioral health","Helping people through mental illness, addiction, and crisis.","Behavioral Health Tech, Case Manager, Counselor"],
+   adm:["Healthcare administration","Running clinics and hospitals: schedules, staff, money.","Clinic Coordinator, Practice Manager, Health Services Manager"],
+   hit:["Health IT & informatics","The data and systems behind care.","EHR Analyst, Health Information Specialist, Clinical Informatics"],
+   comm:["Community & public health","Keeping whole communities healthy.","Community Health Worker, Health Educator, Public Health Analyst"]},
+  qs:[
+   ["hc1","How do you feel about blood, needles, and bodily fluids?",[
+     ["Doesn't faze me",{th:.8},{bed:1,acute:1.5,spec:1},{nurse:.03,fire:.03,allied:.02}],
+     ["I can handle it in small doses",{},{bed:.5,spec:.5,ment:.5},{}],
+     ["I'd rather avoid it completely",{th:.3},{adm:1.5,hit:1.5,ment:1,comm:1},{nurse:-.05,allied:-.04,fire:-.04,hadmin:.03}]]],
+   ["hc2","Which pace sounds best?",[
+     ["Emergency-level: unpredictable, adrenaline",{p:1,v:1,h:.8},{acute:2},{fire:.03}],
+     ["Busy but predictable (a clinic or hospital floor)",{p:.6},{bed:1,spec:1},{}],
+     ["Calm and scheduled (an office or appointments)",{p:.3},{adm:1,hit:1,ment:1,comm:.5},{}]]],
+   ["hc3","Twelve-hour shifts, nights, and weekends are…",[
+     ["Fine — three long days a week sounds great",{h:.8},{bed:1,acute:1},{nurse:.02}],
+     ["OK early on, not forever",{h:.5},{spec:.5,bed:.5},{}],
+     ["A dealbreaker; I want weekday hours",{h:.15},{adm:1,hit:1,comm:1,ment:.5},{nurse:-.03,fire:-.03}]]],
+   ["hc4","When a patient dies or gets terrible news, you…",[
+     ["Feel it, but stay steady and keep caring for others",{p:.8,pu:.8},{acute:1,bed:1},{}],
+     ["Carry it home with you for a while",{},{adm:.5,hit:.5,comm:.5,spec:.3},{}],
+     ["Want to be the one helping them and their family cope",{pu:1,cu:1},{ment:1.5,bed:.5},{counsel:.03}]]],
+   ["hc5","What part of healthcare pulls you in most?",[
+     ["Hands-on patient care",{cu:.9,th:.7},{bed:1.5,spec:1},{}],
+     ["The technology and machines (imaging, monitors, lab)",{th:.8,da:.5},{spec:1.5,hit:.5},{allied:.03}],
+     ["Running the place: schedules, staff, money",{l:.8,da:.5},{adm:2},{hadmin:.04,ops:.02}],
+     ["The data and systems behind care",{da:1,c:.5},{hit:2},{hadmin:.02,data:.03}],
+     ["Mental health and talking people through hard things",{cu:1,pu:1},{ment:2},{counsel:.04}],
+     ["Keeping whole communities healthy",{pu:1,pr:.6},{comm:2},{policy:.03}]]],
+   ["hc6","More school for a better healthcare role?",[
+     ["Yes, even years (nursing, therapy, nurse practitioner)",{pat:.9},{bed:.5,ment:.5,acute:.5},{nurse:.04,counsel:.03}],
+     ["A 1–2 year program at most",{pat:.5},{spec:1.5},{allied:.04}],
+     ["As little as possible",{pat:.2},{adm:.5,hit:.5},{}]]]]},
+ education:{name:"education",dirs:{
+   cls:["Classroom teaching","Leading your own classroom.","Teacher, Substitute, Paraprofessional"],
+   sped:["Special education","Supporting students who need the most help.","Special Ed Teacher, Special Ed Para, Behavior Interventionist"],
+   coach:["Coaching & athletics","Teams, competition, and youth sports.","Coach, Athletic Director, Youth Sports Coordinator"],
+   lead:["School leadership","Running a school or program.","Dean, Assistant Principal, Program Director"],
+   id:["Instructional design & corporate training","Building courses and training for companies.","Instructional Designer, Corporate Trainer, Learning Specialist"],
+   couns:["Student support & counseling","Students' wellbeing and next steps.","School Counselor, Student Success Coach, Social Worker"],
+   edtech:["Ed-tech","Helping schools use technology.","Ed-Tech Implementation Specialist, Ed-Tech Account Manager, Tech Integrationist"]},
+  qs:[
+   ["ed1","What's your favorite part of working with students?",[
+     ["The moment when it finally clicks",{pu:.9,pr:.7},{cls:1.5,sped:.5},{teach:.03}],
+     ["Helping the kids who struggle most",{pu:1,cu:.9},{sped:2,couns:1},{counsel:.02}],
+     ["Coaching and competition",{p:.7,l:.7},{coach:2},{sportsbiz:.02}],
+     ["Honestly, I prefer working with the adults",{cu:.5},{lead:1,id:1,edtech:1},{idtrain:.03}]]],
+   ["ed2","Classroom management and discipline…",[
+     ["Come naturally to me",{l:.8,p:.7},{cls:1,lead:.5,coach:.5},{teach:.03}],
+     ["Are doable but draining",{},{id:.5,edtech:.5,couns:.3},{}],
+     ["Are the part I'd most like to escape",{},{id:1.5,edtech:1},{teach:-.04,idtrain:.03}]]],
+   ["ed3","Would you trade summers off for higher pay?",[
+     ["No — summers off matter a lot",{h:.3},{cls:1,sped:1,coach:.5},{teach:.03}],
+     ["Maybe, for the right raise",{},{lead:.5,couns:.5},{}],
+     ["Yes, pay matters more",{pay:.9},{id:1.5,edtech:1.5},{idtrain:.03,impl:.03}]]],
+   ["ed4","Which sounds best five years out?",[
+     ["Leading my own classroom",{},{cls:2},{teach:.03}],
+     ["Running a school or a program",{l:1},{lead:2},{}],
+     ["Building courses or training for a company",{w:.7,au:.6},{id:2},{idtrain:.04}],
+     ["Helping schools use technology",{th:.5},{edtech:2},{itsup:.02,impl:.03}],
+     ["Supporting students' wellbeing and next steps",{pu:1,cu:1},{couns:2},{counsel:.03}]]],
+   ["ed5","A teaching license or master's degree?",[
+     ["Already have it, or would get it",{pat:.8},{cls:1,sped:1,lead:1,couns:1},{teach:.03,counsel:.02}],
+     ["Only if my employer pays",{pat:.5},{},{}],
+     ["Not interested",{pat:.2},{id:1,edtech:1,coach:.5},{teach:-.04}]]]]},
+ tech:{name:"tech",dirs:{
+   sup:["Support & IT operations","Keeping people and systems running.","Help Desk, Systems Administrator, IT Manager"],
+   sec:["Cybersecurity","Keeping attackers out and data safe.","SOC Analyst, Security Engineer, GRC Analyst"],
+   data:["Data & analytics","Finding the story in the numbers.","Data Analyst, BI Developer, Data Scientist"],
+   dev:["Software development","Building the products people use.","Developer, Software Engineer, QA Engineer"],
+   cloud:["Cloud & infrastructure","Servers, networks, and automation.","Cloud Engineer, DevOps Engineer, Network Engineer"],
+   biz:["Business-facing tech","Translating between the business and the tech team.","Business Analyst, Implementation Consultant, Product Manager"],
+   sales:["Tech sales & solutions","Showing customers how the tech solves their problem.","Sales Engineer, Solutions Consultant, Account Executive"]},
+  qs:[
+   ["tc1","When something breaks, you'd rather…",[
+     ["Fix it myself with my hands on the keyboard",{th:.6,c:.5},{sup:1,cloud:1,sec:.5},{}],
+     ["Find out why and make sure it never happens again",{da:.8},{sec:1,data:.5,cloud:.5},{}],
+     ["Explain it to the person in plain English",{cu:.9,pr:.6},{biz:1,sales:1,sup:.5},{}]]],
+   ["tc2","How do you feel about coding every day?",[
+     ["Love it",{c:1},{dev:2,cloud:1,data:.5},{swe:.04}],
+     ["Some scripting is fine",{c:.5},{cloud:1,data:1,sec:1},{}],
+     ["I'd rather not",{c:.1},{biz:1.5,sales:1,sup:.5},{swe:-.04}]]],
+   ["tc3","Being on call when systems go down at 2 a.m.…",[
+     ["Fine — that's the job",{h:.8,p:.9},{sup:1,cloud:1,sec:1},{}],
+     ["Occasionally, if it's rotated",{h:.5},{},{}],
+     ["Hard no",{h:.15},{biz:1,data:1,dev:.5,sales:.5},{cloud:-.03,cyber:-.02}]]],
+   ["tc4","Which problem would you want to own?",[
+     ["Keeping hackers out",{p:.8},{sec:2},{cyber:.04,grc:.02}],
+     ["Finding the story in the data",{da:1},{data:2},{data:.04}],
+     ["Building the thing people use",{c:.8},{dev:2},{swe:.03}],
+     ["Making the business and the tech teams understand each other",{cu:.8,pr:.7},{biz:2},{ba:.03,impl:.03,pm:.02}],
+     ["Convincing customers our tech is the answer",{s:.9,pr:.9},{sales:2},{se:.04,sales:.02}],
+     ["Running the servers and the cloud",{th:.6},{cloud:2},{cloud:.04}]]]]},
+ trades:{name:"the trades",dirs:{
+   elec:["Electrical","Wiring, panels, and power systems.","Electrician Apprentice, Journeyman Electrician, Master Electrician"],
+   hvac:["HVAC & refrigeration","Heating, cooling, and refrigeration systems.","HVAC Technician, Refrigeration Tech, HVAC Service Manager"],
+   plumb:["Plumbing & pipefitting","Water, gas, and piping systems.","Plumber Apprentice, Pipefitter, Master Plumber"],
+   mech:["Mechanics & maintenance","Engines, vehicles, and machinery.","Diesel Mechanic, Maintenance Technician, Industrial Mechanic"],
+   build:["Construction & carpentry","Building and framing.","Carpenter, Construction Worker, Site Lead"],
+   lead:["Supervision & estimating","Running crews and bidding jobs.","Foreman, Estimator, Construction Project Manager"],
+   own:["Your own shop","Running your own trade business.","Licensed contractor, Business owner"]},
+  qs:[
+   ["tr1","Which work sounds most satisfying?",[
+     ["Wiring and electrical systems",{},{elec:2},{}],["Heating, cooling, and refrigeration",{},{hvac:2},{}],
+     ["Pipes and water systems",{},{plumb:2},{}],["Engines, vehicles, and machinery",{},{mech:2},{}],["Building and framing",{},{build:2},{}]]],
+   ["tr2","Working outside in extreme heat or cold…",[
+     ["No problem",{o:1},{build:1,elec:.5,plumb:.5},{trades:.02}],
+     ["I'd rather be indoors most of the time",{o:.5},{mech:1,hvac:.5},{}],
+     ["I'd want to be off the tools and in the office eventually",{l:.6},{lead:1.5},{proj:.02,ops:.02}]]],
+   ["tr3","Five years from now, you'd rather…",[
+     ["Be a master of my craft",{au:.7},{elec:.5,hvac:.5,plumb:.5,mech:.5},{trades:.03}],
+     ["Run crews and bid jobs",{l:1},{lead:2},{proj:.03,ops:.03}],
+     ["Own my own business",{en:1,au:1},{own:2},{entre:.04}]]],
+   ["tr4","A paid apprenticeship can take 4–5 years. That feels…",[
+     ["Worth it",{pat:.9},{elec:1,plumb:1,hvac:.5},{trades:.03}],
+     ["Long, but doable",{pat:.6},{hvac:.5,mech:.5},{}],
+     ["Too long — I want something faster",{pat:.2},{mech:1,build:.5},{trades:-.02}]]]]},
+ finance:{name:"finance",dirs:{
+   acct:["Accounting & tax","Making the books balance and filing taxes right.","Staff Accountant, Tax Associate, Controller"],
+   audit:["Audit & risk","Catching mistakes, fraud, and risk.","Audit Associate, Internal Auditor, Risk Analyst"],
+   fpa:["Corporate finance (FP&A)","Forecasting where the business is headed.","Financial Analyst, FP&A Manager, CFO"],
+   inv:["Investments & banking","Markets, deals, and investing.","Investment Analyst, Banking Analyst, Portfolio Manager"],
+   adv:["Advising clients","Helping people plan their money.","Financial Advisor, Personal Banker, Wealth Manager"],
+   ops:["Finance systems & operations","The data and tools behind finance.","Finance Systems Analyst, Revenue Operations, Billing Manager"]},
+  qs:[
+   ["fn1","Which sounds most interesting?",[
+     ["Making the books balance perfectly",{da:.8},{acct:2},{acct:.03}],
+     ["Catching mistakes and fraud",{da:.8,p:.6},{audit:2},{grc:.03,acct:.02}],
+     ["Forecasting where the business is headed",{da:1},{fpa:2},{fin:.04}],
+     ["Markets, deals, and investing",{rp:.6,p:.8},{inv:2},{fin:.03}],
+     ["Helping people plan their money",{cu:.9,s:.6,pu:.6},{adv:2},{advisor:.04}],
+     ["The systems and data behind finance",{c:.5,da:.9},{ops:2},{revops:.03,data:.02}]]],
+   ["fn2","Busy season (60-hour weeks a few times a year)…",[
+     ["Fine — the rest of the year is calmer",{h:.7},{acct:1,audit:1},{}],
+     ["I'd rather avoid it",{h:.2},{fpa:.5,ops:1,adv:.5},{}]]],
+   ["fn3","A CPA, CFA, or another big exam?",[
+     ["Yes, I'd go for it",{pat:.9},{acct:1,audit:1,inv:1},{acct:.03,fin:.02}],
+     ["Maybe a smaller certification",{pat:.5},{ops:.5,adv:.5},{}],
+     ["No",{pat:.2},{ops:1,adv:.5},{}]]],
+   ["fn4","Talking with clients about their money…",[
+     ["Love it",{cu:1,s:.6},{adv:2,inv:.5},{advisor:.03}],
+     ["Fine in small doses",{cu:.5},{fpa:.5,audit:.5},{}],
+     ["I'd rather work with numbers than people",{cu:.2},{acct:1,ops:1,fpa:.5},{advisor:-.03}]]]]},
+ creative:{name:"creative work",dirs:{
+   design:["Graphic & brand design","Logos, layouts, and visual identity.","Graphic Designer, Brand Designer, Art Director"],
+   ux:["UX & product design","Apps and websites people actually enjoy using.","UX Designer, Product Designer, UX Researcher"],
+   video:["Video & photo","Shooting, editing, and storytelling on screen.","Video Editor, Videographer, Photographer"],
+   write:["Writing & content","Copy, stories, and scripts.","Copywriter, Content Writer, Communications Manager"],
+   social:["Social & digital marketing","Posts and campaigns that spread.","Social Media Manager, Digital Marketer, Content Strategist"],
+   strat:["Marketing strategy & brand","Running the plan instead of making every piece.","Marketing Manager, Brand Manager, Creative Director"]},
+  qs:[
+   ["cr1","What do you make best?",[
+     ["Visuals: logos, layouts, graphics",{},{design:2},{media:.02}],["Videos and photos",{th:.5},{video:2},{media:.03}],
+     ["Words: copy, stories, scripts",{w:1},{write:2},{writer:.04}],["Apps and websites people use",{da:.4},{ux:2},{ux:.04}],
+     ["Posts and campaigns that blow up",{v:.8},{social:2},{mkt:.03}]]],
+   ["cr2","Harsh feedback on something you made…",[
+     ["Fuels me — I'll make it better",{p:.7},{design:.5,ux:.5,strat:.5},{}],
+     ["Stings, but I'll adjust",{},{},{}],
+     ["Is really hard for me",{p:.3},{write:.5,video:.3},{}]]],
+   ["cr3","Making what you want vs. what a client wants…",[
+     ["I want my own creative vision",{au:1,en:.6},{video:1,write:1},{media:.02,entre:.02}],
+     ["Happy to solve the client's problem",{cu:.7},{ux:1,design:1,strat:.5},{ux:.02}],
+     ["I'd rather run the strategy than make the stuff",{l:.8,da:.6},{strat:2},{mkt:.03,pm:.02}]]],
+   ["cr4","Freelance or in-house?",[
+     ["Freelance — my own clients and schedule",{au:1,rp:.6,en:.8},{video:.5,design:.5,write:.5},{entre:.03}],
+     ["In-house with a steady paycheck",{rp:.1},{ux:.5,strat:.5,social:.5},{}],
+     ["Agency life — lots of variety",{v:.9,p:.7},{design:.5,social:.5,strat:.5},{}]]]]},
+ service:{name:"retail, hospitality, and sales",dirs:{
+   mgmt:["Store & restaurant management","Running the shift, the team, and the numbers.","Shift Lead, Assistant Manager, General Manager"],
+   sales:["B2B sales","Selling to businesses, usually with commission.","Sales Development Rep, Account Executive, Sales Manager"],
+   cs:["Customer success & account management","Keeping customers happy long-term, often in an office.","Account Manager, Customer Success Manager, Client Services"],
+   hotel:["Hotels & travel","Guest experience and travel operations.","Front Desk Lead, Hotel Manager, Travel Coordinator"],
+   events:["Events","Weddings, conferences, and live events.","Event Coordinator, Banquet Manager, Event Producer"],
+   train:["Training & HR","Hiring and training people.","Corporate Trainer, Recruiter, HR Coordinator"],
+   corp:["Corporate side of retail","Buying, merchandising, and operations at headquarters.","Merchandising Analyst, Buyer, Operations Analyst"]},
+  qs:[
+   ["sv1","What do you like most about your job now?",[
+     ["The people I serve",{cu:1},{cs:1,hotel:1,events:.5},{csm:.03}],
+     ["Running the shift and the team",{l:1},{mgmt:2},{hosp:.03,ops:.03}],
+     ["Making the sale",{s:1,rp:.7},{sales:2},{sales:.04}],
+     ["Training new people",{pr:.8},{train:2},{hr:.03,idtrain:.02}],
+     ["Honestly, not much",{},{corp:1,cs:.5},{hosp:-.03}]]],
+   ["sv2","Nights, weekends, and holidays…",[
+     ["Don't bother me",{h:.8},{mgmt:1,hotel:1,events:1},{}],
+     ["I'd like to leave them behind",{h:.2},{cs:1,sales:1,corp:1,train:.5},{hosp:-.04,event:-.02}]]],
+   ["sv3","Stay in this industry, or use it as a jumping-off point?",[
+     ["Grow in it — I like it here",{},{mgmt:1,hotel:1,events:.5},{hosp:.03}],
+     ["Move to the corporate side of it",{da:.5},{corp:2,train:1},{ops:.03}],
+     ["Use my people skills somewhere new (sales, tech, office)",{v:.6},{sales:1,cs:1.5},{csm:.03,sales:.02}]]],
+   ["sv4","Commission-based pay…",[
+     ["Exciting — I'd bet on myself",{rp:1,s:.8},{sales:2},{sales:.03,realestate:.02}],
+     ["OK as a bonus on top of a salary",{rp:.5},{cs:1,mgmt:.5},{}],
+     ["No thanks",{rp:.1},{corp:1,train:1,hotel:.5},{}]]]]},
+ science:{name:"science",dirs:{
+   lab:["Lab research","Experiments at the bench.","Lab Technician, Research Associate, Research Scientist"],
+   clin:["Clinical research","Running trials with patients.","Clinical Research Coordinator, CRA, Clinical Trial Manager"],
+   env:["Environmental & field science","Science outdoors.","Environmental Technician, Field Scientist, Conservation Specialist"],
+   data:["Data science & bioinformatics","Science on a computer.","Bioinformatics Analyst, Data Scientist, Research Data Analyst"],
+   qa:["Quality & regulatory","Making sure things are safe and done right.","QA/QC Analyst, Regulatory Affairs Specialist, Quality Manager"],
+   comm:["Science communication & policy","Helping the public and lawmakers understand.","Science Writer, Policy Analyst, Outreach Coordinator"]},
+  qs:[
+   ["sc1","Where do you want to do science?",[
+     ["At the bench in a lab",{th:.8},{lab:2,qa:.5},{sci:.03}],["Outdoors, in the field",{o:1,th:.7},{env:2},{sci:.02}],
+     ["On a computer with the data",{da:1,c:.6},{data:2},{ds:.04,data:.03}],["With patients in trials",{cu:.8,pu:.8},{clin:2},{hadmin:.02}]]],
+   ["sc2","Grad school (master's or PhD)?",[
+     ["Yes, I want to lead research",{pat:1},{lab:1,data:.5,env:.5},{sci:.04}],
+     ["Maybe a master's",{pat:.6},{clin:1,qa:.5,data:.5},{}],
+     ["No more school",{pat:.2},{qa:1.5,comm:.5},{sci:-.03}]]],
+   ["sc3","Which would you rather produce?",[
+     ["A discovery nobody's made before",{au:.8},{lab:1.5,env:1},{}],
+     ["A process that makes sure things are safe and done right",{da:.6},{qa:2},{grc:.03}],
+     ["An explanation that helps the public or lawmakers understand",{w:.9,pr:.8,pu:.8},{comm:2},{policy:.03,writer:.02}]]],
+   ["sc4","Repeating a careful procedure 50 times…",[
+     ["Satisfying",{v:.2},{lab:1,qa:1},{}],["Fine in moderation",{},{},{}],
+     ["Would drive me crazy",{v:.9},{data:1,env:1,comm:1},{}]]]]},
+ office:{name:"office work",dirs:{
+   ea:["Executive support","The right hand to a busy leader.","Executive Assistant, Chief of Staff, Office Manager"],
+   ops:["Operations","Making the whole place run smoothly.","Operations Coordinator, Operations Manager, Director of Operations"],
+   hr:["HR & recruiting","Hiring and supporting employees.","HR Coordinator, Recruiter, HR Generalist"],
+   proj:["Project coordination","Planning projects and keeping them on track.","Project Coordinator, Project Manager, Program Manager"],
+   fin:["Finance & accounting support","Invoices, budgets, and books.","AP/AR Specialist, Bookkeeper, Staff Accountant"],
+   it:["Office IT & systems","Fixing the tech everyone uses.","IT Support, Systems Administrator, IT Manager"]},
+  qs:[
+   ["of1","Which part of office work do you enjoy most?",[
+     ["Keeping a busy leader organized",{cu:.7},{ea:2},{ea:.04}],
+     ["Making processes run smoothly",{da:.6,l:.5},{ops:2,proj:.5},{ops:.03}],
+     ["Hiring and helping employees",{cu:.9,pu:.6},{hr:2},{hr:.04}],
+     ["Planning projects and keeping them on track",{l:.7},{proj:2},{proj:.04}],
+     ["Numbers, invoices, and budgets",{da:.9},{fin:2},{acct:.03}],
+     ["Fixing the tech everyone uses",{th:.6,c:.3},{it:2},{itsup:.04}]]],
+   ["of2","Being the person everyone brings their problems to…",[
+     ["Love it",{cu:1},{ea:1,hr:1,it:1},{}],["Fine",{},{},{}],
+     ["I'd rather work heads-down",{cu:.3},{fin:1,ops:.5},{}]]],
+   ["of3","Stay in a support role or eventually lead?",[
+     ["Lead a team or department",{l:1},{ops:1.5,hr:.5,proj:.5},{ops:.02}],
+     ["Become a specialist (HR, finance, IT)",{au:.6},{hr:1,fin:1,it:1},{}],
+     ["Be the right hand to a top executive",{},{ea:2},{ea:.03}]]],
+   ["of4","Juggling ten small things vs. one big project…",[
+     ["Ten small things — keeps the day moving",{v:.9},{ea:1,it:.5,hr:.5},{}],
+     ["One big project I can sink into",{v:.3},{proj:1,fin:1},{}]]]]}
+};
+const FQ_ITEMS={};
+for(const [f,o] of Object.entries(FIELDQ))FQ_ITEMS[f]=o.qs.map(([id,text,opts])=>({t:"mc",id,text,opts,fq:f}));
+function fieldItems(){return FQ_ITEMS[curField()]||[]}
+function fieldDirs(){
+  const f=curField(), F=FIELDQ[f]; if(!F)return null;
+  const pts={}, why={}; let n=0;
+  for(const it of FQ_ITEMS[f]){const v=state.answers[it.id]; if(v==null)continue; n++;
+    const o=it.opts[v]; for(const [d,w] of Object.entries(o[2])){pts[d]=(pts[d]||0)+w; if(w>=1)(why[d]=why[d]||[]).push(o[0])}}
+  if(!n)return null;
+  const max=Math.max(...Object.values(pts),1);
+  return Object.keys(F.dirs).map(k=>({k,name:F.dirs[k][0],blurb:F.dirs[k][1],roles:F.dirs[k][2],score:(pts[k]||0)/max,why:why[k]||[]})).sort((a,b)=>b.score-a.score);
+}
+
+/* Career-path questions: where you are and what's in the way */
+const PATHQ=[
+ {id:"pa1",text:"How do you feel about your current (or most recent) job?",opts:[["Love it — I want to grow where I am",{pat:.6}],["It's fine, but I want more",{}],["Ready to leave",{pat:.35}],["Not working right now / still in school",{}]]},
+ {id:"pa2",text:"What's the main reason you're looking?",opts:[["More money",{pay:1}],["Room to grow",{pat:.6}],["Burned out — I need something different",{}],["I honestly don't know what I want yet",{}],["Getting my first real job",{}]]},
+ {id:"pa3",text:"What's holding you back the most?",opts:[["Not sure which direction to go",{}],["Missing skills, a degree, or a certification",{}],["No time to study or apply",{pat:.3}],["Afraid of taking a pay cut",{pay:.9}],["No network — no one to refer me",{}]]},
+ {id:"pa4",text:"Would you take a lower-level \"stepping-stone\" job if it clearly led to a better career?",opts:[["Yes, if it pays about the same",{pat:.7}],["Yes, even with a small pay cut",{pat:1,pay:.4}],["Only if it pays more",{pat:.4,pay:.9}],["No",{pat:.1}]]},
+ {id:"pa5",text:"How soon do you need a change?",opts:[["Within 3 months",{pat:.15}],["Within a year",{pat:.45}],["In 1–3 years",{pat:.8}],["No rush — just exploring",{pat:.9}]]},
+ {id:"pa6",text:"Open to moving for the right job?",opts:[["Yes, anywhere",{tr:.6}],["Within my region",{}],["No, I'm staying put",{tr:.2}]]}
+].map(o=>Object.assign({t:"mc"},o));
+
+const OPEN=[
+ ["op1","Describe your best day at any job, class, or project you've had. What were you doing?","The day I…"],
+ ["op2","What parts of work drain you the fastest?",""],
+ ["op3","Think of a job, class, or role you expected to like but didn't. What specifically didn't you like?",""],
+ ["op4","If every option paid the same, what would you do?",""],
+ ["op5","What does a great life look like five years from now? Job, money, where you live, schedule.",""],
+ ["op6","Whose job have you been jealous of? What about it?",""],
+ ["op7","Anything that's a hard no for you in a job?","e.g. no cold calling, no night shifts, no moving…"],
+ ["op8","Anything else an AI coach should know before analyzing your results?",""]
+].map(([id,text,ph])=>({t:"open",id,text,ph}));
+
+const PAGES=[
+ {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your résumé and a few basics. The résumé is read inside your browser only. It's used to spot skills you already have, which powers the \"stepping-stone jobs\" in your results.",items:[],custom:"checkin"},
+ {id:"int1",title:"Interests, part 1",short:"Interests 1",lede:"Rate each activity twice: how much you'd enjoy it as part of a job, and how good you are at it today. These cover every kind of work on purpose, not just your field. If something isn't your world, a quick \"Hate it\" is a useful answer: it's how the combine rules careers out.",items:lik(RI.slice(0,15),"enjoy")},
+ {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. If you've never tried something, rate your ability as your best guess. Activities outside your field are there on purpose.",items:lik(RI.slice(15),"enjoy")},
+ {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"How accurately does each statement describe you as you generally are now, not as you wish to be? Compare yourself to people your age.",items:lik(B5.slice(0,15),"agree")},
+ {id:"per2",title:"Personality, part 2",short:"Personality 2",lede:"Same instructions. First instinct is usually the most accurate.",items:lik(B5.slice(15),"agree")},
+ {id:"val",title:"What matters most",short:"Values",lede:"Rank these and set your pay numbers. They feed straight into the pay side of the scoring.",items:[{t:"rank",id:"rank_values",text:"Put these in order, most important at the top",items:VALUES},SLIDERS[0],SLIDERS[1]]},
+ {id:"sty",title:"How you want to work",short:"Work style",lede:"Drag each slider to where you honestly land. Leave one untouched if you're unsure, and it won't count.",items:SLIDERS.slice(2)},
+ {id:"tf",title:"True or false",short:"True/false",lede:"Quick gut calls. If it's mostly true, pick True.",items:TF},
+ {id:"ab",title:"This or that",short:"This or that",lede:"Pick the one you'd choose if you had to. Both can be fine.",items:AB},
+ {id:"sj1",title:"Scenarios, part 1",short:"Scenarios 1",lede:"Pick what you'd actually do, not what sounds best.",items:SJT.slice(0,6)},
+ {id:"sj2",title:"Scenarios, part 2",short:"Scenarios 2",lede:"Six more.",items:SJT.slice(6)},
+ {id:"path",title:"Your career path",short:"Your path",lede:"Where you are now and what's in the way. These shape how hard your results push toward quick wins versus longer paths.",items:PATHQ},
+ {id:"fieldq",custom:"field",get title(){const F=FIELDQ[curField()];return F?"Your take on "+F.name:"Questions for your field"},short:"Your field",get lede(){return FIELDQ[curField()]?"These only show up for people in "+FIELDS[curField()].label.toLowerCase()+". They point you toward the right corner of your field, and nudge the main ranking.":""},get items(){return fieldItems()}},
+ {id:"open",title:"In your own words",short:"Your words",lede:"These don't change your score here. They go into the summary you can paste into an AI assistant, so a few honest sentences go a long way. Skip any you want.",items:OPEN}
+];
+function allItems(){return PAGES.flatMap(p=>p.items)}
+
+/* ============================================================
+   SKILLS detected from a résumé: id: [label, patterns ("*" = any word ending)]
+   ============================================================ */
+const SK={
+  sql:['SQL / databases','sql|mysql|postgres*|sql server|bigquery|snowflake|database*'],
+  excel:['Excel / spreadsheets','excel|spreadsheet*|google sheets|vlookup|xlookup|pivot table*'],
+  bi:['Tableau / Power BI','tableau|power bi|powerbi|looker|qlik'],
+  dataviz:['Reporting & dashboards','data visualization|dashboard*|reporting|kpi*|metrics'],
+  python:['Python','python|pandas|numpy|jupyter'],
+  programming:['Programming','java|javascript|typescript|c#|c\\+\\+|ruby|php|swift|kotlin|react|node.js|html|css|software development|programming|coding'],
+  git:['Git / version control','git|github|gitlab|version control'],
+  stats:['Statistics','statistic*|regression|hypothesis test*|rstudio|spss|stata|a/b test*'],
+  ml:['Machine learning / AI','machine learning|scikit*|tensorflow|pytorch|llm*|nlp|artificial intelligence'],
+  math:['Math & quantitative','calculus|linear algebra|mathematic*|quantitative'],
+  cloud:['Cloud (AWS/Azure/GCP)','aws|azure|gcp|google cloud|ec2|terraform|cloud'],
+  linux:['Linux','linux|unix|ubuntu|bash'],
+  scripting:['Scripting & automation','powershell|scripting|shell script*|apps script|automat*|zapier|power automate|ansible|docker'],
+  networking:['Networking','network*|tcp/ip|dns|dhcp|vpn|firewall*|cisco|wi-fi|wifi'],
+  security:['Cybersecurity','cybersecurity|security|siem|splunk|vulnerabilit*|incident response|security\\+|phishing|mfa'],
+  compliance:['Compliance & audit','complian*|audit*|sox|hipaa|ferpa|gdpr|nist|regulator*|controls'],
+  risk:['Risk management','risk*'],
+  troubleshooting:['Troubleshooting','troubleshoot*|diagnos*|help desk|helpdesk|technical support|tech support|ticket*'],
+  endpoint:['Device & account admin','windows|macos|active directory|intune|jamf|google admin|microsoft 365|office 365|chromebook*|imaging'],
+  customer:['Customer service','customer*|client*|guest*|patron*'],
+  communication:['Communication','communicat*|collaborat*|stakeholder*|cross-functional'],
+  presenting:['Presenting','presentation*|presented|presenting|public speaking|demo*|pitch*'],
+  documentation:['Documentation','documentation|documented|documents|knowledge base|sop*|guides|manual*|case files|records'],
+  requirements:['Requirements gathering','requirements|user stor*|business analysis|use case*|gap analysis|process map*'],
+  process:['Process improvement','process improvement|streamlin*|lean|six sigma|efficien*|workflow*|optimiz*'],
+  pm:['Project coordination','project manag*|managed project*|agile|scrum|jira|asana|trello|pmp|capm|coordinat*|timeline*|schedul*'],
+  leadership:['Leadership','led|leader*|supervis*|managed a team|mentor*|captain|president|team lead|manager'],
+  budgeting:['Budgeting & forecasting','budget*|forecast*|cost saving*|p&l'],
+  operations:['Operations & logistics','operations|logistic*|inventory|supply chain|procurement|warehouse|vendor*'],
+  sales:['Sales','sales|sold|quota*|revenue|upsell*|cold call*|lead generation|business development|prospect*'],
+  negotiation:['Negotiation','negotiat*|contract*'],
+  crm:['CRM (Salesforce/HubSpot)','crm|salesforce|hubspot'],
+  marketing:['Marketing','marketing|campaign*|brand*|seo|google ads|email marketing|market research'],
+  social:['Social media','social media|instagram|tiktok|facebook|youtube|content creator'],
+  writing:['Writing & editing','writ*|copywrit*|blog*|editor|editing|journalis*|article*|newsletter*'],
+  design:['Visual design','graphic design|designer|figma|adobe|photoshop|illustrator|canva|indesign'],
+  ux:['UX & user research','user research|usability|ux|user experience|persona*|wirefram*|prototyp*'],
+  media:['Video & photo','video*|premiere|final cut|after effects|photograph*|podcast*'],
+  product:['Product thinking','product manag*|roadmap*|product launch*|feature*'],
+  strategy:['Strategy','strateg*|consulting|competitive analysis|market analysis'],
+  finance:['Finance','financ*|valuation|fp&a|investment*|portfolio*|banking'],
+  accounting:['Accounting','accounting|accounts payable|accounts receivable|bookkeep*|quickbooks|reconcil*|general ledger|gaap|tax*'],
+  training:['Training & coaching','training|trained|onboard*|workshop*|coach*|tutor*'],
+  teaching:['Teaching','teach*|instructor|lesson plan*|classroom|students|educator|substitute'],
+  curriculum:['Curriculum & e-learning','curricul*|instructional design|e-learning|elearning|articulate|storyline|lms'],
+  recruiting:['Recruiting','recruit*|talent acquisition|hiring|sourcing|candidates'],
+  hr:['HR','human resources|hr|payroll|benefits administration|employee relations'],
+  healthcare:['Healthcare / clinical','patient*|clinical|hospital|healthcare|health care|medical|nursing|cna|emt|ehr|epic|cerner|cpr'],
+  counseling:['Counseling & case management','counsel*|case manag*|social work|mental health|crisis|advocacy|therap*'],
+  handson:['Hands-on / mechanical','repair*|install*|maintenance|mechanical|wiring|electrical|hvac|plumbing|carpentry|welding|construction|assembl*|forklift'],
+  safety:['Safety (OSHA)','osha|safety'],
+  cad:['CAD / drafting','cad|autocad|solidworks|revit|blueprint*|drafting'],
+  engineering:['Engineering','engineering|circuit*|matlab|mechanical design'],
+  research:['Research','research*|literature review|survey*'],
+  lab:['Lab work','laboratory|lab|experiment*|pcr|assay*'],
+  legal:['Legal','legal|paralegal|litigation|court|attorney|case files'],
+  policy:['Policy & public sector','policy|policies|legislat*|government|public sector|nonprofit|grant*'],
+  events:['Events','event*|tournament*|ticketing|venue*|game day|banquet*'],
+  sports:['Sports','sports|athletic*|hockey|football|basketball|baseball|soccer|referee*']
+};
+const SK_RX={};
+for(const [id,[,pats]] of Object.entries(SK)){
+  SK_RX[id]=pats.split('|').map(p=>{
+    const body=p.replace(/[.?^${}()[\]/]/g,'\\$&').replace(/\*/g,'[a-z]*');
+    return new RegExp('(^|[^a-z0-9#+])'+body+'(?=$|[^a-z0-9#+])','i');
+  });
+}
+function detectSkills(text){
+  const t=' '+(text||'').toLowerCase().replace(/\s+/g,' ')+' ', out=[];
+  for(const id in SK_RX)if(SK_RX[id].some(r=>r.test(t)))out.push(id);
+  return out;
+}
+
+/* ============================================================
+   CAREER POOL — demand levels (0–1) + facts. pay = [entry, ~yr 4, senior] in $k, rough U.S. figures
+   (OTE for commission roles). edu: 0 none · 1 cert/associate · 2 bachelor's · 3 graduate/license
+   ============================================================ */
+const C=[
+ {id:"se",n:"Sales / Solutions Engineer",r:"EIS",pay:[95,160,240],d:{c:.35,tr:.4,s:.65,cu:.9,l:.4,au:.65,v:.7,p:.65,da:.4,th:.3,rp:.45,h:.6,o:.4,w:.4,pr:.9,en:.2,pu:.3},ease:"Medium",ai:"Low–Med",trv:"15–30%",wlb:"Mixed",edu:2,start:"Associate Solutions Engineer",end:"Director of Solutions Engineering",titles:"Associate Sales Engineer, Solutions Consultant, Pre-Sales Engineer",step:"1–2 years in technical support or implementation at a software company, then move over.",sk:["presenting","troubleshooting","sales","customer","product","communication"],ind:"tech software saas"},
+ {id:"impl",n:"Implementation Consultant",r:"SCI",pay:[65,100,150],d:{c:.25,tr:.35,s:.2,cu:.85,l:.4,au:.55,v:.65,p:.6,da:.45,th:.35,rp:.1,h:.6,o:.45,w:.5,pr:.65,pu:.35},ease:"Easy",ai:"Medium",trv:"0–30%",wlb:"Mixed",edu:1,start:"Implementation Specialist",end:"Director of Professional Services",titles:"Implementation Specialist, Onboarding Specialist, Implementation Consultant",step:"Frame past work as rolling out systems and training people on them.",sk:["training","customer","pm","documentation","troubleshooting"],ind:"tech software healthcare education"},
+ {id:"csm",n:"Customer Success / Account Manager",r:"SEC",pay:[60,95,160],d:{c:.1,tr:.2,s:.45,cu:1,l:.35,au:.55,v:.55,p:.5,da:.35,th:.15,rp:.3,h:.45,o:.2,w:.4,pr:.7,pu:.4},ease:"Easy",ai:"Med–High",trv:"5–20%",wlb:"Good",edu:1,start:"Customer Success Associate",end:"VP of Customer Success",titles:"Customer Success Associate, Account Manager, Client Success Specialist",step:"Lead with customer-facing results: retention, satisfaction scores, upsells.",sk:["customer","communication","crm","training","troubleshooting"],ind:"tech software saas"},
+ {id:"sales",n:"Sales (SDR → Account Executive)",r:"ESC",pay:[65,140,250],d:{c:0,tr:.25,s:1,cu:.9,l:.35,au:.6,v:.55,p:.9,da:.2,th:.05,rp:.95,h:.7,o:.2,en:.4,w:.3,pr:.8,pu:.2},ease:"Easy",ai:"Med–High",trv:"0–30%",wlb:"Demanding",edu:0,start:"Sales Development Representative",end:"VP of Sales",titles:"Sales Development Rep, Business Development Rep, Account Executive",step:"Pick an industry you know and pitch your background to companies that sell into it.",sk:["sales","negotiation","crm","communication","customer","presenting"],ind:"tech medical saas sports"},
+ {id:"revops",n:"Revenue / Sales Operations",r:"CEI",pay:[70,110,170],d:{c:.4,tr:.05,s:.35,cu:.45,l:.5,au:.6,v:.5,p:.55,da:.85,th:.1,rp:.15,h:.5,o:.1,w:.4,pr:.5,pu:.2},ease:"Medium",ai:"Medium",trv:"0–5%",wlb:"Good",edu:2,start:"Sales Operations Analyst",end:"VP of Revenue Operations",titles:"Sales Operations Analyst, Revenue Operations Analyst, CRM Analyst",step:"Salesforce Administrator certification plus one sample sales dashboard.",sk:["crm","excel","dataviz","sql","process"],ind:"tech saas"},
+ {id:"data",n:"Data / BI Analyst",r:"ICE",pay:[65,95,150],d:{c:.65,tr:.05,s:0,cu:.3,l:.25,au:.6,v:.45,p:.45,da:1,th:.1,rp:.05,h:.45,o:.05,w:.4,pr:.45,pu:.3},ease:"Medium",ai:"High",trv:"0–5%",wlb:"Good",edu:2,start:"Junior Data Analyst",end:"Director of Analytics",titles:"Data Analyst, Reporting Analyst, Business Intelligence Analyst",step:"Learn SQL plus Power BI or Tableau and publish one dashboard on public data.",sk:["sql","excel","bi","dataviz","python","stats"],ind:"sports healthcare finance retail tech"},
+ {id:"ds",n:"Data Scientist / ML",r:"ICA",pay:[95,140,210],d:{c:.9,tr:.05,s:0,cu:.2,l:.25,au:.7,v:.5,p:.5,da:1,th:.05,rp:.05,h:.5,o:.05,w:.5,pr:.45,pu:.35},ease:"Hard",ai:"Medium",trv:"0–5%",wlb:"Good",edu:3,start:"Data Analyst (first)",end:"Head of Data Science",titles:"Data Scientist, Machine Learning Engineer, Quantitative Analyst",step:"Start as an analyst and build two public modeling projects in Python.",sk:["python","stats","ml","sql","math"],ind:"tech sports finance healthcare"},
+ {id:"swe",n:"Software Developer",r:"IRC",pay:[80,130,200],d:{c:1,tr:.05,s:0,cu:.2,l:.3,au:.7,v:.5,p:.55,da:.5,th:.2,rp:.05,h:.6,o:.1,w:.35,pr:.3,en:.3,pu:.3},ease:"Medium",ai:"Med–High",trv:"0–5%",wlb:"Good",edu:1,start:"Junior Developer",end:"Staff Engineer / Engineering Manager",titles:"Junior Software Developer, Web Developer, Software Engineer I",step:"Ship 2–3 real projects on GitHub; bootcamp or CS degree both work.",sk:["programming","git","python","cloud"],ind:"tech gaming sports"},
+ {id:"cyber",n:"Cybersecurity Analyst",r:"ICR",pay:[75,115,170],d:{c:.45,tr:.1,s:0,cu:.35,l:.3,au:.55,v:.6,p:.75,da:.6,th:.4,rp:.05,h:.6,o:.3,w:.5,pr:.3,pu:.5},ease:"Medium",ai:"Low–Med",trv:"0–10%",wlb:"Mixed",edu:1,start:"SOC Analyst",end:"Security Engineer / CISO",titles:"SOC Analyst, Security Analyst, Cybersecurity Specialist",step:"Help-desk experience plus CompTIA Security+.",sk:["security","networking","linux","troubleshooting","scripting"],ind:"tech government finance healthcare"},
+ {id:"grc",n:"GRC / Compliance Analyst",r:"CIE",pay:[65,100,160],d:{c:.1,tr:.1,s:.05,cu:.45,l:.4,au:.55,v:.4,p:.45,da:.55,th:.1,rp:.05,h:.45,o:.15,w:.8,pr:.45,pu:.4},ease:"Medium",ai:"Low–Med",trv:"0–10%",wlb:"Good",edu:2,start:"GRC / IT Compliance Analyst",end:"Director of GRC",titles:"GRC Analyst, IT Compliance Analyst, Risk Analyst",step:"An entry security cert (Security+) plus any audit, policy, or compliance work you've done.",sk:["compliance","risk","documentation","security","excel"],ind:"finance healthcare government tech"},
+ {id:"itsup",n:"IT Support → Systems Admin",r:"RCI",pay:[45,75,130],d:{c:.25,tr:.15,s:0,cu:.75,l:.35,au:.45,v:.6,p:.6,da:.3,th:.8,rp:.05,h:.5,o:.7,w:.35,pr:.3,pu:.4},ease:"Easy",ai:"Medium",trv:"Low",wlb:"Mixed",edu:0,start:"Help Desk Technician",end:"IT Manager / IT Director",titles:"Help Desk Technician, IT Support Specialist, Desktop Support",step:"CompTIA A+ gets most people in the door.",sk:["troubleshooting","endpoint","networking","customer"],ind:"education healthcare tech"},
+ {id:"cloud",n:"Cloud / DevOps Engineer",r:"IRC",pay:[85,135,200],d:{c:.75,tr:.05,s:0,cu:.2,l:.3,au:.6,v:.5,p:.7,da:.4,th:.4,rp:.05,h:.65,o:.1,w:.4,pr:.25,pu:.2},ease:"Hard",ai:"Medium",trv:"0–5%",wlb:"Mixed",edu:1,start:"Cloud Support Associate",end:"Principal Engineer",titles:"Cloud Support Associate, Junior DevOps Engineer, Systems Engineer",step:"Sysadmin or support experience plus an AWS or Azure associate cert.",sk:["cloud","linux","scripting","networking"],ind:"tech"},
+ {id:"ba",n:"Business Systems Analyst",r:"CIS",pay:[65,95,140],d:{c:.25,tr:.1,s:.05,cu:.6,l:.35,au:.5,v:.45,p:.45,da:.7,th:.15,rp:.05,h:.4,o:.2,w:.7,pr:.5,pu:.3},ease:"Easy",ai:"Med–High",trv:"0–10%",wlb:"Good",edu:2,start:"Business Analyst I",end:"Director of Business Systems",titles:"Business Analyst, Business Systems Analyst, Systems Analyst",step:"SQL basics plus a before/after process map of something you improved.",sk:["requirements","process","excel","sql","documentation"],ind:"healthcare finance tech"},
+ {id:"pm",n:"Product Manager",r:"EIA",pay:[95,150,250],d:{c:.25,tr:.1,s:.25,cu:.65,l:.7,au:.75,v:.8,p:.7,da:.65,th:.1,rp:.1,h:.7,o:.2,en:.4,w:.7,pr:.75,pu:.4},ease:"Hard",ai:"Low–Med",trv:"0–10%",wlb:"Mixed",edu:2,start:"Associate Product Manager",end:"VP of Product",titles:"Associate Product Manager, Product Analyst, Product Owner",step:"Start as a BA, analyst, or in customer success, then ask to own a small feature.",sk:["product","requirements","communication","dataviz","leadership"],ind:"tech gaming sports"},
+ {id:"proj",n:"Project / Program Manager",r:"ECS",pay:[60,95,150],d:{c:.05,tr:.1,s:.1,cu:.6,l:.85,au:.5,v:.55,p:.65,da:.45,th:.15,rp:.05,h:.55,o:.35,w:.6,pr:.65,pu:.35},ease:"Easy",ai:"Medium",trv:"0–10%",wlb:"Mixed",edu:1,start:"Project Coordinator",end:"PMO Director",titles:"Project Coordinator, Junior Project Manager, Program Coordinator",step:"CAPM certification and lead one project end to end at your current job.",sk:["pm","communication","leadership","budgeting","documentation"],ind:"construction healthcare tech"},
+ {id:"ux",n:"UX / Product Designer",r:"AIS",pay:[70,110,170],d:{c:.2,tr:.05,s:.15,cu:.5,l:.35,au:.65,v:.65,p:.55,da:.45,th:.1,rp:.05,h:.5,o:.15,w:.5,pr:.6,pu:.5},ease:"Hard",ai:"Medium",trv:"0–5%",wlb:"Good",edu:1,start:"Junior UX Designer",end:"Design Director",titles:"UX Designer, Product Designer, UI Designer",step:"A 3-project portfolio with real case studies, not just screenshots.",sk:["ux","design","research","presenting"],ind:"tech gaming"},
+ {id:"mkt",n:"Digital Marketing",r:"AEI",pay:[50,80,140],d:{c:.1,tr:.15,s:.45,cu:.5,l:.4,au:.6,v:.75,p:.6,da:.55,th:.05,rp:.15,h:.55,o:.2,w:.75,pr:.6,en:.3,pu:.35},ease:"Easy",ai:"High",trv:"0–15%",wlb:"Mixed",edu:1,start:"Marketing Coordinator",end:"Chief Marketing Officer",titles:"Marketing Coordinator, Digital Marketing Specialist, Social Media Specialist",step:"Grow one account or run a small campaign and report the numbers.",sk:["marketing","social","writing","dataviz","design"],ind:"sports entertainment retail"},
+ {id:"writer",n:"Writer / Communications",r:"ASE",pay:[45,70,120],d:{c:0,tr:.1,s:.15,cu:.3,l:.2,au:.8,v:.6,p:.55,da:.15,th:0,rp:.1,h:.5,o:.15,w:1,pr:.4,en:.3,pu:.55},ease:"Medium",ai:"High",trv:"0–10%",wlb:"Good",edu:1,start:"Content Writer",end:"Communications Director",titles:"Content Writer, Copywriter, Communications Specialist",step:"Publish five strong writing samples on one topic.",sk:["writing","communication","research","social"],ind:"media nonprofit"},
+ {id:"media",n:"Video, Photo & Graphic Design",r:"ARE",pay:[40,65,110],d:{c:.05,tr:.35,s:.2,cu:.45,l:.25,au:.8,v:.8,p:.65,da:.05,th:.6,rp:.3,h:.65,o:.55,w:.3,pr:.4,en:.55,pu:.45},ease:"Medium",ai:"High",trv:"10–40%",wlb:"Mixed",edu:0,start:"Production Assistant / Junior Designer",end:"Creative Director",titles:"Video Editor, Graphic Designer, Photographer, Content Creator",step:"Build a reel or portfolio of 6–8 strong pieces.",sk:["media","design","social","marketing"],ind:"media entertainment sports"},
+ {id:"fin",n:"Financial Analyst",r:"CIE",pay:[65,100,160],d:{c:.25,tr:.05,s:.1,cu:.3,l:.35,au:.5,v:.45,p:.65,da:.95,th:0,rp:.15,h:.65,o:.15,w:.45,pr:.55,pu:.2},ease:"Medium",ai:"Medium",trv:"0–5%",wlb:"Mixed",edu:2,start:"Financial Analyst",end:"CFO",titles:"Financial Analyst, FP&A Analyst, Investment Analyst",step:"Advanced Excel modeling; finance or accounting coursework helps.",sk:["finance","excel","accounting","budgeting","dataviz"],ind:"finance"},
+ {id:"acct",n:"Accountant / Auditor",r:"CEI",pay:[55,85,140],d:{c:.05,tr:.1,s:0,cu:.35,l:.3,au:.45,v:.3,p:.6,da:.85,th:0,rp:.05,h:.6,o:.2,w:.35,pr:.25,pu:.25},ease:"Medium",ai:"High",trv:"0–15%",wlb:"Mixed (busy season)",edu:2,start:"Staff Accountant",end:"Controller / CFO",titles:"Staff Accountant, Audit Associate, Bookkeeper",step:"Accounting coursework; the CPA opens the top-paying doors.",sk:["accounting","excel","compliance","finance"],ind:"finance"},
+ {id:"advisor",n:"Financial Advisor / Banker",r:"ESC",pay:[50,110,220],d:{c:0,tr:.15,s:.85,cu:.95,l:.3,au:.85,v:.55,p:.65,da:.45,th:0,rp:.8,h:.6,o:.3,en:.6,w:.25,pr:.65,pu:.5},ease:"Medium",ai:"Low–Med",trv:"0–15%",wlb:"Mixed",edu:1,start:"Personal Banker / Advisor Trainee",end:"Practice Owner",titles:"Financial Advisor Trainee, Personal Banker, Insurance Agent",step:"Pass the SIE exam and land a trainee program at a bank or firm.",sk:["sales","finance","communication","crm"],ind:"finance"},
+ {id:"ops",n:"Operations / Supply Chain",r:"ECR",pay:[55,85,140],d:{c:.05,tr:.2,s:.15,cu:.55,l:.8,au:.5,v:.65,p:.75,da:.55,th:.45,rp:.1,h:.7,o:.75,w:.3,pr:.45,pu:.3},ease:"Easy",ai:"Medium",trv:"0–20%",wlb:"Demanding",edu:1,start:"Operations Coordinator",end:"VP of Operations",titles:"Operations Coordinator, Logistics Analyst, Supply Chain Analyst, Shift Supervisor",step:"Fix one bottleneck where you work and measure the time or money saved.",sk:["operations","process","leadership","excel","pm"],ind:"manufacturing retail logistics healthcare sports"},
+ {id:"hr",n:"HR / Recruiter",r:"SEC",pay:[50,80,130],d:{c:0,tr:.1,s:.45,cu:.95,l:.45,au:.5,v:.55,p:.55,da:.3,th:0,rp:.2,h:.5,o:.4,w:.5,pr:.6,pu:.55},ease:"Easy",ai:"Med–High",trv:"0–15%",wlb:"Good",edu:1,start:"Recruiting Coordinator / HR Assistant",end:"Head of People",titles:"Recruiter, HR Generalist, Recruiting Coordinator",step:"Agency recruiting hires for drive; the aPHR helps for HR roles.",sk:["recruiting","hr","communication","training"],ind:"tech healthcare"},
+ {id:"teach",n:"Teacher",r:"SAE",pay:[45,60,85],d:{c:0,tr:0,s:.15,cu:1,l:.7,au:.5,v:.65,p:.6,da:.25,th:.2,rp:0,h:.6,o:1,w:.45,pr:.9,pu:1},ease:"Medium",ai:"Low",trv:"None",wlb:"Mixed",edu:2,start:"Substitute / Paraprofessional",end:"Principal / District Leader",titles:"Teacher, Substitute Teacher, Paraprofessional",step:"Substitute or work as a para to test it; most states require a license.",sk:["teaching","curriculum","presenting","communication"],ind:"education sports"},
+ {id:"idtrain",n:"Instructional Designer / Trainer",r:"ASI",pay:[60,85,120],d:{c:.1,tr:.15,s:.1,cu:.55,l:.4,au:.65,v:.6,p:.45,da:.3,th:.1,rp:.05,h:.45,o:.15,w:.75,pr:.75,pu:.65},ease:"Medium",ai:"Med–High",trv:"0–20%",wlb:"Good",edu:2,start:"Corporate Trainer",end:"Director of Learning",titles:"Instructional Designer, Corporate Trainer, Learning Specialist",step:"Build one short e-learning module as a portfolio piece.",sk:["curriculum","training","writing","design","presenting"],ind:"education healthcare tech"},
+ {id:"nurse",n:"Registered Nurse",r:"SIR",pay:[75,90,120],d:{c:0,tr:.1,s:0,cu:1,l:.5,au:.4,v:.75,p:.95,da:.4,th:.7,rp:0,h:.8,o:1,w:.35,pr:.35,pu:1},ease:"Medium",ai:"Low",trv:"Low (travel nursing optional)",wlb:"Demanding",edu:2,start:"CNA (to test it) → RN",end:"Nurse Practitioner / Nurse Manager",titles:"Registered Nurse, LPN, Nursing Assistant",step:"Start CNA training to test the fit; an ADN or BSN gets you to RN.",sk:["healthcare","communication","customer"],ind:"healthcare"},
+ {id:"allied",n:"Allied Health Technologist",r:"RSI",pay:[50,70,95],d:{c:.05,tr:.05,s:0,cu:.85,l:.25,au:.45,v:.5,p:.7,da:.35,th:.85,rp:0,h:.5,o:1,w:.2,pr:.2,pu:.85},ease:"Medium",ai:"Low",trv:"None",wlb:"Good",edu:1,start:"Technologist / Technician",end:"Lead Technologist / Department Manager",titles:"Radiologic Technologist, Respiratory Therapist, Surgical Tech, PT Assistant",step:"Most are 2-year programs with strong job placement.",sk:["healthcare","handson","customer"],ind:"healthcare"},
+ {id:"hadmin",n:"Healthcare Admin / Health IT",r:"CSE",pay:[55,85,140],d:{c:.1,tr:.05,s:.05,cu:.6,l:.55,au:.45,v:.5,p:.6,da:.6,th:.15,rp:.05,h:.5,o:.6,w:.5,pr:.45,pu:.75},ease:"Medium",ai:"Medium",trv:"0–10%",wlb:"Good",edu:2,start:"Patient Access Rep / Clinic Coordinator",end:"Health System Director",titles:"Clinic Coordinator, Health Information Specialist, Practice Manager",step:"Front-desk or patient-access jobs are the usual door in.",sk:["healthcare","operations","compliance","excel"],ind:"healthcare"},
+ {id:"counsel",n:"Counselor / Social Worker",r:"SAI",pay:[45,60,85],d:{c:0,tr:.1,s:0,cu:1,l:.3,au:.5,v:.6,p:.7,da:.2,th:0,rp:0,h:.55,o:.85,w:.6,pr:.35,pu:1},ease:"Hard",ai:"Low",trv:"Low",wlb:"Mixed",edu:3,start:"Case Aide / Peer Support",end:"Licensed Therapist / Clinical Director",titles:"Case Manager, School Counselor, Social Worker",step:"Case-aide or peer-support work; licensure needs a master's.",sk:["counseling","communication","documentation"],ind:"healthcare education nonprofit government"},
+ {id:"trades",n:"Skilled Trades",r:"RIC",pay:[45,75,110],d:{c:.05,tr:.3,s:.15,cu:.5,l:.4,au:.65,v:.65,p:.6,da:.15,th:1,rp:.05,h:.6,o:1,en:.45,w:.05,pr:.15,pu:.45},ease:"Easy",ai:"Low",trv:"Local",wlb:"Mixed",edu:0,start:"Apprentice",end:"Master / Contractor",titles:"Electrician Apprentice, HVAC Technician, Plumber Apprentice",step:"Apply to a union or employer apprenticeship — you get paid to learn.",sk:["handson","safety","troubleshooting","math"],ind:"construction energy"},
+ {id:"eng",n:"Engineer (Civil, Mechanical, Electrical)",r:"IRC",pay:[75,105,150],d:{c:.35,tr:.2,s:.05,cu:.35,l:.4,au:.55,v:.55,p:.6,da:.65,th:.65,rp:.05,h:.55,o:.5,w:.55,pr:.4,pu:.45},ease:"Hard",ai:"Low–Med",trv:"0–25%",wlb:"Good",edu:2,start:"Engineer I / Engineering Technician",end:"Principal Engineer",titles:"Engineer I, Engineering Technician, CAD Designer",step:"An accredited engineering degree; technicians can start with a 2-year program.",sk:["engineering","cad","math","pm"],ind:"manufacturing construction energy"},
+ {id:"sci",n:"Scientist / Researcher",r:"IRA",pay:[55,85,130],d:{c:.4,tr:.1,s:0,cu:.2,l:.3,au:.7,v:.45,p:.45,da:.85,th:.7,rp:0,h:.55,o:.7,w:.75,pr:.45,pu:.6},ease:"Hard",ai:"Low–Med",trv:"0–10%",wlb:"Good",edu:3,start:"Lab Technician / Research Assistant",end:"Principal Scientist",titles:"Research Assistant, Lab Technician, Research Scientist",step:"Lab roles need a science bachelor's; research careers need grad school.",sk:["research","lab","stats","writing"],ind:"healthcare biotech environment"},
+ {id:"consult",n:"Management / Tech Consulting",r:"EIC",pay:[80,130,250],d:{c:.3,tr:.75,s:.35,cu:.85,l:.6,au:.5,v:.9,p:.85,da:.65,th:.1,rp:.2,h:.9,o:.75,w:.75,pr:.85,pu:.3},ease:"Hard",ai:"Medium",trv:"50–80%",wlb:"Demanding",edu:2,start:"Associate Consultant",end:"Partner",titles:"Associate Consultant, Consulting Analyst, Technology Consulting Analyst",step:"Practice case interviews; big firms hire analysts every fall.",sk:["strategy","presenting","excel","communication","research"],ind:"tech healthcare finance sports"},
+ {id:"entre",n:"Entrepreneur / Small Business Owner",r:"EAR",pay:[30,80,250],d:{c:.15,tr:.3,s:.85,cu:.85,l:.75,au:1,v:.95,p:.85,da:.45,th:.45,rp:1,h:.9,o:.55,en:1,w:.45,pr:.75,pu:.6},ease:"Medium",ai:"Low",trv:"Varies",wlb:"Demanding",edu:0,start:"Side hustle or freelancing",end:"Business owner",titles:"Self-employed, founder, freelancer",step:"Land three paying customers on the side before you quit anything.",sk:["sales","marketing","budgeting","leadership","operations"],ind:""},
+ {id:"sportsbiz",n:"Sports & Entertainment Business",r:"ESC",pay:[45,70,130],d:{c:.05,tr:.35,s:.6,cu:.85,l:.45,au:.5,v:.8,p:.8,da:.4,th:.3,rp:.45,h:.85,o:.8,w:.4,pr:.7,pu:.75},ease:"Hard",ai:"Low–Med",trv:"Local + events",wlb:"Demanding",edu:1,start:"Ticket Sales Rep / Event Staff",end:"VP of Business Operations",titles:"Inside Sales Rep (team), Partnership Coordinator, Team Operations Assistant",step:"Ticket sales is the classic way in; work game days to build contacts.",sk:["sports","events","sales","marketing","communication"],ind:"sports entertainment music"},
+ {id:"event",n:"Event Planner / Producer",r:"ESA",pay:[45,65,110],d:{c:0,tr:.55,s:.4,cu:.85,l:.65,au:.55,v:.9,p:.9,da:.2,th:.6,rp:.1,h:.85,o:.95,w:.35,pr:.55,pu:.5},ease:"Easy",ai:"Low",trv:"20–60%",wlb:"Demanding",edu:1,start:"Event Coordinator / AV Technician",end:"Director of Events",titles:"Event Coordinator, Event Producer, Venue Coordinator, AV Technician",step:"Work events (venues, conferences, weddings) and track the budgets you handled.",sk:["events","operations","customer","pm"],ind:"sports entertainment hospitality music"},
+ {id:"realestate",n:"Real Estate Agent / Property Manager",r:"ESC",pay:[40,80,180],d:{c:0,tr:.3,s:.9,cu:.95,l:.3,au:.9,v:.75,p:.7,da:.35,th:.2,rp:1,h:.75,o:.85,en:.75,w:.25,pr:.65,pu:.4},ease:"Easy",ai:"Low–Med",trv:"Local",wlb:"Demanding",edu:0,start:"Licensed Agent / Leasing Consultant",end:"Broker / Owner",titles:"Real Estate Agent, Leasing Consultant, Property Manager",step:"Get your state license (a few weeks of coursework); expect a slow first year.",sk:["sales","negotiation","customer","marketing"],ind:"real estate housing"},
+ {id:"legal",n:"Paralegal",r:"CIE",pay:[45,62,90],d:{c:0,tr:.1,s:.05,cu:.6,l:.35,au:.45,v:.55,p:.75,da:.45,th:0,rp:.05,h:.6,o:.6,w:.85,pr:.45,pu:.45},ease:"Easy",ai:"Med–High",trv:"0–10%",wlb:"Mixed",edu:1,start:"Legal Assistant",end:"Senior Paralegal / Paralegal Manager",titles:"Paralegal, Legal Assistant, Litigation Paralegal",step:"A paralegal certificate; specializing in one practice area raises pay.",sk:["legal","writing","research","documentation"],ind:"legal government"},
+ {id:"attorney",n:"Attorney",r:"EIS",pay:[70,120,220],d:{c:0,tr:.2,s:.35,cu:.8,l:.6,au:.65,v:.7,p:.85,da:.5,th:0,rp:.1,h:.75,o:.7,w:.95,pr:.85,pu:.65},ease:"Hard",ai:"Medium",trv:"0–20%",wlb:"Demanding (varies a lot by practice area)",edu:3,start:"Law Clerk / Associate Attorney",end:"Partner / Judge",titles:"Associate Attorney, Staff Attorney, Public Defender, Assistant District Attorney",step:"Law school (3 years) and the bar exam. Working as a paralegal first is common and helps admissions.",sk:["legal","writing","research","presenting"],ind:"legal government nonprofit"},
+ {id:"ea",n:"Executive Assistant / Office Manager",r:"CES",pay:[45,65,100],d:{c:0,tr:.15,s:.1,cu:.8,l:.45,au:.45,v:.75,p:.65,da:.45,th:.2,rp:0,h:.55,o:.85,w:.6,pr:.4,pu:.45},ease:"Easy",ai:"High",trv:"Low",wlb:"Good",edu:0,start:"Administrative Assistant",end:"Chief of Staff / Director of Operations",titles:"Administrative Assistant, Executive Assistant, Office Manager",step:"Own one leader's calendar, travel, and projects and become the person they can't work without.",sk:["pm","communication","excel","documentation"],ind:"legal healthcare tech finance"},
+ {id:"contracts",n:"Contracts Manager",r:"CEI",pay:[60,90,140],d:{c:0,tr:.1,s:.3,cu:.6,l:.4,au:.55,v:.5,p:.65,da:.5,th:0,rp:.05,h:.55,o:.4,w:.85,pr:.45,pu:.3},ease:"Medium",ai:"Med–High",trv:"0–10%",wlb:"Good",edu:1,start:"Contracts Administrator",end:"Director of Contracts",titles:"Contracts Administrator, Contract Specialist, Procurement Specialist",step:"Legal-assistant or purchasing experience plus a contract-management certification (such as NCMA's).",sk:["legal","negotiation","documentation","compliance"],ind:"legal government tech healthcare"},
+ {id:"legalops",n:"Legal Operations / E-Discovery",r:"CIE",pay:[60,90,140],d:{c:.3,tr:.1,s:.05,cu:.45,l:.4,au:.55,v:.5,p:.65,da:.75,th:.1,rp:.05,h:.6,o:.3,w:.55,pr:.4,pu:.3},ease:"Medium",ai:"Medium",trv:"0–10%",wlb:"Mixed",edu:1,start:"Litigation Support / E-Discovery Specialist",end:"Director of Legal Operations",titles:"Litigation Support Specialist, E-Discovery Analyst, Legal Operations Analyst",step:"Get certified on an e-discovery review platform (Relativity is the big one) and lead with your legal experience.",sk:["legal","documentation","excel","sql"],ind:"legal tech"},
+ {id:"policy",n:"Public Policy / Government Analyst",r:"ISC",pay:[55,80,120],d:{c:.1,tr:.15,s:.1,cu:.5,l:.4,au:.55,v:.6,p:.55,da:.6,th:0,rp:0,h:.5,o:.4,w:.85,pr:.6,pu:.95},ease:"Medium",ai:"Medium",trv:"0–15%",wlb:"Good",edu:2,start:"Program Assistant / Legislative Aide",end:"Policy Director",titles:"Policy Analyst, Program Analyst, Legislative Aide",step:"Write a 2-page brief on a local issue; government and nonprofit boards post entry roles.",sk:["policy","research","writing","dataviz"],ind:"government nonprofit"},
+ {id:"fire",n:"Firefighter / EMT / Public Safety",r:"RSE",pay:[45,70,100],d:{c:0,tr:.1,s:0,cu:.8,l:.5,au:.35,v:.85,p:1,da:.1,th:.9,rp:0,h:.85,o:1,w:.15,pr:.25,pu:1},ease:"Medium",ai:"Low",trv:"Local",wlb:"Demanding (shifts)",edu:1,start:"EMT",end:"Captain / Chief",titles:"EMT, Firefighter, Paramedic, Police Officer",step:"EMT-Basic is a one-semester course and opens most public-safety doors.",sk:["healthcare","safety","handson","communication"],ind:"government public safety"},
+ {id:"hosp",n:"Hospitality / Restaurant Management",r:"ERS",pay:[40,60,100],d:{c:0,tr:.1,s:.45,cu:1,l:.75,au:.5,v:.8,p:.85,da:.3,th:.55,rp:.3,h:.85,o:1,en:.4,w:.15,pr:.45,pu:.5},ease:"Easy",ai:"Low",trv:"Low",wlb:"Demanding",edu:0,start:"Shift Lead",end:"General Manager / Owner",titles:"Shift Supervisor, Assistant Manager, Front Desk Lead",step:"Ask for shift-lead duties; management-trainee programs hire fast.",sk:["customer","leadership","operations"],ind:"hospitality food travel sports"}
+];
+
+/* Stepping-stone jobs: entry roles you can likely land soon, each leading toward target careers */
+const STEPS=[
+ {n:"Customer Service / Support Representative",pay:"$35–50k",sk:["customer","communication","troubleshooting"],to:["csm","sales","impl","hr"],why:"The fastest way into almost any company. Strong reps get pulled into account management and sales."},
+ {n:"Help Desk / IT Support Technician",pay:"$40–55k",sk:["troubleshooting","endpoint","customer","networking"],to:["itsup","cyber","cloud","ba","impl"],why:"The classic on-ramp to IT, security, and business-systems roles."},
+ {n:"Technical Support Engineer (software company)",pay:"$55–75k",sk:["troubleshooting","customer","documentation","scripting"],to:["impl","se","csm","swe"],why:"The most common door into a software company; sales engineers and consultants often start here."},
+ {n:"Implementation / Onboarding Specialist",pay:"$55–75k",sk:["training","customer","pm","documentation"],to:["impl","csm","se","proj"],why:"Directly feeds implementation, customer success, and sales engineering."},
+ {n:"Sales Development Representative",pay:"$60–80k OTE",sk:["sales","communication","crm","customer"],to:["sales","se","advisor","realestate","revops"],why:"Low barrier and fast promotion to account executive if you hit quota."},
+ {n:"Operations / Administrative Coordinator",pay:"$40–55k",sk:["excel","operations","pm","documentation"],to:["ops","proj","ba","hadmin","hr"],why:"Puts you at the center of how a business runs, which opens ops and project roles."},
+ {n:"Project Coordinator",pay:"$50–65k",sk:["pm","communication","documentation","excel"],to:["proj","pm","consult","ops"],why:"Leading even one project end to end is often enough to land this."},
+ {n:"Reporting / Junior Data Analyst",pay:"$50–65k",sk:["excel","sql","dataviz","bi"],to:["data","ds","fin","revops","ba"],why:"The standard entry to analytics in any industry, including sports."},
+ {n:"Marketing Coordinator / Social Media Assistant",pay:"$40–55k",sk:["marketing","social","writing","design"],to:["mkt","writer","media","pm"],why:"A broad marketing role where you find out which part you're best at."},
+ {n:"Bookkeeper / AP-AR Clerk",pay:"$40–55k",sk:["accounting","excel"],to:["acct","fin"],why:"Real accounting reps while you finish coursework or the CPA path."},
+ {n:"Recruiting Coordinator / HR Assistant",pay:"$40–55k",sk:["recruiting","hr","communication","pm"],to:["hr"],why:"Coordinators who build relationships with hiring managers move up to recruiter fast."},
+ {n:"Paraprofessional / Tutor / Youth Coach",pay:"$30–45k",sk:["teaching","training","communication"],to:["teach","idtrain","counsel"],why:"Tests whether you like teaching before you commit to licensing."},
+ {n:"CNA / Medical Assistant / EMT",pay:"$35–50k",sk:["healthcare","customer"],to:["nurse","allied","hadmin","fire"],why:"Weeks of training, not years, and you see healthcare up close."},
+ {n:"Apprentice / Maintenance Technician",pay:"$40–55k",sk:["handson","safety","troubleshooting"],to:["trades","eng","itsup"],why:"Paid to learn a trade with a clear license ladder."},
+ {n:"Lab / Research Assistant",pay:"$40–55k",sk:["research","lab","stats"],to:["sci","ds"],why:"The door to research careers; many employers help pay for grad school."},
+ {n:"Event Staff / Ticket Sales",pay:"$35–55k",sk:["events","sales","customer","sports"],to:["sportsbiz","event","sales"],why:"How most people get into sports and live entertainment."},
+ {n:"Legal Assistant",pay:"$40–55k",sk:["legal","documentation","writing"],to:["legal","attorney","contracts","legalops"],why:"See legal work up close before investing in a certificate or law school."},
+ {n:"Junior Designer / Production Assistant",pay:"$35–50k",sk:["design","media"],to:["ux","media","mkt"],why:"Builds the portfolio pieces creative hiring depends on."},
+ {n:"Bank Teller / Personal Banker",pay:"$35–50k",sk:["customer","finance","sales"],to:["advisor","fin"],why:"Banks promote tellers into banker and advisor-trainee roles."},
+ {n:"Administrative Assistant / Receptionist",pay:"$38–50k",sk:["customer","documentation","excel","pm"],to:["ea","hr","hadmin","legal","ops"],why:"A front-row seat to how an office runs; strong assistants move into EA, operations, and specialist roles."},
+ {n:"Shift Lead / Assistant Manager",pay:"$35–50k",sk:["customer","leadership","operations"],to:["hosp","ops","event"],why:"Manager experience you can get quickly in retail, food, or hospitality."}
+];
+
+/* ============================================================
+   SCORING
+   ============================================================ */
+const DIMS={c:"coding",tr:"travel",s:"selling",cu:"working with people and customers",l:"leading people",au:"independence",v:"variety",p:"pressure and deadlines",da:"working with data",th:"hands-on, physical work",rp:"commission-based pay",h:"long hours",o:"being on-site or in the field",w:"writing",pr:"presenting",en:"building your own thing",pu:"purpose and helping people"};
+/* [weight, over-penalty (job demands more than you want), under-penalty (job gives less than you want)] */
+const SPEC={c:[2,1,.15],tr:[1.4,1,.8],s:[1.8,1,.35],cu:[1,1,.7],l:[.9,.6,1],au:[.7,.7,1],v:[.8,1,1],p:[1,1,.15],da:[1,1,.8],th:[.9,1,.8],rp:[1.4,1,.25],h:[1.1,1,.1],o:[.6,1,1],w:[.7,1,.1],pr:[.7,1,.2],pu:[.9,.15,1]};
+const RNAME={R:"Building",I:"Investigating",A:"Creating",S:"Helping",E:"Persuading",C:"Organizing"};
+const RDESC={R:"hands-on work with tools, equipment, and physical things",I:"figuring things out, analysis, research",A:"design, writing, creative work",S:"teaching, helping, caring for people",E:"leading, selling, persuading, taking risks",C:"organizing, data accuracy, process"};
+const B5NAME={O:"Openness",C:"Conscientiousness",E:"Extraversion",A:"Agreeableness",N:"Emotional steadiness"};
+const B5DESC={O:["Prefers the practical and proven","Curious, likes ideas and new approaches"],C:["Flexible, spontaneous, less schedule-bound","Organized, detail-focused, plans ahead"],E:["Recharges alone, prefers smaller groups","Energized by people, comfortable in the spotlight"],A:["Direct, competitive, comfortable with conflict","Cooperative, warm, avoids conflict"],N:["Feels stress and worry more strongly","Stays calm under pressure"]};
+const EDU=["High school / GED","Certificate, bootcamp, or associate","Bachelor's degree","Master's, doctorate, or professional"];
+const EDU_NEED=["no degree","a certificate or license","a bachelor's degree","a graduate degree or license"];
+const STAGES={student:"Student / about to graduate",early:"Early career (0–3 yrs)",established:"Established (3–10 yrs)",seasoned:"Seasoned (10+ yrs)",changer:"Changing careers / returning"};
+const YEARS={"0.5":"Under 1 year","2":"1–3 years","5":"3–7 years","10":"7–15 years","18":"15+ years"};
+
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const mean=a=>a.length?a.reduce((s,x)=>s+x,0)/a.length:null;
+const pct=x=>Math.round(x*100);
+
+function mySkills(){
+  const p=state.profile;
+  return new Set([...(p.auto||[]),...(p.manual||[])].filter(id=>SK[id]&&!(p.off||[]).includes(id)));
+}
+
+function compute(){
+  const A=state.answers, ev={};
+  const add=(k,v,w=1)=>{(ev[k]=ev[k]||[]).push([clamp(v),w])};
+  const addObj=o=>{if(o)for(const k in o)add(k,o[k],1)};
+  const ri={R:[],I:[],A:[],S:[],E:[],C:[]}, b5={O:[],C:[],E:[],A:[],N:[]}, ab={R:[],I:[],A:[],S:[],E:[],C:[]}, gaps=[];
+  let answered=0;
+  for(const it of allItems()){
+    const val=A[it.id];
+    if(it.t==="lik"&&it.ri){
+      const e=A[it.id], s=A[it.id+"_ab"];
+      if(e!=null)ri[it.ri].push((e-1)/4);
+      if(s!=null)ab[it.ri].push((s-1)/4);
+      if(e!=null&&s!=null){answered++;gaps.push({text:T(itemText(it)),ri:it.ri,e,s})}
+      continue;
+    }
+    if(val===undefined||val===null||val==="")continue;
+    if(it.t!=="open")answered++;
+    if(it.t==="lik"){const x=(val-1)/4; b5[it.b5].push(it.k>0?x:1-x);}
+    else if(it.t==="tf")addObj(val==="t"?it.T:it.F);
+    else if(it.t==="ab")addObj(val==="a"?it.A:it.B);
+    else if(it.t==="sjt"||it.t==="mc")addObj(it.opts[val]&&it.opts[val][1]);
+    else if(it.t==="sl"&&it.ev)it.ev(Number(val),add);
+  }
+  const R={},B={},AB={};
+  for(const k in ri)R[k]=mean(ri[k])??.5;
+  const abN=Object.values(ab).reduce((s,a)=>s+a.length,0);
+  for(const k in ab)AB[k]=mean(ab[k])??.5;
+  for(const k in b5)B[k]=mean(b5[k])??.5;
+  const stab=1-B.N;
+  // Interests and personality feed the work-style dimensions with modest weights
+  add("th",R.R,1);add("o",R.R,.4);add("da",R.I,.6);add("w",R.A,.5);add("pr",R.A,.3);
+  add("cu",R.S,1);add("pr",R.S,.3);add("pu",R.S,.6);add("s",R.E,1);add("l",R.E,.6);add("en",R.E,.4);add("da",R.C,.5);
+  add("cu",B.E,.6);add("pr",B.E,.6);add("s",B.E,.4);add("l",B.E,.3);add("p",stab,.7);add("v",B.O,.5);add("au",B.O,.3);add("pu",B.A,.3);
+  // Values ranking
+  const order=A.rank_values;
+  if(Array.isArray(order)){
+    const sc=k=>{const i=order.indexOf(k);return i<0?.5:(order.length-1-i)/(order.length-1)};
+    add("pay",sc("pay"),3);add("au",sc("ind"),1.5);add("l",sc("ach"),.5);add("p",sc("ach"),.4);
+    add("pr",sc("rec"),.5);add("l",sc("rec"),.5);add("cu",sc("rel"),.6);add("rp",1-sc("sup"),.6);
+    add("v",sc("var"),1);add("tr",sc("var"),.7);add("pu",sc("pur"),2);
+  }
+  const D={}, skip=new Set();
+  for(const k of [...Object.keys(DIMS),"pay","pat"]){
+    const e=ev[k]; if(!e){D[k]=.5;if(!["pay","pat"].includes(k))skip.add(k);continue}
+    let s=0,w=0; for(const [v,ww] of e){s+=v*ww;w+=ww} D[k]=s/w;
+  }
+  const boost={};
+  for(const it of fieldItems()){const v=A[it.id];if(v==null)continue;for(const [c,w] of Object.entries(it.opts[v][3]||{}))boost[c]=(boost[c]||0)+w}
+  const minSet=A.s_minpay!=null, minPay=minSet?Number(A.s_minpay):50, target=A.s_target!=null?Number(A.s_target):90;
+  const pr=state.profile, curEdu=pr.edu===""||pr.edu==null?null:Number(pr.edu);
+  const sch=A.s_school!=null?Number(A.s_school):null;
+  let allowEdu=null;
+  if(curEdu!=null&&sch!=null){ allowEdu = sch<=1 ? curEdu : sch<=3 ? Math.max(curEdu,1) : 3; }
+  return {R,B,D,skip,AB,abN,gaps,minPay,minSet,target,curEdu,allowEdu,boost,skills:mySkills(),answered,total:allItems().filter(i=>i.t!=="open").length};
+}
+
+function riVec(code){const v={R:0,I:0,A:0,S:0,E:0,C:0};[3,2,1].forEach((w,i)=>{if(code[i])v[code[i]]=w});return v}
+function cosineCentered(a,b){
+  const ks=Object.keys(a),ma=mean(ks.map(k=>a[k])),mb=mean(ks.map(k=>b[k]));
+  let d=0,na=0,nb=0; for(const k of ks){const x=a[k]-ma,y=b[k]-mb;d+=x*y;na+=x*x;nb+=y*y}
+  return na&&nb?d/Math.sqrt(na*nb):0;
+}
+function industryMatch(car){
+  const t=(state.profile.industry||"").toLowerCase().trim();
+  if(!t||!car.ind)return false;
+  const words=t.split(/[^a-z]+/).filter(w=>w.length>=3);
+  return words.some(w=>car.ind.split(" ").some(x=>x.startsWith(w)||w.startsWith(x)));
+}
+
+function scoreCareer(car,P){
+  const U=P.D, interest=(cosineCentered(P.R,riVec(car.r))+1)/2;
+  let pen=0,wsum=0; const parts=[];
+  const spec=Object.assign({},SPEC,{en:[.3+.9*(car.d.en||0),1,1]});
+  for(const k in spec){
+    if(P.skip.has(k))continue;
+    const [w,ov,un]=spec[k], cd=car.d[k]||0, ud=U[k], diff=cd-ud;
+    const p=w*(diff>0?diff*ov:-diff*un);
+    pen+=p; wsum+=w; parts.push({k,cd,ud,p,w,diff});
+  }
+  const dimSim=wsum?1-pen/wsum:.7;
+  const mid=car.pay[1], payFit=clamp(.4*Math.min(1,car.pay[0]/P.minPay)+.6*Math.min(1,mid/P.target));
+  const wp=.1+.25*U.pay;
+  const hasAb=P.abN>=6, ability=hasAb?(cosineCentered(P.AB,riVec(car.r))+1)/2:null, wa=hasAb?.12:0;
+  const hit=car.sk.filter(s=>P.skills.has(s)), hasSk=P.skills.size>=3;
+  const skillFit=hasSk?clamp(hit.length/Math.min(3,car.sk.length)):null, ws=hasSk?.1:0;
+  let total=(.33*interest+wa*(ability||0)+ws*(skillFit||0)+.55*dimSim+wp*payFit)/(.88+wa+ws+wp);
+  const flags=[];
+  if(car.d.c>=.55&&U.c<=.35){total-=.08;flags.push("Needs regular coding, more than you said you want")}
+  if(car.d.s>=.7&&U.s<=.3){total-=.08;flags.push("Heavy selling, which you said you'd rather avoid")}
+  if(car.d.rp>=.6&&U.rp<=.25){total-=.06;flags.push("A big chunk of pay is commission")}
+  if(car.d.tr>=.6&&U.tr<=.2){total-=.06;flags.push("Lots of travel, more than you want")}
+  if(car.d.tr<=.15&&U.tr>=.7){total-=.03;flags.push("Almost no travel, and you want a lot")}
+  if(car.d.h>=.8&&U.h<=.3){total-=.05;flags.push("Long hours are common")}
+  if(P.minSet&&car.pay[0]<P.minPay-10){total-=.04;flags.push("Typical starting pay ($"+car.pay[0]+"k) is under your minimum ($"+P.minPay+"k)")}
+  if(car.ease==="Hard"&&U.pat<.35){total-=.03;flags.push("Hard to break into; expect a multi-year path")}
+  if(P.allowEdu!=null&&car.edu>P.allowEdu){total-=.05*(car.edu-P.allowEdu);flags.push("Usually needs "+EDU_NEED[car.edu]+", more school than you said you'd take on")}
+  const ind=industryMatch(car); if(ind)total+=.02;
+  const fb=clamp(P.boost[car.id]||0,-.08,.08); total+=fb;
+  if(fb<=-.03)flags.push("Clashes with what you said about "+FIELDQ[curField()].name);
+  // reasons
+  const pros=parts.filter(x=>x.cd>=.6&&x.ud>=.6).sort((a,b)=>b.w*Math.min(b.cd,b.ud)-a.w*Math.min(a.cd,a.ud)).slice(0,2)
+    .map(x=>"You want "+DIMS[x.k]+", and this role is heavy on it.");
+  const lows=parts.filter(x=>["c","s","rp","h","tr"].includes(x.k)&&x.cd<=.25&&x.ud<=.3).slice(0,1)
+    .map(x=>"Light on "+DIMS[x.k]+", which suits you.");
+  const top2=Object.entries(P.R).sort((a,b)=>b[1]-a[1]).slice(0,2).map(e=>e[0]);
+  const ints=top2.includes(car.r[0])?["Matches your strongest interest area: "+RNAME[car.r[0]]+" ("+RDESC[car.r[0]]+")."]:[];
+  const topAb=Object.entries(P.AB).sort((a,b)=>b[1]-a[1])[0][0];
+  const abr=hasAb&&car.r[0]===topAb&&P.AB[topAb]>=.6?["Plays to what you're already good at: "+RNAME[topAb].toLowerCase()+" work, so it should be quicker to break in."]:[];
+  const skr=hit.length?["Your résumé already shows "+hit.slice(0,3).map(s=>SK[s][0]).join(", ")+"."]:[];
+  const payr=payFit>=.9?["Pay lines up: about $"+mid+"k a few years in, against your $"+P.target+"k five-year target."]:[];
+  const cons=parts.filter(x=>x.p>=.18*x.w&&x.p>.08).sort((a,b)=>b.p-a.p).slice(0,2)
+    .map(x=>x.diff>0?"Asks for more "+DIMS[x.k]+" than you want.":"Less "+DIMS[x.k]+" than you'd like.");
+  const gapsSk=car.sk.filter(s=>!P.skills.has(s));
+  return {car,fit:Math.round(clamp(total)*100),interest,ability,skillFit,dimSim,payFit,ind,hit,gapsSk,why:[...(fb>=.03?["Lines up with what you said about "+FIELDQ[curField()].name+"."]:[]),...ints,...abr,...skr,...pros,...lows,...payr].slice(0,4),cons,flags};
+}
+
+/* ============================================================
+   STATE + RENDER
+   ============================================================ */
+const LS_KEY="careerCombine.v2";
+const blankProfile=()=>({name:"",stage:"",years:"",edu:"",job:"",industry:"",target:"",resume:"",auto:[],manual:[],off:[],field:""});
+let state={answers:{},page:-1,profile:blankProfile()};
+try{const s=localStorage.getItem(LS_KEY);if(s){const o=JSON.parse(s);if(o&&o.answers){state=o;state.profile=Object.assign(blankProfile(),o.profile||{})}}}catch(e){}
+function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(state))}catch(e){} updateHeader(); if(typeof updateSkip==='function')updateSkip()}
+const app=document.getElementById("app");
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const has=k=>{const v=state.answers[k];return v!==undefined&&v!==null&&v!==""};
+const isAns=it=>has(it.id)&&(!(it.t==="lik"&&it.ri)||has(it.id+"_ab"));
+const checkinDone=()=>{const p=state.profile;return !!(p.stage&&p.years!==""&&p.edu!==""&&FIELDS[p.field])};
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.hidden=false;clearTimeout(toast._t);toast._t=setTimeout(()=>t.hidden=true,2400)}
+
+function updateHeader(){
+  const scored=allItems().filter(i=>i.t!=="open"), n=scored.filter(isAns).length;
+  document.getElementById("meta").textContent=n+" / "+scored.length+" answered";
+  document.getElementById("barfill").style.width=(100*n/scored.length)+"%";
+  const chips=document.getElementById("chips");
+  chips.innerHTML='<button data-go="-1" class="'+(state.page===-1?"cur":"")+'">Start</button>'+
+    PAGES.map((p,i)=>{const full=p.custom==="checkin"?checkinDone():(p.items.filter(it=>it.t!=="open").every(isAns)&&p.items.some(isAns));
+      return '<button data-go="'+i+'" class="'+(state.page===i?"cur ":"")+(full?"full":"")+'">'+esc(p.short)+'</button>'}).join("")+
+    '<button data-go="99" class="'+(state.page===99?"cur":"")+'">Results</button>';
+  const cur=chips.querySelector(".cur"); if(cur)cur.scrollIntoView({block:"nearest",inline:"nearest"});
+}
+
+function renderItem(it,num){
+  const a=state.answers[it.id]; let h='<div class="q'+(isAns(it)?" ans":"")+'" id="q-'+it.id+'"><div class="qn">'+num+'</div>';
+  if(it.t==="lik"){
+    const row=(key,lab,label)=>{const cur=state.answers[key];return (label?'<div class="sub">'+label+'</div>':'')+'<div class="lik" role="radiogroup" aria-label="'+esc((label||"")+" "+it.text)+'">'+lab.map((l,i)=>'<button class="opt'+(cur===i+1?" on":"")+'" role="radio" aria-checked="'+(cur===i+1)+'" data-id="'+it.id+'" data-key="'+key+'" data-v="'+(i+1)+'">'+l+'</button>').join("")+'</div>'};
+    h+='<p class="qt">'+esc(T(itemText(it)))+'</p>';
+    h+=it.ri?row(it.id,ENJOY,"How much would you enjoy it?")+row(it.id+"_ab",ABIL,"How good or comfortable are you at it?"):row(it.id,AGREE,"");
+  }else if(it.t==="tf"){
+    h+='<p class="qt">'+esc(it.text)+'</p><div class="row2">'+[["t","True"],["f","False"]].map(([v,l])=>'<button class="opt'+(a===v?" on":"")+'" data-id="'+it.id+'" data-v="'+v+'">'+l+'</button>').join("")+'</div>';
+  }else if(it.t==="ab"){
+    h+='<p class="qt">Which would you rather?</p><div class="vs"><button class="opt'+(a==="a"?" on":"")+'" data-id="'+it.id+'" data-v="a">'+esc(T(it.a))+'</button><span class="or">OR</span><button class="opt'+(a==="b"?" on":"")+'" data-id="'+it.id+'" data-v="b">'+esc(it.b)+'</button></div>';
+  }else if(it.t==="sjt"||it.t==="mc"){
+    h+='<p class="qt">'+esc(T(it.text))+'</p><div class="stack">'+it.opts.map((o,i)=>'<button class="opt'+(a===i?" on":"")+'" data-id="'+it.id+'" data-v="'+i+'">'+esc(T(o[0]))+'</button>').join("")+'</div>';
+  }else if(it.t==="sl"){
+    const set=isAns(it), v=set?a:it.def;
+    h+='<p class="qt"><label for="in-'+it.id+'">'+esc(it.text)+'</label></p><div class="sl"><div class="val'+(set?"":" unset")+'" id="val-'+it.id+'">'+(set?esc(it.fmt(v)):"Not set — drag to answer")+'</div><input type="range" id="in-'+it.id+'" data-sl="'+it.id+'" min="'+it.min+'" max="'+it.max+'" step="'+it.step+'" value="'+v+'"><div class="ends"><span>'+esc(it.lo)+'</span><span>'+esc(it.hi)+'</span></div><button class="btn ghost sm" data-clear="'+it.id+'" id="clr-'+it.id+'"'+(set?'':' hidden')+' style="align-self:flex-start">Clear answer</button></div>';
+  }else if(it.t==="rank"){
+    const order=Array.isArray(a)?a:(state.rankDraft||it.items.map(x=>x[0]));
+    const lbl=k=>it.items.find(x=>x[0]===k)[1];
+    h+='<p class="qt">'+esc(it.text)+'</p><ol class="rank">'+order.map((k,i)=>'<li><span class="pos">'+(i+1)+'</span><span>'+esc(lbl(k))+'</span><span class="mv"><button aria-label="Move up" data-mv="'+i+'" data-dir="-1">↑</button><button aria-label="Move down" data-mv="'+i+'" data-dir="1">↓</button></span></li>').join("")+'</ol>'+
+      (isAns(it)?'<p class="small" style="margin:10px 0 0">Order saved ✓</p>':'<div class="nav" style="margin-top:10px"><button class="btn pri" data-rankok="1">This order is right</button></div>');
+  }else if(it.t==="open"){
+    h+='<p class="qt"><label for="in-'+it.id+'">'+esc(it.text)+'</label></p><textarea id="in-'+it.id+'" data-open="'+it.id+'" placeholder="'+esc(it.ph||"")+'">'+esc(a||"")+'</textarea>';
+  }
+  if(it.t!=="open"){const nt=state.answers[it.id+"_note"]||"";
+    h+='<details class="note"'+(nt?" open":"")+'><summary>'+(nt?"✎ Your note":"✎ Add a note or details")+'</summary><textarea id="note-'+it.id+'" data-note="'+it.id+'" aria-label="Note on '+esc(it.text||it.a||"")+'" placeholder="Add context if the answer choices don\'t fit. It goes into your AI summary; it doesn\'t change your score.">'+esc(nt)+'</textarea></details>'}
+  return h+'</div>';
+}
+
+function pageStart(p){let s=0;for(let i=0;i<p;i++)s+=PAGES[i].items.length;return s}
+function render(){
+  const p=state.page;
+  if(p===-1)return renderStart();
+  if(p===99)return renderResults();
+  const pg=PAGES[p];
+  if(pg.custom==="checkin")return renderCheckin();
+  const start=pageStart(p);
+  const unanswered=pg.items.filter(it=>!isAns(it)&&it.t!=="open").length;
+  if(pg.custom==="field"&&!pg.items.length){
+    app.innerHTML='<div class="kicker">Section '+(p+1)+' of '+PAGES.length+'</div><h2 class="sec">Questions for your field</h2><p class="lede">This section adds questions made for your field, like law school and practice areas for legal, or shifts and patient care for healthcare. Pick your field on the Check-in page to unlock them.</p><div class="nav"><button class="btn" data-go="0">Pick my field</button><button class="btn pri" data-go="'+(p+1)+'">Skip →</button></div>';
+    updateHeader();return;
+  }
+  const fieldNote=!pg.items.some(it=>it.t==="sjt"||it.fq)?'':
+    '<p class="small" style="margin:-8px 0 16px">'+(curField()==="general"
+      ?'Worded for work in general. <a href="#" data-gofield="1">Pick your field</a> to tailor these.'
+      :(pg.custom==="field"?"For":"Worded for")+' <b>'+esc(FIELDS[curField()].label)+'</b>. <a href="#" data-gofield="1">Change field</a>')+'</p>';
+  app.innerHTML='<div class="kicker">Section '+(p+1)+' of '+PAGES.length+'</div><h2 class="sec">'+esc(pg.title)+'</h2><p class="lede">'+esc(pg.lede)+'</p>'+fieldNote+
+    pg.items.map((it,i)=>renderItem(it,"Q"+(start+i+1))).join("")+
+    '<div class="nav"><button class="btn ghost" data-go="'+(p-1)+'">← Back</button><button class="btn pri" data-go="'+(p===PAGES.length-1?99:p+1)+'">'+(p===PAGES.length-1?"See my results →":"Next section →")+'</button></div>'+
+    '<p class="skipline" id="skipline"></p>';
+  updateSkip(); updateHeader();
+}
+function updateSkip(){
+  const el=document.getElementById("skipline"), pg=PAGES[state.page]; if(!el||!pg||pg.custom==="checkin")return;
+  const n=pg.items.filter(it=>!isAns(it)&&it.t!=="open").length;
+  el.textContent=n?n+" left unanswered here. That's fine — skip and come back anytime.":"";
+}
+
+/* ---------- Check-in (résumé + basics) ---------- */
+function opts(map,cur){return '<option value="">Choose…</option>'+Object.entries(map).map(([v,l])=>'<option value="'+esc(v)+'"'+(String(cur)===String(v)?" selected":"")+'>'+esc(l)+'</option>').join("")}
+function renderCheckin(){
+  const pr=state.profile;
+  app.innerHTML='<div class="kicker">Section 1 of '+PAGES.length+'</div><h2 class="sec">Check-in</h2><p class="lede">'+esc(PAGES[0].lede)+'</p>'+
+  '<div class="q"><div class="qn">Résumé (optional, but it sharpens your results)</div>'+
+   '<div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload résumé file"><strong>Drop a PDF, Word (.docx), or text file</strong><span class="small">or click to choose one</span></div>'+
+   '<input type="file" id="file" accept=".pdf,.docx,.txt,.md" hidden>'+
+   '<div class="status" id="fileStatus" role="status">'+(pr.resume?'Résumé loaded ('+pr.resume.length.toLocaleString()+' characters).':'')+'</div>'+
+   '<details class="note"'+(pr.resume&&!pr._fromFile?" open":"")+'><summary>…or paste the text</summary><textarea id="paste" placeholder="Paste your résumé text here" style="min-height:140px">'+(pr._fromFile?'':esc(pr.resume))+'</textarea><button class="btn sm" id="pasteBtn" style="margin-top:8px">Scan pasted text</button></details>'+
+   '<div class="sub" style="margin-top:16px">Skills on your résumé</div><div class="small">Tap a skill to drop it if we got it wrong. Add anything we missed.</div><div class="skchips" id="skchips"></div>'+
+   '<div class="addrow"><input type="text" id="addSkill" list="skillList" placeholder="Add a skill (e.g. Excel, sales, teaching)"><datalist id="skillList">'+Object.values(SK).map(([l])=>'<option value="'+esc(l)+'">').join("")+'</datalist><button class="btn sm" id="addSkillBtn">Add</button></div>'+
+  '</div>'+
+  '<div class="q"><div class="qn">The basics</div>'+
+   '<label class="f" for="p-name" style="margin-top:0">First name <span class="small">(optional, for your report)</span></label><input type="text" id="p-name" data-pf="name" value="'+esc(pr.name)+'" autocomplete="given-name">'+
+   '<label class="f" for="p-stage">Where are you in your career?</label><select id="p-stage" data-pf="stage">'+opts(STAGES,pr.stage)+'</select>'+
+   '<div class="row2"><div><label class="f" for="p-years">Years of work experience</label><select id="p-years" data-pf="years">'+opts(YEARS,pr.years)+'</select></div>'+
+   '<div><label class="f" for="p-edu">Highest education</label><select id="p-edu" data-pf="edu">'+opts(Object.fromEntries(EDU.map((l,i)=>[i,l])),pr.edu)+'</select></div></div>'+
+   '<label class="f" for="p-job">Current or most recent job title</label><input type="text" id="p-job" data-pf="job" value="'+esc(pr.job)+'" placeholder="e.g. Help desk technician, server, student">'+
+   '<label class="f" for="p-field">Your field</label><div class="f-help small" style="margin:-2px 0 8px">The one you work in now, or the closest. Not sure or between jobs? Pick "General / not sure." Some questions get worded for it, and it unlocks a section made for your field.</div><select id="p-field" data-pf="field"><option value=""'+(FIELDS[pr.field]?"":" selected")+'>Choose your field…</option>'+Object.entries(FIELDS).map(([k,f])=>'<option value="'+k+'"'+(pr.field===k?" selected":"")+'>'+esc(f.label)+'</option>').join("")+'</select>'+
+   '<div class="row2"><div><label class="f" for="p-ind">Dream industry, if any</label><input type="text" id="p-ind" data-pf="industry" value="'+esc(pr.industry)+'" placeholder="e.g. sports, healthcare, tech"></div>'+
+   '<div><label class="f" for="p-tgt">A job you\'re curious about</label><input type="text" id="p-tgt" data-pf="target" value="'+esc(pr.target)+'" placeholder="e.g. data analyst, nurse"></div></div>'+
+  '</div>'+
+  '<div class="nav"><button class="btn ghost" data-go="-1">← Back</button><button class="btn pri" data-go="1">Next section →</button></div>'+
+  (checkinDone()?'':'<p class="skipline">Career stage, experience, education, and your field help the scoring. You can skip them and come back.</p>');
+  renderSkillChips(); wireResume(); updateHeader();
+}
+function renderSkillChips(){
+  const pr=state.profile, el=document.getElementById("skchips"); if(!el)return;
+  const all=[...new Set([...(pr.auto||[]),...(pr.manual||[])])];
+  el.innerHTML=all.length?all.map(id=>{const off=(pr.off||[]).includes(id);return '<button class="skchip'+(off?" off":"")+'" data-skill="'+esc(id)+'" aria-pressed="'+!off+'">'+esc(SK[id]?SK[id][0]:id)+'</button>'}).join(""):'<span class="small">None yet. Upload a résumé or add skills below.</span>';
+}
+function addSkill(){
+  const inp=document.getElementById("addSkill"), v=inp.value.trim(); if(!v)return;
+  const pr=state.profile, hit=Object.entries(SK).find(([,[l]])=>l.toLowerCase()===v.toLowerCase());
+  const ids=hit?[hit[0]]:detectSkills(v);
+  if(!ids.length){toast("Couldn't match that to a skill. Try a simpler word.");return}
+  ids.forEach(id=>{if(!pr.manual.includes(id))pr.manual.push(id);pr.off=pr.off.filter(x=>x!==id)});
+  inp.value="";save();renderSkillChips();
+}
+const PDFJS='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';
+const PDFJS_WORKER='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+const MAMMOTH='https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js';
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>rej(new Error("Couldn't load the file reader. Check your connection, or paste the text instead."));document.head.appendChild(s)})}
+async function readFile(file){
+  const n=file.name.toLowerCase();
+  if(n.endsWith(".pdf")){
+    if(!window.pdfjsLib)await loadScript(PDFJS);
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc=PDFJS_WORKER;
+    const pdf=await window.pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;
+    let out="";
+    for(let i=1;i<=pdf.numPages;i++){const tc=await (await pdf.getPage(i)).getTextContent();out+=tc.items.map(it=>it.str+(it.hasEOL?"\n":" ")).join("")+"\n"}
+    return out;
+  }
+  if(n.endsWith(".docx")){if(!window.mammoth)await loadScript(MAMMOTH);return (await window.mammoth.extractRawText({arrayBuffer:await file.arrayBuffer()})).value}
+  if(/\.(txt|md)$/.test(n))return await file.text();
+  throw new Error("That file type isn't supported. Use PDF, DOCX, or TXT, or paste the text.");
+}
+function estimateYears(text){
+  const yr=new Date().getFullYear(), rx=/\b((?:19|20)\d{2})\s*(?:-|–|—|to)\s*((?:19|20)\d{2}|present|current|now)\b/gi, spans=[];let m;
+  while((m=rx.exec(text))){const a=+m[1],b=/\d/.test(m[2])?+m[2]:yr;if(b>=a&&a<=yr)spans.push([a,Math.max(b,a+.5)])}
+  spans.sort((x,y)=>x[0]-y[0]);let total=0,cur=null;
+  for(const s of spans){if(!cur||s[0]>cur[1]){if(cur)total+=cur[1]-cur[0];cur=[...s]}else cur[1]=Math.max(cur[1],s[1])}
+  if(cur)total+=cur[1]-cur[0];return total;
+}
+function estimateEdu(t){
+  t=t.toLowerCase();
+  if(/\b(ph\.?d|doctorate|master'?s|mba|m\.s\.|m\.a\.|j\.d\.|m\.ed)\b/.test(t))return "3";
+  if(/\b(bachelor'?s?|b\.s\.|b\.a\.|bs in|ba in|bsc)\b/.test(t))return "2";
+  if(/\b(associate'?s?|certificate|bootcamp|diploma in)\b/.test(t))return "1";
+  return "";
+}
+function ingest(text,source){
+  const st=document.getElementById("fileStatus"), clean=(text||"").trim(), pr=state.profile;
+  if(clean.length<80){st.className="status err";st.textContent=source==="file"?"Couldn't find readable text in that file (it may be a scanned image). Try pasting the text instead.":"That's pretty short. Paste the full résumé text.";return}
+  pr.resume=clean.slice(0,20000);pr._fromFile=source==="file";pr.auto=detectSkills(clean);
+  const y=estimateYears(clean);
+  if(pr.years===""&&y)pr.years=y<1?"0.5":y<3?"2":y<7?"5":y<15?"10":"18";
+  const e=estimateEdu(clean);if(pr.edu===""&&e)pr.edu=e;
+  save();renderCheckin();
+  const st2=document.getElementById("fileStatus");st2.className="status ok";
+  st2.textContent="Got it. Found "+pr.auto.length+" skills"+(y?", about "+Math.round(y)+" year"+(Math.round(y)===1?"":"s")+" of dated experience":"")+". Double-check the picks and basics below.";
+}
+function wireResume(){
+  const drop=document.getElementById("drop"), file=document.getElementById("file");
+  drop.addEventListener("click",()=>file.click());
+  drop.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();file.click()}});
+  ["dragenter","dragover"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.add("over")}));
+  ["dragleave","drop"].forEach(ev=>drop.addEventListener(ev,e=>{e.preventDefault();drop.classList.remove("over")}));
+  drop.addEventListener("drop",e=>{const f=e.dataTransfer.files[0];if(f)handleFile(f)});
+  file.addEventListener("change",()=>{if(file.files[0])handleFile(file.files[0]);file.value=""});
+  document.getElementById("pasteBtn").addEventListener("click",()=>ingest(document.getElementById("paste").value,"paste"));
+  document.getElementById("addSkillBtn").addEventListener("click",addSkill);
+  document.getElementById("addSkill").addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();addSkill()}});
+}
+async function handleFile(f){
+  const st=document.getElementById("fileStatus");st.className="status";st.textContent="Reading "+f.name+"…";
+  try{ingest(await readFile(f),"file")}catch(err){st.className="status err";st.textContent=err.message||"Couldn't read that file. Try pasting the text."}
+}
+
+function renderStart(){
+  const scored=allItems().filter(i=>i.t!=="open"), n=scored.filter(isAns).length;
+  app.innerHTML='<div class="kicker">Free · private · about 35–45 minutes</div><h2 class="sec">Find the career that fits how you actually work</h2>'+
+  '<p class="lede">'+(allItems().length)+' questions in '+PAGES.length+' short sections, plus your résumé. Answers save automatically in this browser, so you can stop and pick up later. Nothing is uploaded anywhere.</p>'+
+  '<div class="panel"><strong>What you\'ll do</strong><ul class="intro-list">'+
+  '<li><b>1</b><span>Drop in your résumé. It\'s read in your browser to spot the skills you already have.</span></li>'+
+  '<li><b>30</b><span>Work activities, each rated twice: how much you\'d enjoy it and how good you are at it. Based on the Holland (RIASEC) model the U.S. Department of Labor uses in O*NET.</span></li>'+
+  '<li><b>30</b><span>Personality items from the public-domain IPIP Big Five inventory.</span></li>'+
+  '<li><b>10</b><span>A values ranking and sliders for pay, travel, coding, hours, school, and where you work.</span></li>'+
+  '<li><b>30</b><span>True/false and this-or-that gut calls.</span></li>'+
+  '<li><b>12</b><span>Work scenarios: what would you actually do?</span></li>'+
+  '<li><b>6</b><span>Questions about your career path: where you are and what\'s in the way.</span></li>'+
+  '<li><b>4–6</b><span>Questions made for your field (legal, healthcare, education, trades, and more), unlocked by your résumé.</span></li>'+
+  '<li><b>8</b><span>Open-ended questions for an AI coach to read later.</span></li></ul>'+
+  '<p class="small">At the end you get '+C.length+' careers ranked by fit with reasons and red flags, your personality and interest profile, stepping-stone jobs you could land now, and a summary to paste into Claude or ChatGPT for a deeper read.</p></div>'+
+  '<div class="nav"><span></span><button class="btn pri" data-go="'+(n||checkinDone()?firstUnansweredPage():0)+'">'+(n?"Pick up where you left off →":"Start the combine →")+'</button></div>'+
+  '<div class="panel"><strong>Backup and restore</strong><p class="small">Answers live only in this browser. Copy a backup if you might switch devices, and paste it here to restore.</p>'+
+  '<textarea id="in-backup" placeholder="Paste a backup here to restore"></textarea><div class="nav"><button class="btn" data-act="copybackup">Copy backup</button><button class="btn" data-act="restore">Restore from pasted backup</button><button class="btn ghost" data-act="reset">Start over</button></div>'+
+  '<div id="resetconfirm" hidden><p class="flag">This erases every answer and your résumé from this browser.</p><button class="btn pri" data-act="resetyes">Yes, erase everything</button></div></div>';
+  updateHeader();
+}
+function firstUnansweredPage(){if(!checkinDone())return 0;for(let i=1;i<PAGES.length;i++)if(PAGES[i].items.some(it=>it.t!=="open"&&!isAns(it)))return i;return 99}
+
+function meter(label,sub,x){return '<div class="meter"><div class="lab">'+esc(label)+(sub?'<small>'+esc(sub)+'</small>':'')+'</div><div class="tr"><i style="width:'+pct(x)+'%"></i></div><div class="v">'+pct(x)+'</div></div>'}
+
+function analyze(){
+  const P=compute();
+  const scored=C.map(c=>scoreCareer(c,P)).sort((a,b)=>b.fit-a.fit);
+  const code=Object.entries(P.R).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]).join("");
+  const B=P.B, mbti=(B.E>=.5?"E":"I")+(B.O>=.5?"N":"S")+(B.A>=.5?"F":"T")+(B.C>=.5?"J":"P");
+  return {P,scored,code,mbti};
+}
+
+function renderResults(){
+  const {P,scored,code,mbti}=analyze();
+  const top=scored.slice(0,10), low=P.answered<P.total*.6, pr=state.profile;
+  const indMatches=scored.filter(s=>s.ind&&!top.includes(s)).slice(0,3);
+  const vals=Array.isArray(state.answers.rank_values)?state.answers.rank_values.map(k=>VALUES.find(v=>v[0]===k)[1].split(" — ")[0]):null;
+  let h='<div class="kicker">'+(pr.name?esc(pr.name)+"'s scouting report":"Your scouting report")+'</div><h2 class="sec">Best-fit careers</h2>';
+  if(low)h+='<div class="warnbox"><strong>Partial results.</strong> You\'ve answered '+P.answered+' of '+P.total+' scored questions. The ranking firms up as you answer more. <button class="btn sm" data-go="'+firstUnansweredPage()+'">Keep going</button></div>';
+  h+='<div class="top3">'+top.slice(0,3).map((s,i)=>'<div class="card"><div class="rk">#'+(i+1)+(s.ind?' · '+esc(pr.industry.trim()):'')+'</div><div class="nm">'+esc(s.car.n)+'</div><div class="pc">'+s.fit+'%</div><div class="small">'+esc(s.car.start)+' → '+esc(s.car.end)+'</div></div>').join("")+'</div>';
+  h+='<p class="small">Fit blends your interests (about a third), work-style match (about half), pay fit (weighted by how much you ranked pay), and smaller boosts for abilities you rated high and skills on your résumé. Dealbreakers subtract points.</p>';
+  h+=top.map((s,i)=>resultCard(s,i+1,i<3)).join("");
+  h+=dirsPanel();
+  if(indMatches.length)h+='<h2 class="sec">Through your industry lens</h2><p class="lede">Further down the list, but these connect to '+esc(pr.industry.trim())+'.</p>'+indMatches.map(s=>resultCard(s,"+",false)).join("");
+  h+='<h2 class="sec">Your profile</h2><div class="grid2"><div class="panel"><strong>Interest code</strong><div class="code">'+code+'</div><p class="small">Your top three Holland interest areas, in order. Careers whose code starts with your top letters score higher.</p>'+
+    Object.entries(P.R).sort((a,b)=>b[1]-a[1]).map(([k,v])=>meter(k+" · "+RNAME[k],RDESC[k],v)).join("")+'</div>'+
+    '<div class="panel"><strong>Big Five personality</strong>'+["O","C","E","A","N"].map(k=>{const v=k==="N"?1-P.B.N:P.B[k];return meter(B5NAME[k],v>=.5?B5DESC[k][1]:B5DESC[k][0],v)}).join("")+
+    '<p class="small">For fun, the closest Myers-Briggs letters are <strong>'+mbti+'</strong>. Take that lightly: MBTI types don\'t predict job fit well, which is why the scoring uses Big Five and RIASEC instead.</p></div></div>';
+  h+=strengthsPanel(P);
+  h+=stepsPanel(scored,P);
+  h+='<div class="grid2"><div class="panel"><strong>Work style</strong>'+["tr","c","s","cu","l","au","v","p","da","th","rp","h","o","pu"].map(k=>meter(cap(DIMS[k]),null,P.D[k])).join("")+'<p class="small">0 = avoid, 100 = want a lot. For long hours, this is your tolerance.</p></div>'+
+    '<div class="panel"><strong>What matters most</strong>'+(vals?'<ol>'+vals.map(v=>'<li>'+esc(v)+'</li>').join("")+'</ol>':'<p class="small">Not ranked yet.</p>')+
+    '<p><strong>Pay:</strong> $'+P.minPay+'k minimum now, $'+P.target+'k target in 5 years.</p>'+meter("Pay priority",null,P.D.pay)+meter("Patience for a longer path",null,P.D.pat)+'</div></div>';
+  h+='<h2 class="sec">Take it to an AI coach</h2><p class="lede">Copy this and paste it into Claude, ChatGPT, or any AI assistant. It includes every answer, your notes, your résumé, and the full ranking, plus instructions, so the AI can go much deeper than the scoring here.</p>'+
+    '<div class="nav noprint" style="margin-top:0"><button class="btn pri" data-act="copysum">Copy summary for AI</button><button class="btn" data-act="print">Print / save as PDF</button><button class="btn" data-act="copybackup">Copy answer backup</button></div><pre class="sum" id="sumtext">'+esc(summaryText({P,scored,code,mbti}))+'</pre>';
+  h+='<div class="panel"><details class="method"><summary>How this works and its limits</summary><div class="small" style="margin-top:8px;display:grid;gap:8px">'+
+    '<p><b>Interests (RIASEC).</b> Holland\'s six interest types are the backbone of O*NET, the U.S. Labor Department\'s occupation database. Meta-analysis (Nye et al., 2012) found interest–job fit relates to job performance and staying in a job. Each activity is also rated for ability, because interests and abilities are related but distinct (Ackerman &amp; Heggestad, 1997): what you enjoy predicts staying power, while what you\'re already good at shapes how fast you can break in.</p>'+
+    '<p><b>Personality (Big Five).</b> The 30 items come from Goldberg\'s public-domain IPIP markers. The Big Five has decades of evidence linking it to work outcomes (Barrick &amp; Mount, 1991). MBTI is popular but has weak test-retest reliability (Pittenger, 2005), so it\'s shown only for fun.</p>'+
+    '<p><b>Values and work style.</b> The ranking follows O*NET\'s work-values set, with pay, variety, and purpose split out. Person–job fit on needs and supplies predicts satisfaction (Kristof-Brown et al., 2005). Scenario questions use the situational-judgment format, which captures how you\'d act rather than how you see yourself (McDaniel et al., 2001).</p>'+
+    '<p><b>Résumé.</b> Your résumé is read in your browser and matched against a skill list by keyword. It finds evidence, not proficiency, so check the skill chips. It gives a small boost to careers that use skills you already have and powers the stepping-stone jobs.</p>'+
+    '<p><b>Scoring.</b> Every answer adds evidence to 17 work-style dimensions. Each career has a demand level on the same dimensions. Fit penalizes gaps, more heavily when a job demands more of something you want to avoid (coding, selling, commission, travel, hours) than when it offers less. Career profiles and pay are rough U.S. estimates, not O*NET data. Check the Bureau of Labor Statistics Occupational Outlook Handbook or local postings for real numbers.</p>'+
+    '<p><b>Limits.</b> This is a short self-report tool, not a validated assessment. Career profiles are judgment calls, and how you feel today shifts answers. Use the top 5–10 as a shortlist to test against real job postings and conversations, not as a verdict.</p></div></details></div>';
+  h+='<div class="nav"><button class="btn ghost" data-go="'+(PAGES.length-1)+'">← Back to questions</button><button class="btn" data-go="-1">Backup & settings</button></div>';
+  app.innerHTML=h; updateHeader();
+}
+function dirsPanel(){
+  const d=fieldDirs(); if(!d)return '';
+  return '<h2 class="sec">Within '+esc(FIELDQ[curField()].name)+'</h2><p class="lede">Based on your field questions, here\'s which corner of '+esc(FIELDQ[curField()].name)+' fits you best.</p>'+
+   d.slice(0,3).map((x,i)=>'<details class="res"'+(i<2?" open":"")+'><summary><span class="no">F'+(i+1)+'</span><span class="nm">'+esc(x.name)+'<small>'+esc(x.blurb)+'</small></span><span class="fit">'+pct(x.score)+'</span><span class="fitbar"><i style="width:'+pct(x.score)+'%"></i></span></summary>'+
+   '<div class="body">'+(x.why.length?'<div><span class="good">Because you said</span><ul class="why">'+x.why.map(w=>'<li>'+esc(T(w))+'</li>').join("")+'</ul></div>':'')+'<div class="small"><strong>Roles to look at:</strong> '+esc(x.roles)+'</div></div></details>').join("")+
+   (d.length>3?'<p class="small">Less likely for you: '+esc(d.slice(-2).map(x=>x.name).join(", "))+'.</p>':'');
+}
+function stepping(scored,P){
+  if(P.skills.size<2)return null;
+  const fitOf=id=>{const s=scored.find(x=>x.car.id===id);return s?s.fit:0}, nameOf=id=>C.find(c=>c.id===id).n;
+  return STEPS.map(st=>{
+    const have=st.sk.filter(k=>P.skills.has(k)), need=st.sk.filter(k=>!P.skills.has(k));
+    const ready=have.length/st.sk.length;
+    const tg=st.to.map(id=>({id,n:nameOf(id),fit:fitOf(id)})).sort((a,b)=>b.fit-a.fit);
+    const best=mean(tg.slice(0,2).map(t=>t.fit))/100;
+    return {st,ready,tg,score:.5*ready+.5*best,have:have.map(k=>SK[k][0]),need:need.map(k=>SK[k][0])};
+  }).sort((a,b)=>b.score-a.score);
+}
+function stepsPanel(scored,P){
+  const list=stepping(scored,P);
+  if(!list)return '<h2 class="sec">Stepping-stone jobs</h2><p class="lede">Add your résumé or at least two skills in the Check-in section to see jobs you could get hired for soon that lead toward your top careers.</p>';
+  return '<h2 class="sec">Stepping-stone jobs</h2><p class="lede">Jobs you could likely land soon with skills already on your résumé, ranked by how ready you are and how well they lead to your top-fit careers. Starting lower is fine when the next step is clear.</p>'+
+   list.slice(0,6).map((x,i)=>'<details class="res"'+(i<2?" open":"")+'><summary><span class="no">S'+(i+1)+'</span><span class="nm">'+esc(x.st.n)+'<small>'+esc(x.st.pay)+' · leads to '+esc(x.tg[0].n)+'</small></span><span class="fit">'+pct(x.ready)+'% ready</span><span class="fitbar"><i style="width:'+pct(x.ready)+'%"></i></span></summary>'+
+   '<div class="body"><div class="small">'+esc(x.st.why)+'</div>'+
+   (x.have.length?'<div><span class="good">You already have</span> <span class="small">'+esc(x.have.join(", "))+'</span></div>':'')+
+   (x.need.length?'<div><span class="flag">Gaps to close</span> <span class="small">'+esc(x.need.join(", "))+'</span></div>':'')+
+   '<div><strong>Where it leads</strong><ul class="why">'+x.tg.slice(0,4).map(t=>'<li>'+esc(t.n)+' <span class="small">('+t.fit+'% fit)</span></li>').join("")+'</ul></div></div></details>').join("");
+}
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+function splitGaps(P){
+  const g=P.gaps;
+  return {
+    sweet:g.filter(x=>x.e>=4&&x.s>=4).sort((a,b)=>(b.e+b.s)-(a.e+a.s)),
+    hidden:g.filter(x=>x.s>=4&&x.e<=3).sort((a,b)=>(b.s-b.e)-(a.s-a.e)),
+    grow:g.filter(x=>x.e>=4&&x.s<=2).sort((a,b)=>(b.e-b.s)-(a.e-a.s))
+  };
+}
+function strengthsPanel(P){
+  if(P.abN<6)return '';
+  const {sweet,hidden,grow}=splitGaps(P);
+  const list=(arr,empty)=>arr.length?'<ul class="pairs">'+arr.slice(0,6).map(x=>'<li>'+esc(x.text)+' <span class="small">(enjoy '+x.e+'/5 · skill '+x.s+'/5)</span></li>').join("")+'</ul>':'<p class="small">'+empty+'</p>';
+  const abCode=Object.entries(P.AB).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]).join("");
+  return '<div class="panel"><strong>Enjoy vs. good at</strong><p class="small">Your skill code is <b>'+abCode+'</b> (what you\'re good at), next to your interest code above (what you enjoy). Careers are ranked mostly on enjoyment, with a smaller boost when they use abilities you already have.</p>'+
+   '<div class="grid2"><div><span class="good">Sweet spot</span><p class="small">You enjoy these and you\'re good at them. Build a career around these.</p>'+list(sweet,"Nothing scored high on both yet.")+
+   '<span class="flag">Good at, but not into it</span><p class="small">Useful for getting hired, but a job built on these may wear you out.</p>'+list(hidden,"None — what you\'re good at, you also like.")+'</div>'+
+   '<div><span style="color:var(--navy);font-weight:600">Love it, still building</span><p class="small">Worth investing in: these are where training or a certification pays off most.</p>'+list(grow,"None flagged.")+'</div></div>'+
+   '<div>'+Object.entries(P.AB).sort((a,b)=>b[1]-a[1]).map(([k,v])=>meter(k+" · "+RNAME[k]+" skill",null,v)).join("")+'</div></div>';
+}
+function resultCard(s,rank,open){
+  const c=s.car, pr=state.profile;
+  const watch=[...s.flags,...s.cons.filter(x=>!s.flags.some(f=>f.toLowerCase().includes(x.split(" ").pop().replace(".",""))))].slice(0,4);
+  return '<details class="res"'+(open?" open":"")+'><summary><span class="no">'+rank+'</span><span class="nm">'+esc(c.n)+(s.ind?'<span class="tag ind">'+esc(pr.industry.trim())+'</span>':'')+'<small>'+esc(c.start)+' → '+esc(c.end)+'</small></span><span class="fit">'+s.fit+'%</span><span class="fitbar"><i style="width:'+s.fit+'%"></i></span></summary>'+
+  '<div class="body">'+
+  (s.why.length?'<div><span class="good">Why it fits</span><ul class="why">'+s.why.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>':'')+
+  (watch.length?'<div><span class="flag">Watch out for</span><ul class="why">'+watch.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>':'')+
+  '<div class="facts"><div><span>Pay (entry · yr 4 · senior)</span>$'+c.pay[0]+'k · $'+c.pay[1]+'k · $'+c.pay[2]+'k</div><div><span>Travel</span>'+esc(c.trv)+'</div><div><span>Work-life</span>'+esc(c.wlb)+'</div><div><span>Ease of entry</span>'+esc(c.ease)+'</div><div><span>Typical education</span>'+esc(cap(EDU_NEED[c.edu]))+'</div><div><span>AI exposure</span>'+esc(c.ai)+'</div><div><span>Interest code</span>'+c.r+'</div></div>'+
+  (mySkillsCount()?'<div class="small"><strong>Skills to build:</strong> '+(s.gapsSk.length?esc(s.gapsSk.slice(0,3).map(k=>SK[k][0]).join(", ")):"none of the core ones — go deeper")+'</div>':'')+
+  '<div class="small"><strong>Search for:</strong> '+esc(c.titles)+'</div><div class="small"><strong>First move:</strong> '+esc(c.step)+'</div>'+
+  '<div class="small">Interest match '+pct(s.interest)+(s.ability!=null?' · ability match '+pct(s.ability):'')+(s.skillFit!=null?' · résumé match '+pct(s.skillFit):'')+' · work-style match '+pct(s.dimSim)+' · pay match '+pct(s.payFit)+'</div></div></details>';
+}
+function mySkillsCount(){return mySkills().size}
+
+function ansText(it){
+  const A=state.answers,v=A[it.id];
+  if(it.t==="lik"&&it.ri)return "enjoy "+(v!=null?ENJOY[v-1]:"-")+", skill "+(A[it.id+"_ab"]!=null?ABIL[A[it.id+"_ab"]-1]:"-");
+  if(v==null||v==="")return "(skipped)";
+  if(it.t==="lik")return AGREE[v-1];
+  if(it.t==="tf")return v==="t"?"True":"False";
+  if(it.t==="ab")return v==="a"?T(it.a):it.b;
+  if(it.t==="sjt"||it.t==="mc")return T(it.opts[v][0]);
+  if(it.t==="sl")return it.fmt(Number(v));
+  if(it.t==="rank")return v.join(" > ");
+  return String(v);
+}
+function summaryText({P,scored,code,mbti}){
+  const A=state.answers, pr=state.profile, L=[];
+  L.push("You are an experienced, honest career coach. I just took the Career Combine, a self-assessment. My full results, answers, and résumé are below. Please:");
+  L.push("1. Tell me in plain language what my results say about how I work best. Be honest, not flattering, and point out anything that seems contradictory.");
+  L.push("2. Rank the 3–5 careers you think fit me best (you can disagree with the Combine's ranking). For each: why it fits, my strongest evidence, my biggest gaps, and realistic pay where I live (ask my location if it matters).");
+  L.push("3. For my top path, name 2–3 stepping-stone job titles I could realistically get in the next 6 months with skills I already have, even if they're lower level.");
+  L.push("4. Give me a 90-day plan: what to learn, what to build to prove it, and how many applications to send each week.");
+  L.push("5. Tell me what on my résumé to lead with or rewrite for that path.");
+  L.push("Ask me up to 3 follow-up questions first if something important is missing.");
+  L.push("");
+  L.push("CAREER COMBINE — RESULTS ("+new Date().toLocaleDateString()+")");
+  L.push("Answered "+P.answered+"/"+P.total+" scored questions");
+  L.push("Field (scenarios worded for): "+FIELDS[curField()].label);
+  L.push("Career stage: "+(STAGES[pr.stage]||"not given")+" | Experience: "+(YEARS[pr.years]||"not given")+" | Education: "+(pr.edu!==""?EDU[+pr.edu]:"not given"));
+  if(pr.job)L.push("Current/most recent job: "+pr.job);
+  if(pr.industry)L.push("Dream industry: "+pr.industry);
+  if(pr.target)L.push("A job I'm curious about: "+pr.target);
+  L.push("");
+  L.push("RIASEC code: "+code+" | "+Object.entries(P.R).sort((a,b)=>b[1]-a[1]).map(([k,v])=>k+" "+pct(v)).join(", "));
+  L.push("Big Five: "+["O","C","E","A"].map(k=>k+" "+pct(P.B[k])).join(", ")+", Neuroticism "+pct(P.B.N)+" | MBTI approx (low validity): "+mbti);
+  if(P.abN){const g=splitGaps(P);L.push("Ability code (what I'm good at): "+Object.entries(P.AB).sort((a,b)=>b[1]-a[1]).map(([k,v])=>k+" "+pct(v)).join(", "));
+    L.push("Sweet spot (enjoy + skilled): "+(g.sweet.map(x=>x.text).join("; ")||"none"));
+    L.push("Good at but not into it: "+(g.hidden.map(x=>x.text).join("; ")||"none"));
+    L.push("Love it, still building: "+(g.grow.map(x=>x.text).join("; ")||"none"));}
+  L.push("Values order: "+(Array.isArray(A.rank_values)?A.rank_values.map(k=>VALUES.find(v=>v[0]===k)[1].split(" — ")[0]).join(" > "):"not ranked"));
+  L.push("Pay: min $"+P.minPay+"k, 5-yr target $"+P.target+"k");
+  L.push("Work-style dims (0-100): "+Object.keys(DIMS).map(k=>DIMS[k]+" "+pct(P.D[k])).join(", ")+", pay priority "+pct(P.D.pay)+", patience for a longer path "+pct(P.D.pat));
+  L.push("Skills found on résumé (confirmed): "+([...P.skills].map(s=>SK[s][0]).join(", ")||"none"));
+  L.push("");
+  L.push("TOP 15:");
+  scored.slice(0,15).forEach((s,i)=>L.push((i+1)+". "+s.car.n+" — "+s.fit+"% (int "+pct(s.interest)+(s.ability!=null?", ability "+pct(s.ability):"")+(s.skillFit!=null?", résumé "+pct(s.skillFit):"")+", style "+pct(s.dimSim)+", pay "+pct(s.payFit)+")"+(s.flags.length?" | flags: "+s.flags.join("; "):"")));
+  L.push("BOTTOM 5: "+scored.slice(-5).map(s=>s.car.n+" "+s.fit+"%").join(", "));
+  const stp=stepping(scored,P);
+  if(stp){L.push("");L.push("TOP STEPPING-STONE JOBS:");stp.slice(0,6).forEach((x,i)=>L.push((i+1)+". "+x.st.n+" — "+pct(x.ready)+"% ready → leads to "+x.tg.slice(0,3).map(t=>t.n+" ("+t.fit+"%)").join(", ")+(x.need.length?" | gaps: "+x.need.join(", "):"")))}
+  L.push("");
+  const notes=[];let qn=0;
+  PAGES.forEach(pg=>pg.items.forEach(it=>{qn++;const nt=A[it.id+"_note"];if(it.t!=="open"&&nt&&nt.trim())notes.push("Q"+qn+" ["+pg.short+"] "+(it.text?T(itemText(it)):T(it.a)+" vs "+it.b)+"\n   Answer: "+ansText(it)+"\n   Note: "+nt.trim())}));
+  L.push("NOTES ON ANSWERS:");
+  L.push(notes.length?notes.join("\n"):"(none)");
+  L.push("");
+  const fd=fieldDirs();
+  if(fieldItems().length){L.push("MY FIELD ("+FIELDS[curField()].label+"):");fieldItems().forEach(q=>L.push("- "+q.text+" → "+(A[q.id]!=null?q.opts[A[q.id]][0]:"(skipped)")));
+    if(fd)L.push("Best-fit directions within my field: "+fd.slice(0,3).map(x=>x.name+" ("+pct(x.score)+")").join(", "));L.push("")}
+  L.push("MY CAREER PATH:");
+  PATHQ.forEach(q=>L.push("- "+q.text+" → "+(A[q.id]!=null?q.opts[A[q.id]][0]:"(skipped)")));
+  L.push("");
+  L.push("IN MY OWN WORDS:");
+  OPEN.forEach(o=>L.push("Q: "+o.text+"\nA: "+(A[o.id]?String(A[o.id]).trim():"(skipped)")));
+  L.push("");
+  L.push("KEY ANSWERS:");
+  SLIDERS.forEach(s=>L.push("- "+s.text+": "+(A[s.id]!=null?s.fmt(Number(A[s.id])):"(skipped)")));
+  TF.forEach(t=>L.push("- "+t.text+" "+(A[t.id]==="t"?"TRUE":A[t.id]==="f"?"FALSE":"(skipped)")));
+  AB.forEach(b=>L.push("- "+T(b.a)+" vs "+b.b+": "+(A[b.id]==="a"?T(b.a):A[b.id]==="b"?b.b:"(skipped)")));
+  SJT.forEach(s=>L.push("- "+T(s.text)+" → "+(A[s.id]!=null?T(s.opts[A[s.id]][0]):"(skipped)")));
+  L.push("");
+  L.push("RAW INTERESTS enjoy/skill (1-5): "+RI.map(x=>x[0]+"="+(A[x[0]]??"-")+"/"+(A[x[0]+"_ab"]??"-")).join(" "));
+  L.push("RAW BIG FIVE (1-5): "+B5.map(x=>x[0]+"="+(A[x[0]]??"-")).join(" "));
+  if(pr.resume){L.push("");L.push("MY RÉSUMÉ:");L.push(pr.resume.slice(0,8000))}
+  return L.join("\n");
+}
+
+function copyText(text,okMsg){
+  const done=()=>toast(okMsg);
+  try{navigator.clipboard.writeText(text).then(done,()=>fallback())}catch(e){fallback()}
+  function fallback(){const ta=document.createElement("textarea");ta.value=text;document.body.appendChild(ta);ta.select();let ok=false;try{ok=document.execCommand("copy")}catch(e){}ta.remove();
+    if(ok)done();else{const pre=document.getElementById("sumtext");if(pre){const r=document.createRange();r.selectNodeContents(pre);const s=getSelection();s.removeAllRanges();s.addRange(r)}toast("Copy blocked — text is selected, press Ctrl+C")}}
+}
+
+/* ============================================================
+   EVENTS
+   ============================================================ */
+function rerenderItem(it){const card=document.getElementById("q-"+it.id),num=card.querySelector(".qn").textContent;card.outerHTML=renderItem(it,num)}
+app.addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b)return;
+  if(b.dataset.go!==undefined){go(Number(b.dataset.go));return}
+  if(b.dataset.skill){const pr=state.profile,id=b.dataset.skill;pr.off=pr.off.includes(id)?pr.off.filter(x=>x!==id):[...pr.off,id];save();renderSkillChips();return}
+  if(b.dataset.id){
+    const it=allItems().find(x=>x.id===b.dataset.id);
+    let v=b.dataset.v; if(it.t==="lik"||it.t==="sjt"||it.t==="mc")v=Number(v);
+    const key=b.dataset.key||it.id;
+    state.answers[key]=state.answers[key]===v?null:v; save(); rerenderItem(it); return;
+  }
+  if(b.dataset.mv!==undefined){
+    const it=allItems().find(x=>x.t==="rank");
+    const order=(Array.isArray(state.answers[it.id])?state.answers[it.id]:(state.rankDraft||it.items.map(x=>x[0]))).slice();
+    const i=Number(b.dataset.mv),j=i+Number(b.dataset.dir); if(j<0||j>=order.length)return;
+    [order[i],order[j]]=[order[j],order[i]];
+    state.answers[it.id]=order;
+    save(); rerenderItem(it);
+    const nb=document.querySelector('#q-'+it.id+' [data-mv="'+j+'"][data-dir="'+b.dataset.dir+'"]'); if(nb)nb.focus(); return;
+  }
+  if(b.dataset.rankok){const it=allItems().find(x=>x.t==="rank");state.answers[it.id]=(state.answers[it.id]||state.rankDraft||it.items.map(x=>x[0])).slice();save();rerenderItem(it);return}
+  if(b.dataset.clear){state.answers[b.dataset.clear]=null;save();rerenderItem(allItems().find(x=>x.id===b.dataset.clear));return}
+  const act=b.dataset.act;
+  if(act==="copysum"){copyText(document.getElementById("sumtext").textContent,"Copied — paste it into Claude, ChatGPT, or any AI assistant");return}
+  if(act==="print"){window.print();return}
+  if(act==="copybackup"){copyText(JSON.stringify({v:2,answers:state.answers,profile:state.profile}),"Backup copied");return}
+  if(act==="restore"){try{const o=JSON.parse(document.getElementById("in-backup").value);if(!o||!o.answers)throw 0;state.answers=o.answers;state.profile=Object.assign(blankProfile(),o.profile||{});save();toast("Answers restored");render()}catch(err){toast("That doesn't look like a backup. Paste the full text you copied.")}return}
+  if(act==="reset"){document.getElementById("resetconfirm").hidden=false;return}
+  if(act==="resetyes"){state={answers:{},page:-1,profile:blankProfile()};save();render();toast("Everything erased");return}
+});
+app.addEventListener("click",e=>{const a=e.target.closest("[data-gofield]");if(a){e.preventDefault();go(0);setTimeout(()=>{const f=document.getElementById("p-field");if(f){f.scrollIntoView({block:"center"});f.focus()}},50)}});
+document.getElementById("chips").addEventListener("click",e=>{const b=e.target.closest("button[data-go]");if(b)go(Number(b.dataset.go))});
+function go(p){state.page=Math.max(-1,p);save();render();window.scrollTo({top:0})}
+app.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.dataset.sl){const it=allItems().find(x=>x.id===t.dataset.sl);state.answers[it.id]=Number(t.value);
+    const v=document.getElementById("val-"+it.id);v.textContent=it.fmt(Number(t.value));v.classList.remove("unset");
+    document.getElementById("q-"+it.id).classList.add("ans");const c=document.getElementById("clr-"+it.id);if(c)c.hidden=false;save()}
+  if(t.dataset.note){state.answers[t.dataset.note+"_note"]=t.value;clearTimeout(t._s);t._s=setTimeout(save,300)}
+  if(t.dataset.open){state.answers[t.dataset.open]=t.value;clearTimeout(t._s);t._s=setTimeout(save,300)}
+  if(t.dataset.pf&&t.tagName!=="SELECT"){state.profile[t.dataset.pf]=t.value.trim();clearTimeout(t._s);t._s=setTimeout(save,250)}
+});
+app.addEventListener("change",e=>{const t=e.target;if(!t.dataset.pf)return;const pr=state.profile;pr[t.dataset.pf]=t.value.trim();
+  save()});
+
+/* Theme toggle */
+document.getElementById("themeBtn").addEventListener("click",()=>{
+  const r=document.documentElement, dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;
+  r.dataset.theme=dark?"light":"dark"; try{localStorage.setItem("careerCombine.theme",r.dataset.theme)}catch(e){}
+});
+try{const t=localStorage.getItem("careerCombine.theme");if(t)document.documentElement.dataset.theme=t}catch(e){}
+
+render();
+window.__combine={get state(){return state},set state(v){state=v},analyze,detectSkills,go,render};
+</script>
+</body>
+</html>
