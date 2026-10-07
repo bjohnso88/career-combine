@@ -9,6 +9,7 @@ on:
     branches: [bls-top-100-careers]
     paths:
       - "tools/**"
+      - "source-data/**"
       - ".github/workflows/build-careers.yml"
 
 permissions:
@@ -38,24 +39,26 @@ jobs:
           keep="Occupation Data|Interests|Work Context|Work Activities|Skills|Knowledge|Job Zones|Sample of Reported Titles|Technology Skills|VERSION"
           mkdir -p /tmp/snap/onet /tmp/snap/oews
           for f in data/onet/*; do b=$(basename "$f"); if echo "${b%.*}" | grep -qxE "$keep"; then cp "$f" /tmp/snap/onet/; fi; done
-          cp data/oews/* /tmp/snap/oews/
+          cp data/oews/* /tmp/snap/oews/ 2>/dev/null || true
           [ -f data/ep-occupation.xlsx ] && cp data/ep-occupation.xlsx /tmp/snap/ || true
           cd /tmp/snap
           git init -q -b career-data
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -q -m "Source data snapshot $(cat onet/VERSION.txt) / OEWS $(cat oews/VERSION.txt)"
+          git commit -q -m "Source data snapshot $(cat onet/VERSION.txt) / OEWS $(cat oews/VERSION.txt 2>/dev/null || echo none)"
           git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" career-data
 
       - name: Build careers-bls.js
-        if: hashFiles('tools/build-careers.mjs') != ''
+        id: build
         run: |
-          cd tools && npm install --no-audit --no-fund && cd ..
+          if [ ! -f data/oews/VERSION.txt ]; then echo "::warning::Skipping build: no BLS wage file"; echo "built=no" >> "$GITHUB_OUTPUT"; exit 0; fi
+          cd tools && npm ci --no-audit --no-fund && cd ..
           node tools/build-careers.mjs
+          echo "built=yes" >> "$GITHUB_OUTPUT"
 
       - name: Commit the rebuilt file
-        if: hashFiles('tools/build-careers.mjs') != ''
+        if: steps.build.outputs.built == 'yes'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

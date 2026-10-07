@@ -42,20 +42,30 @@ unzip -q -j onet.zip -d onet
 echo "$onet_file" > onet/VERSION.txt
 rm onet.zip
 
-# --- BLS OEWS national file: newest year that exists (May data, released the next spring)
-year=$(date +%y)
-got=""
-for y in $((10#$year)) $((10#$year - 1)) $((10#$year - 2)); do
-  if get "https://www.bls.gov/oes/special-requests/oesm${y}nat.zip" oews.zip; then got=$y; break; fi
-done
-[ -n "$got" ] || fail "Could not download BLS OEWS national data"
-note "OEWS: May 20$got"
+# --- BLS files. bls.gov blocks downloads from cloud servers (including GitHub's), so these
+# usually come from source-data/bls/ in the repo, where they're added by hand once a year:
+#   - OEWS national zip (e.g. oesm24nat.zip): https://www.bls.gov/oes/tables.htm → "National" → XLS
+#   - Employment Projections: https://www.bls.gov/emp/ind-occ-matrix/occupation.xlsx
+# A direct download is still tried first, in case it works from where this runs.
+BLS_IN="../source-data/bls"
 rm -rf oews && mkdir oews
-unzip -q -j oews.zip -d oews
-echo "May 20${got}" > oews/VERSION.txt
-rm oews.zip
+oews_zip=$(ls "$BLS_IN"/oesm*nat.zip 2>/dev/null | sort -V | tail -1 || true)
+oews_xlsx=$(ls "$BLS_IN"/national_M*_dl.xlsx 2>/dev/null | sort -V | tail -1 || true)
+year=$(date +%y); got=""
+for y in $((10#$year)) $((10#$year - 1)); do
+  if get "https://www.bls.gov/oes/special-requests/oesm${y}nat.zip" oews.zip; then got="20$y"; unzip -q -j oews.zip -d oews; rm oews.zip; break; fi
+done
+if [ -z "$got" ] && [ -n "$oews_zip" ]; then
+  unzip -q -j "$oews_zip" -d oews; got="20$(basename "$oews_zip" | grep -oE '[0-9]{2}' | head -1)"
+elif [ -z "$got" ] && [ -n "$oews_xlsx" ]; then
+  cp "$oews_xlsx" oews/; got=$(basename "$oews_xlsx" | grep -oE '20[0-9]{2}' | head -1)
+fi
+if [ -n "$got" ]; then echo "May $got" > oews/VERSION.txt; note "OEWS: May $got"
+else note "No BLS OEWS wage file. Add one to source-data/bls/ (see README) to build careers."; fi
 
 # --- BLS Employment Projections (optional: growth, openings, education)
-get "https://www.bls.gov/emp/ind-occ-matrix/occupation.xlsx" ep-occupation.xlsx || echo "Employment Projections skipped"
+get "https://www.bls.gov/emp/ind-occ-matrix/occupation.xlsx" ep-occupation.xlsx \
+  || { [ -f "$BLS_IN/occupation.xlsx" ] && cp "$BLS_IN/occupation.xlsx" ep-occupation.xlsx && note "Employment Projections: from source-data/bls"; } \
+  || { rm -f ep-occupation.xlsx; note "No Employment Projections file; growth will be left out"; }
 
 ls -la . onet oews | head -80

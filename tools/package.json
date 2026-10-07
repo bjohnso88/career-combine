@@ -1,0 +1,9 @@
+{
+  "name": "career-combine-tools",
+  "private": true,
+  "type": "module",
+  "description": "Builds careers-bls.js from BLS and O*NET data. Not part of the published app.",
+  "dependencies": {
+    "xlsx": "0.18.5"
+  }
+}
