@@ -35,9 +35,9 @@ jobs:
         # Keeps the exact files each build used, so results can be checked or rebuilt later.
         run: |
           set -e
-          keep="Occupation Data.txt|Interests.txt|Work Context.txt|Work Activities.txt|Skills.txt|Knowledge.txt|Job Zones.txt|Sample of Reported Titles.txt|Technology Skills.txt|VERSION.txt"
+          keep="Occupation Data|Interests|Work Context|Work Activities|Skills|Knowledge|Job Zones|Sample of Reported Titles|Technology Skills|VERSION"
           mkdir -p /tmp/snap/onet /tmp/snap/oews
-          for f in data/onet/*; do b=$(basename "$f"); if echo "$b" | grep -qxE "$keep"; then cp "$f" /tmp/snap/onet/; fi; done
+          for f in data/onet/*; do b=$(basename "$f"); if echo "${b%.*}" | grep -qxE "$keep"; then cp "$f" /tmp/snap/onet/; fi; done
           cp data/oews/* /tmp/snap/oews/
           [ -f data/ep-occupation.xlsx ] && cp data/ep-occupation.xlsx /tmp/snap/ || true
           cd /tmp/snap

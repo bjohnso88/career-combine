@@ -29,15 +29,17 @@ get() { # get URL OUTFILE — tries a contact user agent, then a browser one (bl
   return 1
 }
 
-# --- O*NET: find the newest text-format database on the download page
+# --- O*NET: find the newest database on the download page. Text (tab-delimited)
+# files are preferred; recent releases may only offer Excel, which the build script also reads.
 onet_page=$(curl -fsSL -A "$UA_CONTACT" https://www.onetcenter.org/database.html) || fail "Could not open the O*NET download page"
-onet_path=$(printf '%s' "$onet_page" | grep -oE '/dl_files/database/db_[0-9]+_[0-9]+_text\.zip' | sort -V | tail -1)
-[ -n "$onet_path" ] || fail "Could not find the O*NET text zip link"
-get "https://www.onetcenter.org${onet_path}" onet.zip || fail "O*NET download failed"
-note "O*NET: $onet_path"
+pick() { printf '%s' "$onet_page" | grep -oE "db_[0-9]+_[0-9]+_$1\.zip" | sort -uV | tail -1 || true; }
+onet_file=$(pick text); [ -n "$onet_file" ] || onet_file=$(pick excel)
+[ -n "$onet_file" ] || fail "Could not find an O*NET text or Excel zip link"
+get "https://www.onetcenter.org/dl_files/database/${onet_file}" onet.zip || fail "O*NET download failed"
+note "O*NET: $onet_file"
 rm -rf onet && mkdir onet
 unzip -q -j onet.zip -d onet
-echo "$onet_path" > onet/VERSION.txt
+echo "$onet_file" > onet/VERSION.txt
 rm onet.zip
 
 # --- BLS OEWS national file: newest year that exists (May data, released the next spring)
