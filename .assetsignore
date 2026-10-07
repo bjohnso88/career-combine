@@ -1,0 +1,8 @@
+# Files in this repo that should not be published as part of the app.
+# Uses .gitignore syntax. The assets directory is the repo root, so without
+# this the git history and tooling files would be served as site content.
+.git
+.wrangler
+.assetsignore
+wrangler.jsonc
+README.md

@@ -1,0 +1,14 @@
+{
+  // Cloudflare Workers config for careercombine.bixjohnson.com.
+  // The app is plain static files, so there is no Worker script. Cloudflare
+  // serves everything in this folder as static assets.
+  "name": "career-combine",
+  // Set this to today's date when you need newer Workers runtime behavior.
+  "compatibility_date": "2026-10-07",
+  "assets": {
+    "directory": "./"
+  },
+  // Required by `wrangler preview`, which Workers Builds runs for branch and
+  // pull request builds. An empty block is all it needs.
+  "previews": {}
+}

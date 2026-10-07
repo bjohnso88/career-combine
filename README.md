@@ -1,5 +1,8 @@
 # Career Combine
 
+**Live at [careercombine.bixjohnson.com](https://careercombine.bixjohnson.com)** ·
+write-up at [bixjohnson.com/projects/career-combine](https://bixjohnson.com/projects/career-combine)
+
 A free, private career assessment that runs entirely in the browser. You drop in
 your résumé and answer a few rounds of questions about what you enjoy and how you
 like to work. You get back a scouting report: 46 careers ranked by fit, the reasons
@@ -53,14 +56,33 @@ loaded from jsDelivr when someone uploads a file:
 [pdf.js](https://github.com/mozilla/pdf.js) for PDFs and
 [mammoth](https://github.com/mwilliamson/mammoth.js) for Word files.
 
-## Running it
+## Files
 
-It's one self-contained file, `index.html`, with no build step and no dependencies
-to install.
+| File | What it is |
+| --- | --- |
+| `index.html` | The whole app: page, styles, questions, scoring, and results, all in one file |
+| `wrangler.jsonc` | Tells Cloudflare the app's name and to serve this folder as static files (no server code) |
+| `.assetsignore` | Keeps `.git`, this README, and the config files from being published with the app |
+| `README.md` | This file |
 
-- **Try it locally:** open `index.html` in a browser.
-- **Host it:** put `index.html` on any static host. To embed it in another site,
-  copy the file in and rename it (for example `career-combine.html`).
+## Making changes
+
+There's no build step and nothing to install.
+
+1. **Edit `index.html`.** See [Editing it](#editing-it) for where each question
+   set and the career list live.
+2. **Check it locally:** open `index.html` in a browser and click through. Try a
+   phone-sized window too.
+3. **Push to `main`.** Cloudflare rebuilds automatically, and
+   careercombine.bixjohnson.com updates in a minute or two. Branches and pull
+   requests get their own preview link instead of changing the live app.
+
+To check that Cloudflare will accept the files before pushing, run
+`npx wrangler deploy --dry-run` in this folder.
+
+The app is fully separate from the main website. It has its own styles, and it
+links to bixjohnson.com only in its header and footer, so changes to the website
+never break it.
 
 ## How scoring works
 
