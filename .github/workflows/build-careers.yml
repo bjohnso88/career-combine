@@ -1,0 +1,65 @@
+# Rebuilds careers-bls.js from the latest BLS and O*NET data.
+# Runs on GitHub's servers (free for public repos). It never touches main:
+# it commits the rebuilt file to the branch it ran on, for review in a pull request.
+name: Build career data
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [bls-top-100-careers]
+    paths:
+      - "tools/**"
+      - ".github/workflows/build-careers.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-careers-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Download BLS and O*NET data
+        run: bash tools/fetch-data.sh
+
+      - name: Save a snapshot of the source data (career-data branch)
+        # Keeps the exact files each build used, so results can be checked or rebuilt later.
+        run: |
+          set -e
+          keep="Occupation Data.txt|Interests.txt|Work Context.txt|Work Activities.txt|Skills.txt|Knowledge.txt|Job Zones.txt|Sample of Reported Titles.txt|Technology Skills.txt|VERSION.txt"
+          mkdir -p /tmp/snap/onet /tmp/snap/oews
+          for f in data/onet/*; do b=$(basename "$f"); if echo "$b" | grep -qxE "$keep"; then cp "$f" /tmp/snap/onet/; fi; done
+          cp data/oews/* /tmp/snap/oews/
+          [ -f data/ep-occupation.xlsx ] && cp data/ep-occupation.xlsx /tmp/snap/ || true
+          cd /tmp/snap
+          git init -q -b career-data
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -q -m "Source data snapshot $(cat onet/VERSION.txt) / OEWS $(cat oews/VERSION.txt)"
+          git push -q -f "https://x-access-token:${{ github.token }}@github.com/${{ github.repository }}.git" career-data
+
+      - name: Build careers-bls.js
+        if: hashFiles('tools/build-careers.mjs') != ''
+        run: |
+          cd tools && npm install --no-audit --no-fund && cd ..
+          node tools/build-careers.mjs
+
+      - name: Commit the rebuilt file
+        if: hashFiles('tools/build-careers.mjs') != ''
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add careers-bls.js tools/build-report.md
+          if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          git commit -m "Rebuild careers-bls.js from latest BLS and O*NET data"
+          git push
