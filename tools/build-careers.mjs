@@ -87,7 +87,7 @@ for (const row of readSheetFile(path.join(oewsDir, oewsFile), [/^OCC_CODE$/i, /^
   const w = k => wage(col(row, new RegExp("^" + k + "$", "i")));
   const p = { p10: w("A_PCT10"), p25: w("A_PCT25"), med: w("A_MEDIAN"), p75: w("A_PCT75"), p90: w("A_PCT90") };
   if (p.med.k == null && !p.med.top) continue; // no annual wage published (some hourly-only jobs)
-  oews[code] = { title: String(col(row, /^OCC_TITLE$/i)).trim(), emp: num(col(row, /^TOT_EMP$/i)), p };
+  oews[code] = { title: String(col(row, /^OCC_TITLE$/i)).trim().replace(/\s*--\s*/g, " – "), emp: num(col(row, /^TOT_EMP$/i)), p };
 }
 log(`OEWS (${OEWS_YEAR || oewsFile}): ${Object.keys(oews).length} detailed occupations with annual wages`);
 
