@@ -159,6 +159,7 @@ body.has-live.live-open{padding-bottom:240px}
 .bls{border-top:1px dashed var(--line);padding-top:8px;font-size:.85rem}
 .bls .src{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .bls a{color:inherit}
+.linkbtn{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}
 .desc{color:var(--muted);font-size:.9rem;margin:0}
 input[type=search]{width:100%;font:inherit;color:var(--ink);background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:10px}
 .facts div span{display:block;font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
@@ -1002,6 +1003,12 @@ function scoreCareer(car,P){
   if(P.minSet&&car.pay[0]<P.minPay-10){total-=.04;flags.push("Typical starting pay ($"+car.pay[0]+"k) is under your minimum ($"+P.minPay+"k)")}
   if(car.ease==="Hard"&&U.pat<.35){total-=.03;flags.push("Hard to break into; expect a multi-year path")}
   if(P.allowEdu!=null&&car.edu>P.allowEdu){total-=.05*(car.edu-P.allowEdu);flags.push("Usually needs "+EDU_NEED[car.edu]+", more school than you said you'd take on")}
+  // BLS says some jobs (most managers, for example) are usually reached after years in a related job.
+  const yrs=parseFloat(state.profile.years), exp=car.bls&&car.bls.exp;
+  if(exp&&!isNaN(yrs)){
+    if(/5 years or more/i.test(exp)&&yrs<5){total-=.07;flags.push("Usually needs 5+ years in a related job first, so it's a later step rather than a starting point")}
+    else if(/less than 5/i.test(exp)&&yrs<1){total-=.03;flags.push("Usually needs some experience in a related job first")}
+  }
   const ind=industryMatch(car); if(ind)total+=.02;
   // Field answers are things you told us directly, so they move the ranking more than general traits.
   const fb=clamp(1.6*(P.boost[car.id]||0),-.2,.15); total+=fb;
@@ -1252,8 +1259,9 @@ let lastScored=[];
 function searchCareers(q){
   const words=q.toLowerCase().split(/[^a-z0-9]+/).filter(w=>w.length>=2);
   if(!words.length)return [];
+  const exact=x=>x.s.car.n.toLowerCase()===q.trim().toLowerCase()?1:0;
   return lastScored.map((s,i)=>({s,i,t:(s.car.n+' '+(s.car.titles||'')).toLowerCase()})).filter(x=>words.every(w=>x.t.includes(w)))
-    .sort((a,b)=>(b.s.car.n.toLowerCase().includes(words[0])-a.s.car.n.toLowerCase().includes(words[0]))||a.i-b.i).slice(0,8);
+    .sort((a,b)=>(exact(b)-exact(a))||(b.s.car.n.toLowerCase().includes(words[0])-a.s.car.n.toLowerCase().includes(words[0]))||a.i-b.i).slice(0,8);
 }
 function renderResults(){
   const {P,scored,code,mbti,ready}=analyze();
@@ -1271,8 +1279,8 @@ function renderResults(){
   if(low)h+='<div class="warnbox"><strong>Early read.</strong> You\'ve answered '+P.answered+' of '+P.total+' scored questions, and these are based only on those. The ranking firms up as you answer more. <button class="btn sm" data-go="'+firstUnansweredPage()+'">Keep going</button></div>';
   h+='<div class="top3">'+top.slice(0,3).map((s,i)=>'<div class="card"><div class="rk">#'+(i+1)+(s.ind?' · '+esc(pr.industry.trim()):'')+'</div><div class="nm">'+esc(s.car.n)+'</div><div class="pc">'+s.fit+'%</div><div class="small">'+esc(subline(s.car))+'</div></div>').join("")+'</div>';
   h+='<p class="small">Fit blends your interests (about a third), work-style match (about half), pay fit (weighted by how much you ranked pay), and smaller boosts for abilities you rated high and skills on your resume. Only parts you\'ve answered count. Dealbreakers subtract points.</p>';
-  h+=top.map((s,i)=>resultCard(s,i+1,i<3)).join("");
   lastScored=scored;
+  h+=top.map((s,i)=>resultCard(s,i+1,i<3)).join("");
   h+='<h2 class="sec">Look up any career</h2><p class="lede">All '+scored.length.toLocaleString("en-US")+' careers are scored for you. Search to see where any job lands.</p>'+
     '<input type="search" id="careerSearch" placeholder="Try nurse, electrician, pilot, accountant…" aria-label="Search careers" autocomplete="off"><div id="searchOut"></div>';
   h+=dirsPanel();
@@ -1366,11 +1374,18 @@ function blsBlock(c){
   const parts=['<strong>Median pay '+esc(b.pay.med)+'</strong> (middle half earn '+esc(b.pay.p25)+'–'+esc(b.pay.p75)+'; top 10% earn '+esc(b.pay.p90)+'+)'];
   if(b.emp)parts.push(n(b.emp)+' people do this job in the U.S.');
   if(b.growth!=null)parts.push('Projected growth '+(b.growth>0?'+':'')+b.growth+'% over 10 years'+(b.openings?', about '+n(b.openings)+' openings a year':''));
-  if(b.edu)parts.push('Typical entry: '+esc(b.edu.toLowerCase())+(b.exp&&!/^none$/i.test(b.exp)?', plus '+esc(b.exp.toLowerCase())+' of related experience':''));
+  if(b.edu&&!c.gen)parts.push('Typical entry: '+esc(b.edu.toLowerCase())+(b.exp&&!/^none$/i.test(b.exp)?', plus '+esc(b.exp.toLowerCase())+' of related experience':''));
   const others=(c.blsAll||[]).slice(1).map(x=>x.title);
   return '<div class="bls"><div class="src">Official numbers · BLS '+esc(b.year||'')+(others.length?' · '+esc(b.title):'')+'</div><p style="margin:4px 0">'+parts.join(' · ').replace(/([^.])$/,'$1.')+'</p>'+
     (others.length?'<div class="small">Also covers: '+esc(others.join(", "))+'</div>':'')+
     '<div class="small"><a href="'+esc(b.url)+'" target="_blank" rel="noopener noreferrer">BLS wage data</a>'+(b.onet?' · <a href="'+esc(b.onet)+'" target="_blank" rel="noopener noreferrer">What the job involves (O*NET)</a>':'')+'</div></div>';
+}
+function relBlock(c){
+  if(!c.rel||!lastScored.length)return '';
+  const rows=c.rel.map(code=>{const i=lastScored.findIndex(x=>(x.car.soc||[]).includes(code)||(x.car.bls&&x.car.bls.soc===code));return i<0?null:{s:lastScored[i],i}})
+    .filter((x,j,a)=>x&&a.findIndex(y=>y&&y.i===x.i)===j&&x.s.car!==c).sort((a,b)=>a.i-b.i);
+  if(!rows.length)return '';
+  return '<div class="small"><strong>Specific jobs in this group:</strong> '+rows.map(x=>'<button type="button" class="linkbtn" data-find="'+esc(x.s.car.n)+'">'+esc(x.s.car.n)+'</button> '+x.s.fit+'%').join(' · ')+'</div>';
 }
 function resultCard(s,rank,open){
   const c=s.car, pr=state.profile;
@@ -1383,7 +1398,7 @@ function resultCard(s,rank,open){
   '<div class="facts"><div><span>Pay (entry · yr 4 · senior)</span>$'+c.pay[0]+'k · $'+c.pay[1]+'k · $'+c.pay[2]+'k</div><div><span>Travel</span>'+esc(c.trv)+'</div><div><span>Work-life</span>'+esc(c.wlb)+'</div><div><span>Ease of entry</span>'+esc(c.ease)+'</div><div><span>Typical education</span>'+esc(cap(EDU_NEED[c.edu]))+'</div><div><span>AI exposure</span>'+esc(c.ai)+'</div><div><span>Interest code</span>'+c.r+'</div></div>'+
   (mySkillsCount()?'<div class="small"><strong>Skills to build:</strong> '+(s.gapsSk.length?esc(s.gapsSk.slice(0,3).map(k=>SK[k][0]).join(", ")):"none of the core ones — go deeper")+'</div>':'')+
   '<div class="small"><strong>Search for:</strong> '+esc(c.titles)+'</div>'+(c.step?'<div class="small"><strong>'+(c.gen?'Path in':'First move')+':</strong> '+esc(c.step)+'</div>':'')+
-  blsBlock(c)+
+  blsBlock(c)+relBlock(c)+
   (c.gen?'<div class="small">'+(c.est?'This job has little O*NET data, so much of its profile is estimated from similar jobs. ':'')+'Profile computed from O*NET job data; AI exposure not rated yet.</div>':'')+
   '<div class="small">'+[["Interest match",s.interest],["ability match",s.ability],["resume match",s.skillFit],["work-style match",s.dimSim],["pay match",s.payFit]].filter(x=>x[1]!=null).map(x=>x[0]+' '+pct(x[1])).join(' · ').replace(/^./,c=>c.toUpperCase())+'</div></div></details>';
 }
@@ -1502,6 +1517,9 @@ app.addEventListener("click",e=>{
   if(act==="reset"){document.getElementById("resetconfirm").hidden=false;return}
   if(act==="resetyes"){state={answers:{},page:-1,profile:blankProfile()};save();render();toast("Everything erased");return}
 });
+app.addEventListener("click",e=>{const f=e.target.closest("[data-find]");if(!f)return;
+  const box=document.getElementById("careerSearch");if(!box)return;
+  box.value=f.dataset.find;box.dispatchEvent(new Event("input",{bubbles:true}));box.scrollIntoView({behavior:"smooth",block:"start"})});
 app.addEventListener("click",e=>{const a=e.target.closest("[data-gofield]");if(a){e.preventDefault();go(0);setTimeout(()=>{const f=document.getElementById("p-field");if(f){f.scrollIntoView({block:"center"});f.focus()}},50)}});
 document.getElementById("chips").addEventListener("click",e=>{const b=e.target.closest("button[data-go]");if(b)go(Number(b.dataset.go))});
 function go(p){state.page=Math.max(-1,p);save();render();updateLive();window.scrollTo({top:0})}
@@ -1510,7 +1528,7 @@ app.addEventListener("input",e=>{
   if(t.id==="careerSearch"){const out=document.getElementById("searchOut"),q=t.value.trim();
     if(!q){out.innerHTML="";return}
     const hits=searchCareers(q);
-    out.innerHTML=hits.length?hits.map(x=>resultCard(x.s,"#"+(x.i+1),hits.length===1)).join(""):'<p class="small">No career matches “'+esc(q)+'”. Try a broader word.</p>';
+    out.innerHTML=hits.length?hits.map((x,j)=>resultCard(x.s,"#"+(x.i+1),hits.length===1||(j===0&&x.s.car.n.toLowerCase()===q.toLowerCase()))).join(""):'<p class="small">No career matches “'+esc(q)+'”. Try a broader word.</p>';
     return}
   if(t.dataset.sl){const it=allItems().find(x=>x.id===t.dataset.sl);state.answers[it.id]=Number(t.value);
     const v=document.getElementById("val-"+it.id);v.textContent=it.fmt(Number(t.value));v.classList.remove("unset");

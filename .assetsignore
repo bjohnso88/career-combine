@@ -6,7 +6,6 @@
 .assetsignore
 wrangler.jsonc
 README.md
-BLS-MERGE-PLAN.md
 .github
 tools
 data

@@ -401,8 +401,8 @@ const careers = [], skipped = [];
 for (const soc of Object.keys(oews).sort()) {
   const o = oews[soc];
   const { raw, ints, gaps } = filled(soc);
-  // "All Other" catch-alls without their own O*NET profile are too vague to fingerprint.
-  if (/all other/i.test(o.title) && (INT[soc].R == null || RAW[soc].v == null)) { skipped.push(`${soc} ${o.title}`); continue; }
+  // "All Other" catch-alls (e.g. "Managers, All Other") aren't a job anyone can search for or aim at.
+  if (/all other/i.test(o.title)) { skipped.push(`${soc} ${o.title}`); continue; }
   if (Object.values(ints).some(v => v == null)) { skipped.push(`${soc} ${o.title} (no interest data)`); continue; }
   const r = "RIASEC".split("").sort((a, b) => ints[b] - ints[a]).slice(0, 3).join("");
   const d = {};
@@ -449,7 +449,7 @@ fs.writeFileSync(path.join(ROOT, "careers-bls.js"), header + careers.map(c => " 
 log(`\n## Result\n- ${careers.length} careers written to careers-bls.js`);
 log(`- ${careers.filter(c => handSocs.has(c.bls.soc)).length} of them fold into hand-tuned careers (same SOC code)`);
 log(`- ${careers.filter(c => c.est).length} have thin O*NET data, so much of their fingerprint is estimated from similar jobs (marked est)`);
-log(`- ${skipped.length} occupations skipped (vague "All Other" groups without their own data, or incomplete wages)`);
+log(`- ${skipped.length} occupations skipped ("All Other" catch-all groups, or incomplete wages)`);
 if (skipped.length) log("\n<details><summary>Skipped occupations</summary>\n\n" + skipped.map(s => "- " + s).join("\n") + "\n</details>");
 const top = [...careers].sort((a, b) => b.pay[1] - a.pay[1]).slice(0, 15);
 log("\n## Highest median pay (spot check)\n" + top.map(c => `- ${c.n}: median ${c.bls.pay.med}, code ${c.r}, edu ${c.edu}`).join("\n"));

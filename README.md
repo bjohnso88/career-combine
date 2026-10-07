@@ -5,7 +5,7 @@ write-up at [bixjohnson.com/projects/career-combine](https://bixjohnson.com/proj
 
 A free, private career assessment that runs entirely in the browser. You drop in
 your resume and answer a few rounds of questions about what you enjoy and how you
-like to work. You get back a scouting report: every U.S. occupation (about 800) ranked by fit, the reasons
+like to work. You get back a scouting report: about 760 careers (every U.S. occupation with national wage data) ranked by fit, the reasons
 behind each one, red flags, and stepping-stone jobs you could land now.
 
 It's built like a sports combine. Instead of drafting on vibes, you run the
@@ -168,7 +168,7 @@ the card shows the official BLS numbers.
 ## Career data
 
 Besides the 46 hand-tuned careers, the app includes every occupation the Bureau
-of Labor Statistics publishes national wages for, about 800 in all. They live in
+of Labor Statistics publishes national wages for, about 710 more after overlaps (catch-all "All Other" groups are left out). They live in
 `careers-bls.js`, which `tools/build-careers.mjs` builds from three public sources:
 
 - **BLS Occupational Employment and Wage Statistics (OEWS):** pay percentiles and
