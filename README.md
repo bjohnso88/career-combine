@@ -187,10 +187,17 @@ of Labor Statistics publishes national wages for, about 710 more after overlaps 
 careers, which occupations were skipped and why, and a spot check of the results.
 
 **Rebuilding it.** The GitHub Action in `.github/workflows/build-careers.yml` does
-this on GitHub's servers whenever `tools/` or `source-data/` changes on the
-working branch, and can be run by hand from the repo's **Actions** tab. It
-downloads O\*NET, rebuilds `careers-bls.js`, commits it, and saves the exact
-source files it used to the `career-data` branch.
+this on GitHub's servers. It downloads the newest O\*NET release, rebuilds
+`careers-bls.js`, and saves the exact source files it used to the `career-data`
+branch. It runs:
+
+- **On the 1st of each month**, to pick up new O\*NET releases.
+- **When `tools/` or `source-data/` changes** on any branch.
+- **By hand**, from the repo's **Actions** tab → **Build career data** → **Run workflow**.
+
+It never changes `main` (the live app) directly. On `main`, a changed result goes
+to a new `data-refresh/<date>` branch with a pull request to review and merge. On
+any other branch, it commits the rebuilt file to that branch.
 
 bls.gov blocks downloads from cloud servers, so the two BLS files are added by
 hand to `source-data/bls/` once a year: the OEWS national zip (wages, released

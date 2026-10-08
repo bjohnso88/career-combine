@@ -1,6 +1,6 @@
 # Career data build report
 
-Built 2026-10-07 from OEWS May 2025 and O*NET db_31_0_excel.zip.
+Built from OEWS May 2025 and O*NET db_31_0_excel.zip.
 
 OEWS (May 2025): 825 detailed occupations with annual wages
 Employment Projections: 831 occupations
