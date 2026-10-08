@@ -454,4 +454,4 @@ if (skipped.length) log("\n<details><summary>Skipped occupations</summary>\n\n" 
 const top = [...careers].sort((a, b) => b.pay[1] - a.pay[1]).slice(0, 15);
 log("\n## Highest median pay (spot check)\n" + top.map(c => `- ${c.n}: median ${c.bls.pay.med}, code ${c.r}, edu ${c.edu}`).join("\n"));
 fs.writeFileSync(path.join(ROOT, "tools", "build-report.md"),
-  `# Career data build report\n\nBuilt ${new Date().toISOString().slice(0, 10)} from OEWS ${OEWS_YEAR} and O*NET ${ONET_VERSION}.\n\n` + report.join("\n") + "\n");
+  `# Career data build report\n\nBuilt from OEWS ${OEWS_YEAR} and O*NET ${ONET_VERSION}.\n\n` + report.join("\n") + "\n");

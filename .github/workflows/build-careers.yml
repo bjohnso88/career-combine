@@ -1,12 +1,17 @@
 # Rebuilds careers-bls.js from the latest BLS and O*NET data.
-# Runs on GitHub's servers (free for public repos). It never touches main:
-# it commits the rebuilt file to the branch it ran on, for review in a pull request.
+# Runs on GitHub's servers (free for public repos). It never changes main (the live app) directly:
+#  - On main (monthly check, a run by hand, or a merge that changes the data or tools), a changed
+#    result goes to a new data-refresh/<date> branch with a pull request to review and merge.
+#  - On any other branch, the rebuilt file is committed to that branch, for its own pull request.
 name: Build career data
 
 on:
   workflow_dispatch:
+  schedule:
+    # 1st of each month, 9:07 am Central (14:07 UTC). Picks up new O*NET releases.
+    - cron: "7 14 1 * *"
   push:
-    branches: [bls-top-100-careers]
+    branches: ["**"]
     paths:
       - "tools/**"
       - "source-data/**"
@@ -14,6 +19,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 concurrency:
   group: build-careers-${{ github.ref }}
@@ -61,10 +67,24 @@ jobs:
 
       - name: Commit the rebuilt file
         if: steps.build.outputs.built == 'yes'
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add careers-bls.js tools/build-report.md
           if git diff --cached --quiet; then echo "No changes"; exit 0; fi
+          if [ "$GITHUB_REF_NAME" != "main" ]; then
+            git commit -m "Rebuild careers-bls.js from latest BLS and O*NET data"
+            git push
+            exit 0
+          fi
+          # On main: never push to the live app. Put the change on its own branch for review.
+          branch="data-refresh/$(date +%Y-%m-%d)"
+          git checkout -b "$branch"
           git commit -m "Rebuild careers-bls.js from latest BLS and O*NET data"
-          git push
+          git push -f origin "$branch"
+          gh pr create --base main --head "$branch" \
+            --title "Career data refresh $(date +%Y-%m-%d)" \
+            --body "The monthly data check found new BLS or O*NET data and rebuilt careers-bls.js. See tools/build-report.md for what changed. Merging makes it live." \
+          || echo "::warning::Pushed $branch but couldn't open a pull request. Open one from that branch on GitHub, or allow it under Settings → Actions → General → 'Allow GitHub Actions to create and approve pull requests'."
