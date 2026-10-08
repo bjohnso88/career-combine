@@ -1,0 +1,50 @@
+total 54872
+drwxr-xr-x 2 runner runner     4096 Oct  8 01:33 .
+drwxr-xr-x 4 runner runner     4096 Oct  8 01:33 ..
+-rw-rw-r-- 1 runner runner    14026 Jul 29  2024 Abilities to Work Activities.xlsx
+-rw-rw-r-- 1 runner runner     9774 Feb 24  2025 Abilities to Work Context.xlsx
+-rw-rw-r-- 1 runner runner  5067562 Jul 30 16:44 Abilities.xlsx
+-rw-rw-r-- 1 runner runner     7748 May  1 21:00 Career Interest Type Keywords.xlsx
+-rw-rw-r-- 1 runner runner   302779 May  1 21:00 Career Interest Types.xlsx
+-rw-rw-r-- 1 runner runner   108255 May  1 21:00 Content Model Reference.xlsx
+-rw-rw-r-- 1 runner runner     7017 Jul 30 16:44 Education Categories.xlsx
+-rw-rw-r-- 1 runner runner   617996 Jul 30 16:44 Education.xlsx
+-rw-rw-r-- 1 runner runner    29731 Jul 30 16:44 Emerging Tasks.xlsx
+-rw-rw-r-- 1 runner runner     8859 May  1 21:00 Essential Skills to Work Activities.xlsx
+-rw-rw-r-- 1 runner runner     7282 May  1 21:00 Essential Skills to Work Context.xlsx
+-rw-rw-r-- 1 runner runner   984422 Jul 30 16:45 Essential Skills.xlsx
+-rw-rw-r-- 1 runner runner    92488 May  1 21:00 GWAs to IWAs to DWAs.xlsx
+-rw-rw-r-- 1 runner runner    18421 May  1 21:00 GWAs to IWAs.xlsx
+-rw-rw-r-- 1 runner runner    13329 May  1 21:00 Interests Illustrative Activities.xlsx
+-rw-rw-r-- 1 runner runner    13439 May  1 21:00 Interests Illustrative Occupations.xlsx
+-rw-rw-r-- 1 runner runner  1230048 Aug 16 17:43 Job Titles.xlsx
+-rw-rw-r-- 1 runner runner     7479 Feb  5  2026 Job Zone Reference.xlsx
+-rw-rw-r-- 1 runner runner    39540 Jul 30 16:45 Job Zones.xlsx
+-rw-rw-r-- 1 runner runner  3411578 Jul 30 16:45 Knowledge.xlsx
+-rw-rw-r-- 1 runner runner    30490 Feb  5  2026 Level Scale Anchors.xlsx
+-rw-rw-r-- 1 runner runner   102540 Jul 29  2024 Occupation Data.xlsx
+-rw-rw-r-- 1 runner runner   864719 Jul 30 16:45 Occupation Level Metadata.xlsx
+-rw-r--r-- 1 runner runner      513 Jul 30 16:39 Read Me.txt
+-rw-rw-r-- 1 runner runner   459744 Dec  2  2025 Related Occupations.xlsx
+-rw-rw-r-- 1 runner runner   208118 Aug 16 17:44 Sample of Reported Titles.xlsx
+-rw-rw-r-- 1 runner runner     7004 Jul 30 16:46 Scales Reference.xlsx
+-rw-rw-r-- 1 runner runner   987547 May  1 21:01 Software Skills.xlsx
+-rw-rw-r-- 1 runner runner     7496 May  1 21:01 Specific Interest Areas to Career Interest Types.xlsx
+-rw-rw-r-- 1 runner runner  2299805 May  1 21:01 Specific Interest Areas.xlsx
+-rw-rw-r-- 1 runner runner    14211 Dec  2  2025 Survey Booklet Locations.xlsx
+-rw-rw-r-- 1 runner runner     6136 Jul 29  2024 Task Categories.xlsx
+-rw-rw-r-- 1 runner runner 10237269 Jul 30 16:48 Task Ratings.xlsx
+-rw-rw-r-- 1 runner runner  1149461 Jul 30 16:48 Task Statements.xlsx
+-rw-rw-r-- 1 runner runner  1373306 Jul 30 16:48 Tasks to DWAs.xlsx
+-rw-rw-r-- 1 runner runner     6980 May  1 21:02 Training and Experience Categories.xlsx
+-rw-rw-r-- 1 runner runner  1485222 Jul 30 16:48 Training and Experience.xlsx
+-rw-rw-r-- 1 runner runner     9199 May  1 21:02 Transferable Skills to Work Activities.xlsx
+-rw-rw-r-- 1 runner runner     7669 May  1 21:02 Transferable Skills to Work Context.xlsx
+-rw-rw-r-- 1 runner runner  2442345 Jul 30 16:49 Transferable Skills.xlsx
+-rw-r--r-- 1 runner runner       18 Oct  8 01:33 VERSION.txt
+-rw-rw-r-- 1 runner runner  4294510 Jul 30 16:49 Work Activities.xlsx
+-rw-rw-r-- 1 runner runner    14531 Feb 24  2025 Work Context Categories.xlsx
+-rw-rw-r-- 1 runner runner 16835857 Jul 30 16:53 Work Context.xlsx
+-rw-rw-r-- 1 runner runner    12352 May  1 21:06 Work Styles to Work Activities.xlsx
+-rw-rw-r-- 1 runner runner    11818 May  1 21:06 Work Styles to Work Context.xlsx
+-rw-rw-r-- 1 runner runner  1217466 Dec  2  2025 Work Styles.xlsx
