@@ -988,7 +988,8 @@ function scoreCareer(car,P){
   const mid=car.pay[1];
   let ability=null; if(P.abN>=6){const vals=Object.values(P.AB).filter(v=>v!=null),avg=mean(vals),Af={};for(const k in P.AB)Af[k]=P.AB[k]??avg;ability=(cosineCentered(Af,riVec(car.r))+1)/2}
   const hit=car.sk.filter(s=>P.skills.has(s)), hasSk=P.skills.size>=3;
-  const skillFit=hasSk?clamp(hit.length/Math.min(3,car.sk.length)):null;
+  // Careers with no listed core skills (some generated ones) get no resume score rather than 0/0.
+  const skillFit=hasSk&&car.sk.length?clamp(hit.length/Math.min(3,car.sk.length)):null;
   // Blend only the parts we have evidence for. Work style counts more as more traits get answered.
   const comp=[[interest,.33],[ability,.12],[skillFit,.1],[dimSim,.55*Math.min(1,P.nDims/8)],[payFit,.1+.25*U.pay]].filter(([v,w])=>v!=null&&w>0);
   const cw=comp.reduce((a,[,w])=>a+w,0);
