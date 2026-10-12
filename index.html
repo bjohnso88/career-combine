@@ -77,7 +77,7 @@ details.note textarea{min-height:64px;margin-top:6px;font-size:.92rem}
 .vs .or{align-self:center;font-family:var(--f-display);font-weight:700;color:var(--muted)}
 .vs .opt{padding:14px 10px}
 .sl{display:flex;flex-direction:column;gap:6px}
-.sl input[type=range]{width:100%;accent-color:var(--accent)}
+.sl input[type=range]{width:100%;accent-color:var(--navy)}
 .sl .ends{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);gap:8px}
 .sl .val{font-family:var(--f-mono);font-size:1.1rem;color:var(--navy);font-variant-numeric:tabular-nums}
 .sl .val.unset{color:var(--muted)}
@@ -85,10 +85,8 @@ textarea,input[type=text],select{width:100%;font:inherit;color:var(--ink);backgr
 textarea{min-height:90px;resize:vertical}
 label.f{display:block;font-weight:600;margin:14px 0 6px}
 .rank{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none}
-.rank li{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
-.rank .pos{font-family:var(--f-mono);color:var(--accent);font-weight:500}
-.rank .mv{display:flex;gap:4px}
-.rank .mv button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;width:34px;height:30px;cursor:pointer}
+.rank li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:center;background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+.rank select.pos{width:auto;min-width:58px;padding:6px 8px;font:500 1rem var(--f-mono);color:var(--navy);background:var(--surface);cursor:pointer}
 .small{font-size:.82rem;color:var(--muted)}
 .nav{display:flex;justify-content:space-between;gap:10px;margin-top:20px;flex-wrap:wrap}
 .btn{font:600 .95rem var(--f-body);border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:11px 18px;cursor:pointer}
@@ -287,7 +285,7 @@ const SLIDERS=[
  {t:"sl",id:"s_travel",text:"Ideal share of your work week spent traveling",min:0,max:80,step:5,def:15,lo:"Never",hi:"80% — on the road most weeks",fmt:v=>v+"%",ev:(v,add)=>add("tr",Math.min(1,v/70),3)},
  {t:"sl",id:"s_coding",text:"How much coding or technical scripting you're OK doing long-term",min:0,max:100,step:5,def:20,lo:"None at all",hi:"Coding most days",fmt:v=>v+"%",ev:(v,add)=>add("c",v/100,3)},
  {t:"sl",id:"s_comm",text:"How you'd want to be paid",min:0,max:100,step:5,def:20,lo:"100% fixed salary",hi:"Mostly commission, uncapped",fmt:v=>v<10?"All salary":v<40?"Mostly salary":v<70?"Salary + big bonus":"Heavy commission",ev:(v,add)=>add("rp",v/100,3)},
- {t:"sl",id:"s_hours",text:"Most hours a week you'd regularly work for noticeably higher pay",min:30,max:65,step:1,def:45,lo:"30",hi:"65",fmt:v=>v+" hrs",ev:(v,add)=>add("h",Math.max(0,(v-38)/27),3)},
+ {t:"sl",id:"s_hours",text:"If it paid noticeably more, how many hours a week would you regularly work?",min:30,max:65,step:1,def:45,lo:"30",hi:"65",fmt:v=>v+" hrs",ev:(v,add)=>add("h",Math.max(0,(v-38)/27),3)},
  {t:"sl",id:"s_onsite",text:"Where you'd want to work",min:0,max:100,step:5,def:40,lo:"Fully remote",hi:"Out in the field / on-site",fmt:v=>v<20?"Remote":v<45?"Hybrid":v<75?"Mostly in person":"In the field",ev:(v,add)=>add("o",v/100,2.5)},
  {t:"sl",id:"s_people",text:"How much of your day you'd want spent with people",min:0,max:100,step:5,def:50,lo:"Heads-down alone",hi:"With people all day",fmt:v=>v+"%",ev:(v,add)=>{add("cu",v/100,2.5);add("pr",v/100,.6)}},
  {t:"sl",id:"s_school",text:"How much more school or training you'd take on for the right career",min:0,max:4,step:1,def:1,lo:"None",hi:"4-year degree or more",fmt:v=>SCHOOL[v],ev:(v,add)=>add("pat",v/4,2)}
@@ -332,10 +330,10 @@ const AB=[
 /* Scenarios use {tokens} that are filled in for the person's field (see FIELDS). Answer options keep the same scoring in every field. */
 const SJT=[
  {id:"sj1",text:"{brk}. What do you do?",opts:[
-  ["Jump in and fix it myself, fast",{th:.9,o:.8,p:.7}],
-  ["Walk a coworker through fixing it so they learn it",{cu:.8,pr:.6}],
-  ["Find a workaround now, dig into the root cause later",{da:.6,c:.4,p:.6}],
-  ["Fix it, then pitch my {boss} on a way to stop it happening again",{en:.6,s:.6,l:.6}]]},
+  ["Try to fix it myself right away",{th:.9,o:.8,p:.7}],
+  ["Keep everyone calm and updated while it gets fixed",{cu:.8,pr:.6}],
+  ["Find a workaround so things keep moving, and figure out the cause later",{da:.6,c:.4,p:.6}],
+  ["Get through it, then pitch my {boss} on a way to stop it happening again",{en:.6,s:.6,l:.6}]]},
  {id:"sj2",text:"Your {boss} asks for one volunteer. Which do you grab?",opts:[
   ["Lead the rollout of {init}",{l:1,pr:.6}],
   ["Build a report that shows leadership what's really going on",{da:1,c:.4}],
@@ -711,7 +709,7 @@ function fieldDirs(){
 /* Career-path questions: where you are and what's in the way */
 const PATHQ=[
  {id:"pa1",text:"How do you feel about your current (or most recent) job?",opts:[["Love it — I want to grow where I am",{pat:.6}],["It's fine, but I want more",{}],["Ready to leave",{pat:.35}],["Not working right now / still in school",{}]]},
- {id:"pa2",text:"What's the main reason you're looking?",opts:[["More money",{pay:1}],["Room to grow",{pat:.6}],["Burned out — I need something different",{}],["I honestly don't know what I want yet",{}],["Getting my first real job",{}]]},
+ {id:"pa2",text:"What's the main reason you'd look for something new?",opts:[["More money",{pay:1}],["Room to grow",{pat:.6}],["Burned out — I need something different",{}],["I honestly don't know what I want yet",{}],["Getting my first real job",{}]]},
  {id:"pa3",text:"What's holding you back the most?",opts:[["Not sure which direction to go",{}],["Missing skills, a degree, or a certification",{}],["No time to study or apply",{pat:.3}],["Afraid of taking a pay cut",{pay:.9}],["No network — no one to refer me",{}]]},
  {id:"pa4",text:"Would you take a lower-level \"stepping-stone\" job if it clearly led to a better career?",opts:[["Yes, if it pays about the same",{pat:.7}],["Yes, even with a small pay cut",{pat:1,pay:.4}],["Only if it pays more",{pat:.4,pay:.9}],["No",{pat:.1}]]},
  {id:"pa5",text:"How soon do you need a change?",opts:[["Within 3 months",{pat:.15}],["Within a year",{pat:.45}],["In 1–3 years",{pat:.8}],["No rush — just exploring",{pat:.9}]]},
@@ -720,9 +718,9 @@ const PATHQ=[
 
 const OPEN=[
  ["op1","Describe your best day at any job, class, or project you've had. What were you doing?","The day I…"],
- ["op2","What parts of work drain you the fastest?",""],
+ ["op2","What kinds of tasks or situations at work drain your energy the fastest?",""],
  ["op3","Think of a job, class, or role you expected to like but didn't. What specifically didn't you like?",""],
- ["op4","If every option paid the same, what would you do?",""],
+ ["op4","If every job paid exactly the same, what work would you choose?",""],
  ["op5","What does a great life look like five years from now? Job, money, where you live, schedule.",""],
  ["op6","Whose job have you been jealous of? What about it?",""],
  ["op7","Anything that's a hard no for you in a job?","e.g. no cold calling, no night shifts, no moving…"],
@@ -733,8 +731,8 @@ const PAGES=[
  {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your resume and a few basics. The resume is read inside your browser only. It's used to spot skills you already have, which powers the \"stepping-stone jobs\" in your results.",items:[],custom:"checkin"},
  {id:"int1",title:"Interests, part 1",short:"Interests 1",lede:"Rate each activity twice: how much you'd enjoy it as part of a job, and how good you are at it today. These cover every kind of work on purpose, not just your field. If something isn't your world, a quick \"Hate it\" is a useful answer: it's how the combine rules careers out.",items:lik(RI.slice(0,15),"enjoy")},
  {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. If you've never tried something, rate your ability as your best guess. Activities outside your field are there on purpose.",items:lik(RI.slice(15),"enjoy")},
- {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"How accurately does each statement describe you as you generally are now, not as you wish to be? Compare yourself to people your age.",items:lik(B5.slice(0,15),"agree")},
- {id:"per2",title:"Personality, part 2",short:"Personality 2",lede:"Same instructions. First instinct is usually the most accurate.",items:lik(B5.slice(15),"agree")},
+ {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"Read each one as starting with \"I\" (\"I am the life of the party\"). How well does it describe you as you usually are, not as you wish to be? A few are worded negatively on purpose, so read each one before answering.",items:lik(B5.slice(0,15),"agree")},
+ {id:"per2",title:"Personality, part 2",short:"Personality 2",lede:"Same as before: read each one as starting with \"I\", and watch for the negatively worded ones. First instinct is usually the most accurate.",items:lik(B5.slice(15),"agree")},
  {id:"val",title:"What matters most",short:"Values",lede:"Rank these and set your pay numbers. They feed straight into the pay side of the scoring.",items:[{t:"rank",id:"rank_values",text:"Put these in order, most important at the top",items:VALUES},SLIDERS[0],SLIDERS[1]]},
  {id:"sty",title:"How you want to work",short:"Work style",lede:"Drag each slider to where you honestly land. Leave one untouched if you're unsure, and it won't count.",items:SLIDERS.slice(2)},
  {id:"tf",title:"True or false",short:"True/false",lede:"Quick gut calls. If it's mostly true, pick True.",items:TF},
@@ -1077,7 +1075,7 @@ function renderItem(it,num){
   }else if(it.t==="rank"){
     const order=Array.isArray(a)?a:(state.rankDraft||it.items.map(x=>x[0]));
     const lbl=k=>it.items.find(x=>x[0]===k)[1];
-    h+='<p class="qt">'+esc(it.text)+'</p><ol class="rank">'+order.map((k,i)=>'<li><span class="pos">'+(i+1)+'</span><span>'+esc(lbl(k))+'</span><span class="mv"><button aria-label="Move up" data-mv="'+i+'" data-dir="-1">↑</button><button aria-label="Move down" data-mv="'+i+'" data-dir="1">↓</button></span></li>').join("")+'</ol>'+
+    h+='<p class="qt">'+esc(it.text)+'</p><p class="small" style="margin:-4px 0 10px">Pick a number next to any item to move it to that spot. 1 matters most.</p><ol class="rank">'+order.map((k,i)=>'<li><select class="pos" data-rk="'+i+'" aria-label="Rank for '+esc(lbl(k))+'">'+order.map((_,n)=>'<option value="'+n+'"'+(n===i?' selected':'')+'>'+(n+1)+'</option>').join("")+'</select><span>'+esc(lbl(k))+'</span></li>').join("")+'</ol>'+
       (isAns(it)?'<p class="small" style="margin:10px 0 0">Order saved ✓</p>':'<div class="nav" style="margin-top:10px"><button class="btn pri" data-rankok="1">This order is right</button></div>');
   }else if(it.t==="open"){
     h+='<p class="qt"><label for="in-'+it.id+'">'+esc(it.text)+'</label></p><textarea id="in-'+it.id+'" data-open="'+it.id+'" placeholder="'+esc(it.ph||"")+'">'+esc(a||"")+'</textarea>';
@@ -1105,7 +1103,7 @@ function render(){
       ?'Worded for work in general. <a href="#" data-gofield="1">Pick your field</a> to tailor these.'
       :(pg.custom==="field"?"For":"Worded for")+' <b>'+esc(FIELDS[curField()].label)+'</b>. <a href="#" data-gofield="1">Change field</a>')+'</p>';
   app.innerHTML='<div class="kicker">Section '+(p+1)+' of '+PAGES.length+'</div><h2 class="sec">'+esc(pg.title)+'</h2><p class="lede">'+esc(pg.lede)+'</p>'+fieldNote+
-    pg.items.map((it,i)=>renderItem(it,"Q"+(start+i+1))).join("")+
+    pg.items.map((it,i)=>renderItem(it,"Question "+(start+i+1))).join("")+
     '<div class="nav"><button class="btn ghost" data-go="'+(p-1)+'">← Back</button><button class="btn pri" data-go="'+(p===PAGES.length-1?99:p+1)+'">'+(p===PAGES.length-1?"See my results →":"Next section →")+'</button></div>'+
     '<p class="skipline" id="skipline"></p>';
   updateSkip(); updateHeader();
@@ -1499,15 +1497,6 @@ app.addEventListener("click",e=>{
     const key=b.dataset.key||it.id;
     state.answers[key]=state.answers[key]===v?null:v; save(); rerenderItem(it); return;
   }
-  if(b.dataset.mv!==undefined){
-    const it=allItems().find(x=>x.t==="rank");
-    const order=(Array.isArray(state.answers[it.id])?state.answers[it.id]:(state.rankDraft||it.items.map(x=>x[0]))).slice();
-    const i=Number(b.dataset.mv),j=i+Number(b.dataset.dir); if(j<0||j>=order.length)return;
-    [order[i],order[j]]=[order[j],order[i]];
-    state.answers[it.id]=order;
-    save(); rerenderItem(it);
-    const nb=document.querySelector('#q-'+it.id+' [data-mv="'+j+'"][data-dir="'+b.dataset.dir+'"]'); if(nb)nb.focus(); return;
-  }
   if(b.dataset.rankok){const it=allItems().find(x=>x.t==="rank");state.answers[it.id]=(state.answers[it.id]||state.rankDraft||it.items.map(x=>x[0])).slice();save();rerenderItem(it);return}
   if(b.dataset.clear){state.answers[b.dataset.clear]=null;save();rerenderItem(allItems().find(x=>x.id===b.dataset.clear));return}
   const act=b.dataset.act;
@@ -1537,6 +1526,14 @@ app.addEventListener("input",e=>{
   if(t.dataset.note){state.answers[t.dataset.note+"_note"]=t.value;clearTimeout(t._s);t._s=setTimeout(save,300)}
   if(t.dataset.open){state.answers[t.dataset.open]=t.value;clearTimeout(t._s);t._s=setTimeout(save,300)}
   if(t.dataset.pf&&t.tagName!=="SELECT"){state.profile[t.dataset.pf]=t.value.trim();clearTimeout(t._s);t._s=setTimeout(save,250)}
+});
+app.addEventListener("change",e=>{const t=e.target;if(t.dataset.rk===undefined)return;
+  const it=allItems().find(x=>x.t==="rank");
+  const order=(Array.isArray(state.answers[it.id])?state.answers[it.id]:(state.rankDraft||it.items.map(x=>x[0]))).slice();
+  const from=Number(t.dataset.rk),to=Number(t.value);
+  order.splice(to,0,order.splice(from,1)[0]);
+  state.answers[it.id]=order; save(); rerenderItem(it);
+  const nb=document.querySelector('#q-'+it.id+' [data-rk="'+to+'"]'); if(nb)nb.focus();
 });
 app.addEventListener("change",e=>{const t=e.target;if(!t.dataset.pf)return;const pr=state.profile;pr[t.dataset.pf]=t.value.trim();
   save()});
