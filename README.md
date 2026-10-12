@@ -24,7 +24,7 @@ drills and the results come from your answers.
 | This or that | 12 | Forced choices between two kinds of work |
 | Scenarios | 12 | What you'd actually do in real work situations, worded for your field |
 | Your path | 6 | Where you are now, why you're looking, and what's in the way |
-| Your field | 4–6 | Questions only for your field, like law school and practice areas for legal, or shifts and patient care for healthcare |
+| Your field | 4–6 | Questions only for your field, like law school and practice areas for legal, or shifts and patient care for healthcare. 19 fields have their own section; "Something else" lets people type their field and uses the general questions |
 | Your words | 8 open-ended | Not scored. These go into the AI summary |
 
 Interests stay broad on purpose and cover every kind of work, not just your
@@ -54,10 +54,12 @@ is read on the visitor's device, and answers are saved in that browser's
 `localStorage` so people can stop and come back. A backup/restore option on the
 start page moves answers between devices.
 
-The only outside requests are Google Fonts, plus two resume-reading libraries
-loaded from jsDelivr when someone uploads a file:
-[pdf.js](https://github.com/mozilla/pdf.js) for PDFs and
-[mammoth](https://github.com/mwilliamson/mammoth.js) for Word files.
+The only outside requests are Google Fonts, plus libraries loaded from jsDelivr
+only when they're needed: [pdf.js](https://github.com/mozilla/pdf.js) and
+[mammoth](https://github.com/mwilliamson/mammoth.js) to read an uploaded PDF or
+Word resume, and [jsPDF](https://github.com/parallax/jsPDF) and
+[html2canvas](https://github.com/niklasvh/html2canvas) to make the results PDF.
+All of them run in the browser.
 
 ## Files
 
@@ -143,7 +145,7 @@ data you can edit without touching the logic.
 | Values, sliders | `VALUES`, `SLIDERS` |
 | True/false, this-or-that | `TF`, `AB` |
 | Scenarios | `SJT` (uses `{tokens}` filled in per field) |
-| Field wording for scenarios | `FIELDS` |
+| Field wording for scenarios, and the order of the field picker | `FIELDS`, `FIELD_ORDER` |
 | Field-specific questions and directions | `FIELDQ` |
 | Career-path questions | `PATHQ` |
 | Open-ended questions | `OPEN` |

@@ -192,6 +192,12 @@ footer a{color:var(--navy)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{header.top,.nav,footer,.noprint,details.note{display:none!important}.res,.panel{break-inside:avoid}}
+body.pdfmode #app{width:980px;max-width:none}
+body.pdfmode .res,body.pdfmode .panel,body.pdfmode .card{break-inside:avoid;page-break-inside:avoid}
+body.pdfmode .res .body{grid-template-columns:1fr 1fr;gap:6px 24px}
+body.pdfmode .res .body>*{grid-column:1/-1}
+body.pdfmode .res .body>div:not([class]){grid-column:auto}
+body.pdfmode .noprint,body.pdfmode .nav,body.pdfmode details.note,body.pdfmode .live,body.pdfmode #sumtext,body.pdfmode .pdf-hide{display:none!important}
 </style>
 </head>
 <body>
@@ -403,10 +409,23 @@ const FIELDS={
  trades:{label:"Skilled trades & field work",cust:"homeowner",brk:"A key tool or machine fails at the start of a job",boss:"foreman",init:"a new safety program",vend:"suppliers",client:"A homeowner",deliv:"a job your crew just finished",grow:"Your company wants more jobs on the books",clients:"customers",crunch:"The job is due Friday and your crew is behind",event:"job or inspection",clash:"two crew leads",pres:"Mid-walkthrough with a customer",mess:"a disorganized parts inventory with 2,000 items"},
  finance:{label:"Finance & accounting",cust:"client",brk:"A key report breaks the morning numbers are due to leadership",boss:"manager",init:"a new accounting system",vend:"software vendors",client:"A client",deliv:"a report your team just delivered",grow:"Your firm wants to grow",clients:"clients",crunch:"Month-end close is two days away and your team is behind",event:"audit or quarter close",clash:"two departments",pres:"Mid-presentation",mess:"a messy ledger with 2,000 transactions"},
  creative:{label:"Creative, media & marketing",cust:"client",brk:"Your editing software crashes the morning a project is due",boss:"creative director",init:"a new brand or content plan",vend:"freelancers and agencies",client:"A client",deliv:"a design your team just delivered",grow:"Your agency wants more clients",clients:"clients",crunch:"A campaign launches Monday and your team is behind",event:"campaign launch",clash:"the creative team and the client",pres:"Mid-pitch",mess:"a messy folder of 2,000 unlabeled files"},
- service:{label:"Retail, hospitality & sales",cust:"customer",brk:"The point-of-sale system goes down in the middle of a rush",boss:"manager",init:"a new ordering or rewards system",vend:"suppliers",client:"A customer",deliv:"their order or visit",grow:"Your business wants more customers",clients:"customers",crunch:"It's the last week of the month and your store is behind its sales goal",event:"grand opening or big event",clash:"two shift leads",pres:"Mid-meeting with your team",mess:"a messy inventory sheet with 2,000 items"},
- science:{label:"Science & research",cust:"colleague",brk:"An instrument fails halfway through an experiment",boss:"lab lead",init:"a new lab protocol",vend:"lab suppliers",client:"A partner team",deliv:"results your lab just shared",grow:"Your lab needs more funding",clients:"funders and partners",crunch:"A grant deadline is days away and your team is behind",event:"experiment or submission",clash:"two researchers",pres:"Mid-presentation",mess:"a messy dataset with 2,000 rows"}
+ service:{label:"Retail, food & hospitality",cust:"customer",brk:"The point-of-sale system goes down in the middle of a rush",boss:"manager",init:"a new ordering or rewards system",vend:"suppliers",client:"A customer",deliv:"their order or visit",grow:"Your business wants more customers",clients:"customers",crunch:"It's the last week of the month and your store is behind its sales goal",event:"grand opening or big event",clash:"two shift leads",pres:"Mid-meeting with your team",mess:"a messy inventory sheet with 2,000 items"},
+ science:{label:"Science & research",cust:"colleague",brk:"An instrument fails halfway through an experiment",boss:"lab lead",init:"a new lab protocol",vend:"lab suppliers",client:"A partner team",deliv:"results your lab just shared",grow:"Your lab needs more funding",clients:"funders and partners",crunch:"A grant deadline is days away and your team is behind",event:"experiment or submission",clash:"two researchers",pres:"Mid-presentation",mess:"a messy dataset with 2,000 rows"},
+ consulting:{label:"Consulting & strategy",cust:"client",brk:"Your laptop dies an hour before a client presentation",boss:"engagement manager",init:"a new client engagement",vend:"subcontractors and software vendors",client:"A client",deliv:"the recommendations your team just delivered",grow:"Your firm wants to win more clients",clients:"clients",crunch:"The final client presentation is two days away and your team is behind",event:"client presentation",clash:"the client's team and yours",pres:"Mid-presentation",mess:"a messy client spreadsheet with 2,000 rows"},
+ gov:{label:"Government, public policy & public affairs",cust:"constituent",brk:"The livestream fails five minutes before a public hearing",boss:"director",init:"a new public program",vend:"contractors",client:"A community group",deliv:"a program your office just rolled out",grow:"Your organization needs to build support for a new policy",clients:"constituents",crunch:"A bill deadline is days away and your team is behind",event:"hearing or vote",clash:"two agencies",pres:"Mid-testimony",mess:"a messy spreadsheet of 2,000 public comments"},
+ exec:{label:"Business owner, executive & leadership",cust:"customer",brk:"Your payment system goes down on your busiest day",boss:"business partner",init:"a new product line",vend:"suppliers",client:"A key customer",deliv:"the last big order you delivered",grow:"Your company needs to grow",clients:"customers",crunch:"Payroll is due Friday and cash is tight",event:"launch or big sale",clash:"two of your managers",pres:"Mid-pitch to investors",mess:"a messy spreadsheet of 2,000 transactions"},
+ nonprofit:{label:"Nonprofit & social impact",cust:"client",brk:"The donor database crashes the morning of a big fundraiser",boss:"executive director",init:"a new community program",vend:"vendors and partners",client:"A community partner",deliv:"a program your team just ran",grow:"Your nonprofit needs more funding",clients:"the people you serve",crunch:"A grant deadline is days away and your team is behind",event:"fundraiser or event",clash:"two program teams",pres:"Mid-presentation to the board",mess:"a messy spreadsheet of 2,000 donors"},
+ sales:{label:"Sales & business development",cust:"customer",brk:"Your CRM goes down an hour before a big demo",boss:"sales manager",init:"a new sales playbook",vend:"software vendors",client:"A big prospect",deliv:"a deal you just closed",grow:"Your team needs to hit a bigger number",clients:"customers",crunch:"It's the last week of the quarter and your team is behind quota",event:"product launch or trade show",clash:"sales and the product team",pres:"Mid-demo",mess:"a messy CRM with 2,000 contacts"},
+ manufacturing:{label:"Manufacturing, logistics & supply chain",cust:"customer",brk:"A key machine goes down at the start of a shift",boss:"plant manager",init:"a new inventory system",vend:"suppliers and carriers",client:"A big customer",deliv:"the last shipment your team sent out",grow:"Your plant needs to ship more",clients:"customers",crunch:"A big order ships Friday and your line is behind",event:"shipment or audit",clash:"production and shipping",pres:"Mid-meeting with the plant manager",mess:"a messy inventory spreadsheet with 2,000 parts"},
+ publicsafety:{label:"Public safety, military & emergency services",cust:"member of the public",brk:"The radio system goes down at the start of a shift",boss:"sergeant",init:"a new dispatch or reporting system",vend:"equipment suppliers",client:"A community member",deliv:"how a call was handled",grow:"Your department needs more recruits",clients:"the public",crunch:"Your unit is short-staffed for a big event this weekend",event:"major event or emergency",clash:"two units",pres:"Mid-briefing",mess:"a messy spreadsheet of 2,000 incident reports"},
+ sports:{label:"Sports, fitness & entertainment",cust:"fan",brk:"The ticket scanners go down an hour before doors open",boss:"general manager",init:"a new fan-engagement program",vend:"vendors and sponsors",client:"A sponsor",deliv:"the last event your team ran",grow:"Your team needs to sell more tickets",clients:"fans",crunch:"Opening night is days away and your team is behind",event:"game or show",clash:"the business side and the coaching staff",pres:"Mid-presentation to a sponsor",mess:"a messy spreadsheet of 2,000 season-ticket holders"},
+ realestate:{label:"Real estate & property",cust:"client",brk:"The listing site goes down the morning of a big open house",boss:"broker",init:"a new property-management system",vend:"contractors",client:"A buyer",deliv:"a deal you just closed",grow:"Your brokerage wants more listings",clients:"clients",crunch:"Three closings are set for Friday and the paperwork is behind",event:"closing or open house",clash:"the buyer and the seller",pres:"Mid-showing",mess:"a messy spreadsheet of 2,000 leads"},
+ other:{label:"Something else (type it in)"}
 };
+// Order in the "Your field" picker. "Something else" uses the general wording plus whatever the person types.
+const FIELD_ORDER=["general","office","exec","consulting","creative","education","finance","gov","healthcare","legal","manufacturing","nonprofit","publicsafety","realestate","service","sales","science","sports","tech","trades","other"];
 function curField(){const f=state.profile.field;return f&&FIELDS[f]?f:"general"}
+function fieldLabel(){const pr=state.profile;return curField()==="other"&&(pr.fieldOther||"").trim()?pr.fieldOther.trim():FIELDS[curField()].label}
 function T(s){const F=FIELDS[curField()]||FIELDS.general;return String(s).replace(/\{(\w+)\}/g,(m,k)=>F[k]??FIELDS.general[k]??m)}
 
 /* ============================================================
@@ -620,7 +639,7 @@ const FIELDQ={
      ["Freelance — my own clients and schedule",{au:1,rp:.6,en:.8},{video:.5,design:.5,write:.5},{entre:.03}],
      ["In-house with a steady paycheck",{rp:.1},{ux:.5,strat:.5,social:.5},{}],
      ["Agency life — lots of variety",{v:.9,p:.7},{design:.5,social:.5,strat:.5},{}]]]]},
- service:{name:"retail, hospitality, and sales",dirs:{
+ service:{name:"retail and hospitality",dirs:{
    mgmt:["Store & restaurant management","Running the shift, the team, and the numbers.","Shift Lead, Assistant Manager, General Manager"],
    sales:["B2B sales","Selling to businesses, usually with commission.","Sales Development Rep, Account Executive, Sales Manager"],
    cs:["Customer success & account management","Keeping customers happy long-term, often in an office.","Account Manager, Customer Success Manager, Client Services"],
@@ -692,7 +711,251 @@ const FIELDQ={
      ["Be the right hand to a top executive",{},{ea:2},{ea:.03}]]],
    ["of4","Juggling ten small things vs. one big project…",[
      ["Ten small things — keeps the day moving",{v:.9},{ea:1,it:.5,hr:.5},{}],
-     ["One big project I can sink into",{v:.3},{proj:1,fin:1},{}]]]]}
+     ["One big project I can sink into",{v:.3},{proj:1,fin:1},{}]]]]},
+ consulting:{name:"consulting",dirs:{
+   strat:["Strategy consulting","Big-picture business problems for executives. Top pay, heavy travel and hours.","Business Analyst, Strategy Consultant, Engagement Manager"],
+   ops:["Operations & process consulting","Making companies run leaner and faster.","Operations Consultant, Process Improvement Manager, Lean Six Sigma Lead"],
+   tech:["Technology & implementation consulting","Picking and rolling out systems.","Technology Consultant, Implementation Consultant, Solutions Architect"],
+   hr:["People & change consulting","Org design, change management, and culture.","Change Management Consultant, HR Consultant, Organizational Development Specialist"],
+   fin:["Financial advisory","Deals, valuations, and restructuring.","Financial Advisory Associate, Transaction Services Associate, Corporate Development Manager"],
+   inhouse:["Internal strategy (in-house)","The same problem-solving for one company, with saner hours.","Strategy Analyst, Business Operations Manager, Chief of Staff"],
+   solo:["Independent consulting","Your own clients and your own rates.","Independent Consultant, Fractional COO, Founder"]},
+  qs:[
+   ["co1","What part of consulting work do you enjoy most?",[
+     ["Cracking the big strategic question",{da:.7,au:.6},{strat:2,fin:.5},{consult:.04}],
+     ["Fixing how the work actually gets done",{da:.5},{ops:2},{ops:.03,consult:.02}],
+     ["Choosing and rolling out new systems",{c:.4,cu:.6},{tech:2},{impl:.04,ba:.02}],
+     ["Helping people through change",{cu:.8,pu:.5},{hr:2},{hr:.03,idtrain:.02}],
+     ["The numbers behind deals",{da:1},{fin:2},{fin:.04}]]],
+   ["co2","Traveling Monday to Thursday most weeks…",[
+     ["Sounds fun, at least for a few years",{tr:.9},{strat:1,tech:1,ops:.5},{consult:.03}],
+     ["Some is fine, just not every week",{tr:.4},{ops:.5,hr:.5,fin:.5},{}],
+     ["No, I want to sleep in my own bed",{tr:.05},{inhouse:2,solo:.5},{consult:-.03}]]],
+   ["co3","Five years from now, you'd rather be…",[
+     ["A partner at a firm",{l:.8,s:.7,h:.8},{strat:1,fin:.5,ops:.5},{consult:.03}],
+     ["Running strategy or operations inside one company",{l:.6},{inhouse:2},{ops:.03,pm:.02}],
+     ["Running my own consulting business",{en:1,au:.9,s:.6},{solo:2},{entre:.04}],
+     ["The expert people call for one thing",{au:.7},{tech:1,fin:1,hr:.5},{}]]],
+   ["co4","Selling the next project to a client…",[
+     ["I like it. Winning the work is part of the fun",{s:.9},{solo:1,strat:.5},{se:.02,sales:.02}],
+     ["I'll do it if I have to",{s:.5},{},{}],
+     ["I'd rather someone else bring in the work",{s:.15},{inhouse:1,tech:.5,ops:.5},{}]]]]},
+ gov:{name:"public policy and public affairs",dirs:{
+   analysis:["Policy analysis & research","Digging into data and writing about what should change.","Policy Analyst, Research Associate, Legislative Analyst"],
+   leg:["Legislative & government relations","Working with lawmakers to move bills.","Legislative Aide, Government Relations Specialist, Lobbyist"],
+   comms:["Public affairs & communications","Telling the story to the public and the press.","Communications Specialist, Public Affairs Officer, Press Secretary"],
+   admin:["Public administration","Running programs and agencies day to day.","Program Analyst, Program Manager, City Administrator"],
+   campaign:["Campaigns & advocacy","Organizing people around a cause or candidate.","Field Organizer, Campaign Manager, Advocacy Director"],
+   regs:["Regulatory & compliance","Writing and enforcing the rules.","Regulatory Analyst, Compliance Officer, Inspector"]},
+  qs:[
+   ["gv1","Which part of public work pulls you in most?",[
+     ["Researching and writing about what should change",{da:.7,w:.9},{analysis:2},{policy:.04}],
+     ["Working with lawmakers and stakeholders",{cu:.8,s:.6},{leg:2},{policy:.03}],
+     ["Talking to the public and the press",{pr:.9,w:.6},{comms:2},{writer:.03,mkt:.02}],
+     ["Running the programs that serve people",{l:.6,pu:.8},{admin:2},{proj:.03,ops:.02}],
+     ["Organizing people around a cause",{cu:.8,pu:.9,h:.6},{campaign:2},{}]]],
+   ["gv2","Government job, or the private side (lobbying, consulting, advocacy groups)?",[
+     ["Government: stable, mission-driven, good benefits",{pu:.7},{admin:1,analysis:1,regs:1},{policy:.02}],
+     ["Private side: usually more pay and more hustle",{pay:.7,s:.5},{leg:1.5,comms:.5},{consult:.02}],
+     ["Nonprofit advocacy",{pu:1},{campaign:1.5,analysis:.5},{}]]],
+   ["gv3","Election years, late nights, and a constant news cycle…",[
+     ["Energizing",{p:.9,h:.8},{campaign:1,comms:1,leg:1},{}],
+     ["I'd rather have steady, predictable work",{h:.2,p:.3},{admin:1,regs:1,analysis:.5},{}]]],
+   ["gv4","More school (a master's in public policy or administration, or law school)?",[
+     ["Yes, if it opens doors",{pat:.8},{analysis:1,leg:.5},{policy:.03,attorney:.02}],
+     ["Maybe later",{pat:.5},{},{}],
+     ["No, I'd rather learn on the job",{pat:.2},{campaign:1,comms:.5,admin:.5},{}]]]]},
+ exec:{name:"running a business",dirs:{
+   ceo:["Run a company","Owner, CEO, or general manager: the whole business is yours.","General Manager, President, CEO"],
+   ops:["Operations leadership","Making the machine run: people, process, and cost.","Director of Operations, COO, Plant or Branch Manager"],
+   growth:["Sales & growth leadership","Bringing in revenue and building the team that does.","VP of Sales, Business Development Director, Chief Revenue Officer"],
+   fin:["Finance leadership","Cash, budgets, and the big money decisions.","Controller, Finance Director, CFO"],
+   advise:["Advising other owners","Using what you've learned to help other businesses.","Management Consultant, Fractional Executive, Board Advisor"],
+   newv:["Start or buy something new","A new venture, a franchise, or buying an existing business.","Founder, Franchise Owner, Acquisition Entrepreneur"],
+   mission:["Lead a mission-driven organization","Nonprofit or public-sector leadership.","Executive Director, Nonprofit COO, Agency Director"]},
+  qs:[
+   ["bo1","What part of leading the business do you enjoy most?",[
+     ["Setting the direction and making the big calls",{l:1,au:.8},{ceo:2,newv:.5},{b111011:.03,entre:.02}],
+     ["Making operations run smoothly",{da:.5,l:.7},{ops:2},{ops:.03,b111021:.03}],
+     ["Selling and growing revenue",{s:1,rp:.5},{growth:2},{sales:.03}],
+     ["The money: cash flow, budgets, deals",{da:.9},{fin:2},{fin:.03,acct:.02}],
+     ["Developing people and building the team",{cu:.8,pu:.5},{mission:1,ops:.5},{hr:.03}]]],
+   ["bo2","Next chapter: keep running a company, or something different?",[
+     ["Keep running one, maybe a bigger one",{l:.9},{ceo:1.5,ops:.5},{}],
+     ["Start or buy something new",{en:1,au:.9},{newv:2},{entre:.04}],
+     ["Advise other owners and leaders",{pr:.6,au:.7},{advise:2},{consult:.04}],
+     ["Lead something mission-driven",{pu:1},{mission:2},{policy:.02}]]],
+   ["bo3","Being where the buck stops (payroll, lawsuits, bad quarters)…",[
+     ["I can carry it",{p:.9,h:.8},{ceo:1,newv:1},{}],
+     ["I'd rather have a boss or board above me",{p:.5},{ops:1,fin:1,growth:.5},{}],
+     ["I'm ready to put it down for a while",{p:.2,h:.2},{advise:1,mission:.5},{entre:-.03}]]],
+   ["bo4","Your strongest edge as a leader…",[
+     ["Vision: seeing where things should go",{en:.8},{ceo:1,newv:1},{}],
+     ["Execution: getting things done",{l:.6},{ops:1.5},{}],
+     ["Relationships: people trust me",{cu:.9,s:.5},{growth:1,advise:.5,mission:.5},{}],
+     ["Numbers: I see the business in the data",{da:1},{fin:1.5},{}]]]]},
+ nonprofit:{name:"nonprofit work",dirs:{
+   program:["Program management","Running the services that help people.","Program Coordinator, Program Manager, Director of Programs"],
+   fund:["Fundraising & development","Bringing in donations and grants.","Development Associate, Grant Writer, Development Director"],
+   direct:["Direct service & case management","Working one-on-one with the people you serve.","Case Manager, Community Health Worker, Social Worker"],
+   comms:["Communications & marketing","Telling the story so people care.","Communications Coordinator, Marketing Manager, Digital Strategist"],
+   ops:["Operations & finance","Keeping the organization running.","Operations Manager, Nonprofit Accountant, Finance Director"],
+   advocacy:["Advocacy & policy","Changing the rules, not just helping one person at a time.","Advocacy Coordinator, Policy Associate, Community Organizer"],
+   lead:["Leadership","Running the whole organization.","Executive Director, Deputy Director, COO"]},
+  qs:[
+   ["np1","What part of nonprofit work do you enjoy most?",[
+     ["Working directly with the people we serve",{cu:1,pu:1},{direct:2},{counsel:.04}],
+     ["Running programs and keeping them on track",{l:.7,pu:.6},{program:2},{proj:.03}],
+     ["Raising money and building donor relationships",{s:.8,cu:.7},{fund:2},{b131131:.04}],
+     ["Telling the story",{w:.8,pr:.5},{comms:2},{writer:.03,mkt:.02}],
+     ["Keeping the books and operations in order",{da:.8},{ops:2},{acct:.02,ops:.02}],
+     ["Pushing for policy change",{pr:.6,w:.6},{advocacy:2},{policy:.04}]]],
+   ["np2","Nonprofit pay vs. a bigger paycheck elsewhere…",[
+     ["Mission comes first. I'll stay in nonprofits",{pu:1},{program:.5,direct:.5,lead:.5},{}],
+     ["I'd move to a company that still does good (social impact, healthcare)",{pay:.6,pu:.7},{comms:.5,ops:.5,fund:.5},{}],
+     ["I need to make more, even outside the mission",{pay:1},{ops:1,fund:.5},{}]]],
+   ["np3","Asking people for money…",[
+     ["I'm good at it",{s:.9},{fund:2,lead:.5},{b131131:.03}],
+     ["I can do it for a cause I believe in",{s:.5},{fund:.5,program:.5},{}],
+     ["I'd rather never",{s:.1},{direct:1,ops:1,comms:.5},{}]]],
+   ["np4","Emotionally heavy work (crisis, poverty, trauma)…",[
+     ["It's why I do this",{pu:1,p:.6},{direct:2,advocacy:.5},{counsel:.03}],
+     ["Some is fine, with good boundaries",{pu:.6},{program:1},{}],
+     ["I'd rather support it from behind the scenes",{pu:.4},{ops:1,comms:1,fund:.5},{counsel:-.03}]]]]},
+ sales:{name:"sales",dirs:{
+   ae:["Closing deals (account executive)","Owning the pipeline and the number.","Account Executive, Senior Account Executive, Enterprise AE"],
+   se:["Technical sales","Showing how the product works and handling tricky questions.","Sales Engineer, Solutions Consultant, Pre-Sales Engineer"],
+   am:["Account management & customer success","Growing and keeping the customers you have.","Account Manager, Customer Success Manager, Client Partner"],
+   lead:["Sales leadership","Coaching a team to hit the number.","Sales Manager, Director of Sales, VP of Sales"],
+   ops:["Sales operations","The data, tools, and process behind the team.","Sales Operations Analyst, Revenue Operations Manager, CRM Administrator"],
+   biz:["Partnerships & business development","Big deals and long relationships with partners.","Partnerships Manager, Business Development Manager, Channel Manager"],
+   own:["Your own book of business","Real estate, insurance, or financial advising: you are the business.","Real Estate Agent, Insurance Agent, Financial Advisor"]},
+  qs:[
+   ["sa1","What part of sales do you enjoy most?",[
+     ["Closing the deal",{s:1,rp:.8,p:.7},{ae:2,own:.5},{sales:.04}],
+     ["Explaining how the product works",{c:.4,pr:.8},{se:2},{se:.04}],
+     ["Building long relationships with customers",{cu:1},{am:2,biz:1},{csm:.04}],
+     ["Coaching other reps",{l:1},{lead:2},{sales:.02}],
+     ["The data and process behind the team",{da:1,c:.3},{ops:2},{revops:.04}]]],
+   ["sa2","Commission and a quota…",[
+     ["Love it. Uncapped is the point",{rp:1},{ae:1,own:1.5},{sales:.03,realestate:.02,advisor:.02}],
+     ["Fine, with a solid base salary under it",{rp:.5},{am:1,se:1,biz:.5},{}],
+     ["I'd rather be on salary",{rp:.1},{ops:1.5,am:.5},{revops:.02,sales:-.03}]]],
+   ["sa3","What do you most want to sell?",[
+     ["Software and tech",{c:.3},{se:1,ae:1},{se:.02}],
+     ["Big-ticket business deals",{},{biz:1,ae:1},{}],
+     ["Things people buy for themselves (homes, insurance, investments)",{cu:.8},{own:2},{realestate:.03,advisor:.03}],
+     ["Doesn't matter. Selling is selling",{},{ae:.5,lead:.5},{}]]],
+   ["sa4","Five years from now…",[
+     ["Top individual rep with the biggest accounts",{au:.7},{ae:1,biz:1},{}],
+     ["Running a sales team",{l:1},{lead:2},{}],
+     ["Out of sales, using what I learned (marketing, product, ops)",{v:.6},{ops:1,am:.5},{mkt:.02,pm:.02,sales:-.03}],
+     ["Running my own business",{en:1},{own:1.5},{entre:.04}]]]]},
+ manufacturing:{name:"manufacturing and logistics",dirs:{
+   floor:["Production supervision","Running the floor and the crew.","Production Supervisor, Shift Manager, Plant Manager"],
+   maint:["Maintenance & technicians","Keeping the machines running.","Maintenance Technician, Industrial Mechanic, Automation Technician"],
+   quality:["Quality & continuous improvement","Fewer defects, less waste.","Quality Technician, Quality Engineer, Continuous Improvement Lead"],
+   sc:["Supply chain & purchasing","Getting the right parts at the right price.","Buyer, Supply Chain Analyst, Purchasing Manager"],
+   log:["Logistics & warehouse","Moving things from here to there on time.","Logistics Coordinator, Warehouse Manager, Transportation Manager"],
+   eng:["Industrial & manufacturing engineering","Designing better ways to make things.","Manufacturing Engineer, Industrial Engineer, Process Engineer"],
+   safety:["Safety & environmental","Keeping people safe and the plant compliant.","Safety Coordinator, EHS Specialist, EHS Manager"]},
+  qs:[
+   ["mf1","What part of the work do you enjoy most?",[
+     ["Leading the crew and hitting the numbers",{l:1,p:.7},{floor:2},{b113051:.04}],
+     ["Fixing machines when they break",{th:1,o:.8},{maint:2},{trades:.04}],
+     ["Finding and fixing what causes defects",{da:.8},{quality:2,eng:.5},{b172112:.03}],
+     ["Buying parts and planning inventory",{da:.8,s:.4},{sc:2},{b131020:.04,ops:.02}],
+     ["Moving shipments and running the warehouse",{l:.5,o:.7},{log:2},{b113071:.04,ops:.02}],
+     ["Designing better processes and layouts",{da:.8,c:.3},{eng:2},{eng:.04}]]],
+   ["mf2","On the floor or at a desk?",[
+     ["On the floor, hands-on",{th:.9,o:1},{maint:1,floor:1},{}],
+     ["A mix of both",{o:.6},{quality:1,eng:1,safety:1},{}],
+     ["At a desk with data and systems",{o:.2,da:.7},{sc:1.5,log:.5},{}]]],
+   ["mf3","Shift work (nights, weekends, overtime)…",[
+     ["Fine. The overtime pay helps",{h:.8},{floor:1,maint:1},{}],
+     ["I'd like to move to weekday day shifts",{h:.3},{sc:1,quality:.5,eng:.5,safety:.5},{}]]],
+   ["mf4","More school or certifications?",[
+     ["An engineering degree",{pat:.9},{eng:2},{eng:.03}],
+     ["A certification (Six Sigma, supply chain, safety, a trade license)",{pat:.5},{quality:1,sc:1,safety:1,maint:.5},{}],
+     ["No, I'll grow through experience",{pat:.2},{floor:1,log:1},{}]]]]},
+ publicsafety:{name:"public safety",dirs:{
+   patrol:["Frontline response","Patrol, firefighting, or EMS out in the community.","Police Officer, Firefighter, Paramedic"],
+   invest:["Investigations","Working cases and finding out what happened.","Detective, Fire Investigator, Criminal Investigator"],
+   dispatch:["Dispatch & emergency management","Coordinating the response behind the scenes.","911 Dispatcher, Emergency Management Specialist, Emergency Manager"],
+   lead:["Leadership & command","Leading a unit, station, or department.","Sergeant, Captain, Chief"],
+   corp:["Security & risk in the private sector","Protecting a company's people and property.","Corporate Security Specialist, Loss Prevention Manager, Risk Manager"],
+   train:["Training & community outreach","Teaching recruits or working with the community.","Training Officer, Community Liaison, Instructor"],
+   civ:["A civilian career built on your service skills","Logistics, IT, health, or operations outside of uniform.","Logistics Coordinator, IT Specialist, Operations Manager"]},
+  qs:[
+   ["ps1","What part of the work matters most to you?",[
+     ["Being out there when people need help",{pu:1,o:1,p:.9},{patrol:2},{fire:.04}],
+     ["Figuring out what really happened",{da:.7,au:.6},{invest:2},{b333021:.03}],
+     ["Coordinating the response",{p:.8,l:.5},{dispatch:2},{b435031:.03}],
+     ["Leading a team",{l:1},{lead:2},{}],
+     ["Teaching others",{pr:.8},{train:2},{idtrain:.02}]]],
+   ["ps2","Physical risk and danger…",[
+     ["Part of the job. I'm fine with it",{th:.9,p:.8},{patrol:1.5,invest:.5},{fire:.03}],
+     ["Some is OK, but less as I get older",{},{lead:1,train:1,invest:.5},{}],
+     ["I'd rather be out of harm's way",{th:.2},{dispatch:1,corp:1,civ:1},{fire:-.04}]]],
+   ["ps3","Stay in uniform, or take your skills somewhere new?",[
+     ["Stay and move up",{l:.7},{lead:1.5,invest:.5},{}],
+     ["Move to the private sector (security, risk, compliance)",{pay:.6},{corp:2},{grc:.03}],
+     ["Use my skills in a different civilian career",{v:.7},{civ:2},{ops:.02,itsup:.02}]]],
+   ["ps4","Rotating shifts, nights, and holidays…",[
+     ["Don't mind them",{h:.8},{patrol:1,dispatch:1},{}],
+     ["Ready for a regular schedule",{h:.2},{corp:1,train:1,civ:1},{}]]]]},
+ sports:{name:"sports and entertainment",dirs:{
+   tix:["Ticket & sponsorship sales","The revenue side of a team or venue.","Ticket Sales Rep, Sponsorship Coordinator, Partnerships Manager"],
+   ops:["Event & venue operations","Making game day or show night happen.","Event Coordinator, Operations Manager, Venue Manager"],
+   analytics:["Analytics & scouting","The data behind the players, fans, and business.","Data Analyst, Scouting Analyst, Business Intelligence Manager"],
+   content:["Media & content","Telling the story through social, video, and broadcast.","Social Media Coordinator, Video Producer, Broadcast Producer"],
+   coach:["Coaching & performance","Training athletes and clients.","Coach, Strength and Conditioning Coach, Personal Trainer"],
+   health:["Sports medicine","Keeping athletes healthy.","Athletic Trainer, Physical Therapist, Exercise Physiologist"],
+   talent:["Talent, agents & management","Representing athletes or performers.","Agency Assistant, Talent Manager, Player Relations Coordinator"]},
+  qs:[
+   ["sp1","What part of sports or entertainment pulls you in most?",[
+     ["Selling tickets and sponsorships",{s:1,rp:.6},{tix:2},{sportsbiz:.04,sales:.02}],
+     ["Running game day or the show",{p:.8,o:.8},{ops:2},{event:.04}],
+     ["The stats and data",{da:1},{analytics:2},{data:.04}],
+     ["Creating content and telling the story",{w:.6,pr:.5},{content:2},{media:.03,mkt:.02}],
+     ["Coaching and training people",{pr:.7,pu:.6,th:.6},{coach:2},{b272022:.04}],
+     ["Keeping athletes healthy",{pu:.9,th:.6},{health:2},{allied:.03}]]],
+   ["sp2","Nights, weekends, and the whole season on the calendar…",[
+     ["Worth it to work in this world",{h:.9},{ops:1,coach:1,content:.5},{sportsbiz:.02}],
+     ["I'd like a normal schedule most of the time",{h:.3},{analytics:1,tix:.5,talent:.5},{}]]],
+   ["sp3","Lower pay at the start to get a foot in the door…",[
+     ["Yes. Getting in is what matters",{pay:.2,pat:.8},{tix:1,ops:1,content:.5},{sportsbiz:.03}],
+     ["Only for a year or two",{pat:.5},{},{}],
+     ["No. I'd rather bring skills from another industry later",{pay:.8},{analytics:1,health:.5},{sportsbiz:-.02}]]],
+   ["sp4","More school (sports management, kinesiology, physical therapy)?",[
+     ["Yes, if it's the path",{pat:.9},{health:1.5,coach:.5},{allied:.02}],
+     ["A certification at most",{pat:.5},{coach:1},{}],
+     ["No more school",{pat:.2},{tix:1,ops:1,content:.5},{}]]]]},
+ realestate:{name:"real estate",dirs:{
+   agent:["Residential sales","Helping people buy and sell homes.","Real Estate Agent, Buyer's Agent, Team Lead"],
+   cre:["Commercial real estate","Office, retail, and industrial deals.","Commercial Broker, Leasing Agent, Investment Sales Associate"],
+   pm:["Property management","Keeping buildings and tenants running smoothly.","Property Manager, Community Manager, Regional Property Manager"],
+   dev:["Development & construction","Turning land into buildings.","Development Associate, Project Manager, Construction Manager"],
+   fin:["Finance & lending","The money behind the deal.","Loan Officer, Appraiser, Real Estate Analyst"],
+   invest:["Investing","Buying and managing your own properties.","Real Estate Investor, Asset Manager, Acquisitions Analyst"]},
+  qs:[
+   ["re1","What part of real estate do you enjoy most?",[
+     ["Working with buyers and sellers",{cu:1,s:.8},{agent:2},{realestate:.04}],
+     ["Big commercial deals",{s:.9,da:.5},{cre:2},{realestate:.02}],
+     ["Taking care of buildings and tenants",{l:.5,cu:.7},{pm:2},{realestate:.02}],
+     ["Watching projects get built",{o:.8,l:.5},{dev:2},{b119021:.04}],
+     ["The numbers behind the deal",{da:1},{fin:2,invest:.5},{b132072:.03,fin:.02}]]],
+   ["re2","Commission-only income…",[
+     ["Exciting",{rp:1},{agent:1.5,cre:1},{realestate:.03}],
+     ["I want a base salary",{rp:.3},{pm:1,dev:1,fin:1},{}],
+     ["Only if I'm building my own investments",{en:.7},{invest:2},{entre:.02}]]],
+   ["re3","Evenings and weekends for showings and tenant calls…",[
+     ["Fine",{h:.7},{agent:1,pm:1},{}],
+     ["I'd rather keep regular hours",{h:.3},{fin:1,dev:.5,cre:.5},{}]]],
+   ["re4","Five years from now…",[
+     ["Running my own team or brokerage",{l:.8,en:.8},{agent:1,cre:1},{entre:.02}],
+     ["Owning a portfolio of properties",{en:1},{invest:2},{}],
+     ["In a steady salaried role in the industry",{rp:.2},{pm:1,fin:1,dev:1},{}]]]]}
 };
 const FQ_ITEMS={};
 for(const [f,o] of Object.entries(FIELDQ))FQ_ITEMS[f]=o.qs.map(([id,text,opts])=>({t:"mc",id,text,opts,fq:f}));
@@ -960,7 +1223,7 @@ function cosineCentered(a,b){
   return na&&nb?d/Math.sqrt(na*nb):0;
 }
 function industryMatch(car){
-  const t=(state.profile.industry||"").toLowerCase().trim();
+  const pr=state.profile, t=((pr.industry||"")+" "+(curField()==="other"?pr.fieldOther||"":"")).toLowerCase().trim();
   if(!t||!car.ind)return false;
   const words=t.split(/[^a-z]+/).filter(w=>w.length>=3);
   return words.some(w=>car.ind.split(" ").some(x=>x.startsWith(w)||w.startsWith(x)));
@@ -1035,7 +1298,7 @@ function scoreCareer(car,P){
    STATE + RENDER
    ============================================================ */
 const LS_KEY="careerCombine.v2";
-const blankProfile=()=>({name:"",stage:"",years:"",edu:"",job:"",industry:"",target:"",resume:"",auto:[],manual:[],off:[],field:""});
+const blankProfile=()=>({name:"",stage:"",years:"",edu:"",job:"",industry:"",target:"",resume:"",auto:[],manual:[],off:[],field:"",fieldOther:""});
 let state={answers:{},page:-1,profile:blankProfile()};
 try{const s=localStorage.getItem(LS_KEY);if(s){const o=JSON.parse(s);if(o&&o.answers){state=o;state.profile=Object.assign(blankProfile(),o.profile||{})}}}catch(e){}
 // Text boxes (notes and open-ended answers) don't change the score, so they only write storage.
@@ -1139,7 +1402,8 @@ function renderCheckin(){
    '<div class="row2"><div><label class="f" for="p-years">Years of work experience</label><select id="p-years" data-pf="years">'+opts(YEARS,pr.years)+'</select></div>'+
    '<div><label class="f" for="p-edu">Highest education</label><select id="p-edu" data-pf="edu">'+opts(Object.fromEntries(EDU.map((l,i)=>[i,l])),pr.edu)+'</select></div></div>'+
    '<label class="f" for="p-job">Current or most recent job title</label><input type="text" id="p-job" data-pf="job" value="'+esc(pr.job)+'" placeholder="e.g. Help desk technician, server, student">'+
-   '<label class="f" for="p-field">Your field</label><div class="f-help small" style="margin:-2px 0 8px">The one you work in now, or the closest. Not sure or between jobs? Pick "General / not sure." Some questions get worded for it, and it unlocks a section made for your field.</div><select id="p-field" data-pf="field"><option value=""'+(FIELDS[pr.field]?"":" selected")+'>Choose your field…</option>'+Object.entries(FIELDS).map(([k,f])=>'<option value="'+k+'"'+(pr.field===k?" selected":"")+'>'+esc(f.label)+'</option>').join("")+'</select>'+
+   '<label class="f" for="p-field">Your field</label><div class="f-help small" style="margin:-2px 0 8px">The one you work in now, or the closest. Not sure or between jobs? Pick "General / not sure." Not listed? Pick "Something else" and type it in. Some questions get worded for it, and it unlocks a section made for your field.</div><select id="p-field" data-pf="field"><option value=""'+(FIELDS[pr.field]?"":" selected")+'>Choose your field…</option>'+FIELD_ORDER.map(k=>'<option value="'+k+'"'+(pr.field===k?" selected":"")+'>'+esc(FIELDS[k].label)+'</option>').join("")+'</select>'+
+   '<div id="p-other-wrap"'+(pr.field==="other"?"":" hidden")+'><label class="f" for="p-other">What field are you in?</label><input type="text" id="p-other" data-pf="fieldOther" value="'+esc(pr.fieldOther||"")+'" placeholder="e.g. aviation, agriculture, ministry"><div class="f-help small">You\'ll get the general version of the questions. What you type still goes into your AI summary and helps match careers in that industry.</div></div>'+
    '<div class="row2"><div><label class="f" for="p-ind">Dream industry, if any</label><input type="text" id="p-ind" data-pf="industry" value="'+esc(pr.industry)+'" placeholder="e.g. sports, healthcare, tech"></div>'+
    '<div><label class="f" for="p-tgt">A job you\'re curious about</label><input type="text" id="p-tgt" data-pf="target" value="'+esc(pr.target)+'" placeholder="e.g. data analyst, nurse"></div></div>'+
   '</div>'+
@@ -1163,6 +1427,55 @@ function addSkill(){
 const PDFJS='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';
 const PDFJS_WORKER='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 const MAMMOTH='https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js';
+/* Results PDF: jsPDF + html2canvas (both MIT), loaded only when someone clicks Download PDF.
+   Everything runs in the browser, so results still never leave the device.
+   Each block on the results page (a career card, a panel, a heading) becomes one image, and blocks
+   are packed onto letter-size pages so a card is never cut in half. */
+const JSPDF='https://cdn.jsdelivr.net/npm/jspdf@4.2.1/dist/jspdf.umd.min.js';
+const HTML2CANVAS='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+async function downloadPdf(btn){
+  const label=btn?btn.textContent:"", root=document.documentElement, prevTheme=root.getAttribute("data-theme");
+  const closed=[...app.querySelectorAll("details.res:not([open]),details.method:not([open])")];
+  if(btn){btn.disabled=true;btn.textContent="Making your PDF…"}
+  try{
+    if(!window.jspdf)await loadScript(JSPDF);
+    if(!window.html2canvas)await loadScript(HTML2CANVAS);
+    root.setAttribute("data-theme","light"); document.body.classList.add("pdfmode"); closed.forEach(d=>d.open=true);
+    const pdf=new window.jspdf.jsPDF({unit:"mm",format:"letter",orientation:"portrait"});
+    const PW=pdf.internal.pageSize.getWidth(), PH=pdf.internal.pageSize.getHeight(), M=10, W=PW-2*M, GAP=3;
+    const blocks=[...app.children].filter(el=>el.offsetHeight>0&&getComputedStyle(el).display!=="none");
+    const shots=[];
+    for(const el of blocks){const c=await window.html2canvas(el,{scale:2,backgroundColor:"#ffffff",useCORS:true,logging:false});
+      shots.push({c,h:c.height*W/c.width,head:/^H[1-3]$/.test(el.tagName)||el.classList.contains("kicker")})}
+    let y=M;
+    for(let i=0;i<shots.length;i++){
+      const {c,h}=shots[i];
+      // A heading stays on the same page as the block after it.
+      let need=h; for(let j=i;shots[j]&&shots[j].head&&shots[j+1];j++)need+=shots[j+1].h+GAP;
+      if(y>M&&y+Math.min(need,PH-2*M)>PH-M){pdf.addPage();y=M}
+      if(h<=PH-2*M){pdf.addImage(c.toDataURL("image/jpeg",.9),"JPEG",M,y,W,h);y+=h+GAP;continue}
+      // Taller than a page (rare): slice it across pages.
+      const pxPerMm=c.width/W; let done=0;
+      while(done<c.height){
+        const room=(PH-M-y)*pxPerMm, slice=Math.min(room,c.height-done);
+        const part=document.createElement("canvas"); part.width=c.width; part.height=slice;
+        part.getContext("2d").drawImage(c,0,done,c.width,slice,0,0,c.width,slice);
+        pdf.addImage(part.toDataURL("image/jpeg",.9),"JPEG",M,y,W,slice/pxPerMm);
+        done+=slice; y+=slice/pxPerMm+GAP;
+        if(done<c.height){pdf.addPage();y=M}
+      }
+    }
+    const name=(state.profile.name||"").trim().replace(/[^a-z0-9]+/gi,"-").replace(/^-|-$/g,"");
+    pdf.save("career-combine-results"+(name?"-"+name:"")+".pdf");
+  }catch(err){
+    toast("Couldn't make the PDF here. Opening print instead: choose \"Save as PDF\" as the printer.");
+    setTimeout(()=>window.print(),600);
+  }finally{
+    closed.forEach(d=>d.open=false); document.body.classList.remove("pdfmode");
+    if(prevTheme==null)root.removeAttribute("data-theme"); else root.setAttribute("data-theme",prevTheme);
+    if(btn){btn.disabled=false;btn.textContent=label}
+  }
+}
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>rej(new Error("Couldn't load the file reader. Check your connection, or paste the text instead."));document.head.appendChild(s)})}
 async function readFile(file){
   const n=file.name.toLowerCase();
@@ -1283,11 +1596,12 @@ function renderResults(){
   }
   if(low)h+='<div class="warnbox"><strong>Early read.</strong> You\'ve answered '+P.answered+' of '+P.total+' scored questions, and these are based only on those. The ranking firms up as you answer more. <button class="btn sm" data-go="'+firstUnansweredPage()+'">Keep going</button></div>';
   h+='<div class="top3">'+top.slice(0,3).map((s,i)=>'<div class="card"><div class="rk">#'+(i+1)+(s.ind?' · '+esc(pr.industry.trim()):'')+'</div><div class="nm">'+esc(s.car.n)+'</div><div class="pc">'+s.fit+'%</div><div class="small">'+esc(subline(s.car))+'</div></div>').join("")+'</div>';
+  h+='<div class="nav noprint" style="margin:6px 0 4px"><button class="btn" data-act="pdf">Download results as PDF</button></div>';
   h+='<p class="small">Fit blends your interests (about a third), work-style match (about half), pay fit (weighted by how much you ranked pay), and smaller boosts for abilities you rated high and skills on your resume. Only parts you\'ve answered count. Dealbreakers subtract points.</p>';
   lastScored=scored;
   h+=top.map((s,i)=>resultCard(s,i+1,i<3)).join("");
-  h+='<h2 class="sec">Look up any career</h2><p class="lede">All '+scored.length.toLocaleString("en-US")+' careers are scored for you. Search to see where any job lands.</p>'+
-    '<input type="search" id="careerSearch" placeholder="Try nurse, electrician, pilot, accountant…" aria-label="Search careers" autocomplete="off"><div id="searchOut"></div>';
+  h+='<div class="noprint"><h2 class="sec">Look up any career</h2><p class="lede">All '+scored.length.toLocaleString("en-US")+' careers are scored for you. Search to see where any job lands.</p>'+
+    '<input type="search" id="careerSearch" placeholder="Try nurse, electrician, pilot, accountant…" aria-label="Search careers" autocomplete="off"><div id="searchOut"></div></div>';
   h+=dirsPanel();
   if(indMatches.length)h+='<h2 class="sec">Through your industry lens</h2><p class="lede">Further down the list, but these connect to '+esc(pr.industry.trim())+'.</p>'+indMatches.map(s=>resultCard(s,"+",false)).join("");
   const riPanel=P.riN>=6
@@ -1306,8 +1620,8 @@ function renderResults(){
   h+='<div class="grid2"><div class="panel"><strong>Work style</strong>'+(ws.length?ws.map(k=>meter(cap(DIMS[k]),null,P.D[k])).join("")+'<p class="small">0 = avoid, 100 = want a lot. For long hours, this is your tolerance. Traits you haven\'t answered anything about are left out.</p>':'<p class="small">Answer the work style, true/false, and scenario sections to see this.</p>')+'</div>'+
     '<div class="panel"><strong>What matters most</strong>'+(vals?'<ol>'+vals.map(v=>'<li>'+esc(v)+'</li>').join("")+'</ol>':'<p class="small">Not ranked yet.</p>')+
     payLine+'</div></div>';
-  h+='<h2 class="sec">Take it to an AI coach</h2><p class="lede">Copy this and paste it into Claude, ChatGPT, or any AI assistant. It includes every answer, your notes, your resume, and the full ranking, plus instructions, so the AI can go much deeper than the scoring here.</p>'+
-    '<div class="nav noprint" style="margin-top:0"><button class="btn pri" data-act="copysum">Copy summary for AI</button><button class="btn" data-act="print">Print / save as PDF</button><button class="btn" data-act="copybackup">Copy answer backup</button></div><pre class="sum" id="sumtext">'+esc(summaryText({P,scored,code,mbti}))+'</pre>';
+  h+='<h2 class="sec pdf-hide">Take it to an AI coach</h2><p class="lede pdf-hide">Copy this and paste it into Claude, ChatGPT, or any AI assistant. It includes every answer, your notes, your resume, and the full ranking, plus instructions, so the AI can go much deeper than the scoring here.</p>'+
+    '<div class="nav noprint" style="margin-top:0"><button class="btn pri" data-act="copysum">Copy summary for AI</button><button class="btn" data-act="pdf">Download PDF</button><button class="btn" data-act="print">Print</button><button class="btn" data-act="copybackup">Copy answer backup</button></div><pre class="sum" id="sumtext">'+esc(summaryText({P,scored,code,mbti}))+'</pre>';
   h+='<div class="panel"><details class="method"><summary>How this works and its limits</summary><div class="small" style="margin-top:8px;display:grid;gap:8px">'+
     '<p><b>Interests (RIASEC).</b> Holland\'s six interest types are the backbone of O*NET, the U.S. Labor Department\'s occupation database. Meta-analysis (Nye et al., 2012) found interest–job fit relates to job performance and staying in a job. Each activity is also rated for ability, because interests and abilities are related but distinct (Ackerman &amp; Heggestad, 1997): what you enjoy predicts staying power, while what you\'re already good at shapes how fast you can break in.</p>'+
     '<p><b>Personality (Big Five).</b> The 30 items come from Goldberg\'s public-domain IPIP markers. The Big Five has decades of evidence linking it to work outcomes (Barrick &amp; Mount, 1991). MBTI is popular but has weak test-retest reliability (Pittenger, 2005), so it\'s shown only for fun.</p>'+
@@ -1433,7 +1747,7 @@ function summaryText({P,scored,code,mbti}){
   L.push("");
   L.push("CAREER COMBINE — RESULTS ("+new Date().toLocaleDateString()+")");
   L.push("Answered "+P.answered+"/"+P.total+" scored questions");
-  L.push("Field (scenarios worded for): "+FIELDS[curField()].label);
+  L.push("Field (scenarios worded for): "+fieldLabel());
   L.push("Career stage: "+(STAGES[pr.stage]||"not given")+" | Experience: "+(YEARS[pr.years]||"not given")+" | Education: "+(pr.edu!==""?EDU[+pr.edu]:"not given"));
   if(pr.job)L.push("Current/most recent job: "+pr.job);
   if(pr.industry)L.push("Dream industry: "+pr.industry);
@@ -1508,6 +1822,7 @@ app.addEventListener("click",e=>{
   const act=b.dataset.act;
   if(act==="copysum"){copyText(document.getElementById("sumtext").textContent,"Copied — paste it into Claude, ChatGPT, or any AI assistant");return}
   if(act==="print"){window.print();return}
+  if(act==="pdf"){downloadPdf(b);return}
   if(act==="copybackup"){copyText(JSON.stringify({v:2,answers:state.answers,profile:state.profile}),"Backup copied");return}
   if(act==="restore"){try{const o=JSON.parse(document.getElementById("in-backup").value);if(!o||!o.answers)throw 0;state.answers=o.answers;state.profile=Object.assign(blankProfile(),o.profile||{});save();toast("Answers restored");render()}catch(err){toast("That doesn't look like a backup. Paste the full text you copied.")}return}
   if(act==="reset"){document.getElementById("resetconfirm").hidden=false;return}
@@ -1542,6 +1857,7 @@ app.addEventListener("change",e=>{const t=e.target;if(t.dataset.rk===undefined)r
   const nb=document.querySelector('#q-'+it.id+' [data-rk="'+to+'"]'); if(nb)nb.focus();
 });
 app.addEventListener("change",e=>{const t=e.target;if(!t.dataset.pf)return;const pr=state.profile;pr[t.dataset.pf]=t.value.trim();
+  if(t.dataset.pf==="field"){const w=document.getElementById("p-other-wrap");if(w){w.hidden=t.value!=="other";if(t.value==="other")document.getElementById("p-other").focus()}}
   save()});
 
 
