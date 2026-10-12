@@ -216,6 +216,8 @@ const knowledge = elements(onet("Knowledge"), "IM", {
   safety: /^Public Safety and Security$/, hr: /^Personnel and Human Resources$/, media: /^Communications and Media$/,
   admin: /^Administrative$/, admin2: /^Administration and Management$/, computers: /^Computers and Electronics$/,
   biology: /^Biology$/, chemistry: /^Chemistry$/, production: /^Production and Processing$/, transport: /^Transportation$/,
+  food: /^Food Production$/, building: /^Building and Construction$/, psychology: /^Psychology$/, math: /^Mathematics$/,
+  fineArts: /^Fine Arts$/, physics: /^Physics$/,
 });
 const jobZone = bySoc(onet("Job Zones"), () => true, r => num(r["Job Zone"]));
 const titleRows = onet("Sample of Reported Titles", false);
@@ -395,6 +397,35 @@ function stepText(soc, e) {
   return parts.length ? parts.join("; ") + "." : "";
 }
 
+/* ---------------- subject areas (what the work is about) ----------------
+   Matches the "What would you enjoy working with?" question in index.html (SUBJECTS).
+   Most come from O*NET knowledge importance; a few have no O*NET measure and use job families. */
+const SUBJ_RULES = {
+  electric: ["47-2111", "47-2231", "49-2", "49-9051", "49-9052", "49-9097", "17-2071", "17-2072", "17-3023", "51-202"],
+  animals: ["31-9096", "29-2056", "29-1131", "39-2011", "39-2021", "45-2093", "19-1023", "33-9011", "45-3031", "19-1011"],
+  nature: ["45-", "37-3", "19-1013", "19-1031", "19-1032", "19-4071", "19-2041", "19-4042", "19-1029", "11-9013", "33-2022", "19-2043"],
+  kids: ["25-2", "25-3021", "25-9042", "25-9043", "39-9011", "21-1021", "29-1221", "29-1243", "19-3034", "21-1012", "25-4022"],
+  food: ["35-1011", "35-1012", "35-2", "51-301", "51-302", "51-309", "11-9051", "29-1031", "19-1012"],
+  sports: ["27-2021", "27-2022", "27-2023", "39-9031", "29-9091", "29-1128", "39-3091"],
+};
+const SUBJ_KN = { // subject: [[knowledge key, weight], ...], start (importance 0–1 that counts as "some"), full
+  machines: [[["mechanical", 1]], .5, .85], tech: [[["computers", 1]], .6, .9], build: [[["building", 1]], .5, .85],
+  food: [[["food", 1]], .45, .8], health: [[["medicine", 1]], .5, .85], mind: [[["therapy", 1], ["psychology", .8]], .5, .85],
+  money: [[["accounting", 1], ["math", .7]], .5, .85], law: [[["law", 1]], .55, .9], art: [[["fineArts", 1], ["design", .6]], .45, .85],
+  media: [[["media", 1]], .5, .85], science: [[["biology", 1], ["chemistry", 1], ["physics", 1]], .55, .9],
+  safety: [[["safety", 1]], .6, .9], transport: [[["transport", 1]], .5, .85], factory: [[["production", 1]], .55, .85],
+  teach: [[["education", 1]], .6, .9],
+};
+function subjectsFor(soc) {
+  const out = {};
+  for (const [k, [parts, a, b]] of Object.entries(SUBJ_KN)) {
+    const x = Math.max(0, ...parts.map(([kk, w]) => (kn(kk, soc) ?? 0) * w));
+    const v = r2(clamp((x - a) / (b - a))); if (v >= .2) out[k] = v;
+  }
+  for (const [k, list] of Object.entries(SUBJ_RULES)) if (list.some(pre => soc.startsWith(pre))) out[k] = 1;
+  return out;
+}
+
 /* ---------------- build ---------------- */
 const handSocs = new Set(HAND.flatMap(h => h.soc || []));
 const careers = [], skipped = [];
@@ -416,12 +447,15 @@ for (const soc of Object.keys(oews).sort()) {
   careers.push({
     id: "b" + soc.replace("-", ""),
     n: o.title,
-    r, pay, d,
+    r,
+    // Full O*NET interest profile (R,I,A,S,E,C on 0–1), so careers that share a three-letter code still differ.
+    ri: "RIASEC".split("").map(L => r2(clamp((ints[L] - 1) / 6))),
+    pay, d,
     ease: easeOf(edu, z), ai: "Not rated yet", trv: travelText(d.tr || 0), wlb: wlbText(d.h || 0, d.p || 0), edu,
     start: "", end: "",
     titles: titlesFor(soc) || o.title,
     step: stepText(soc, e),
-    sk: skillsFor(soc), ind: "",
+    sk: skillsFor(soc), ind: "", sub: subjectsFor(soc),
     desc: onetDesc[soc] || "",
     gen: 1, ...(gaps >= 6 ? { est: 1 } : {}),
     bls: {

@@ -67,6 +67,8 @@ button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-vis
 .pairs{display:grid;gap:4px;margin:6px 0 0;padding-left:18px}
 .stack{display:flex;flex-direction:column;gap:8px}
 .stack .opt{text-align:left;padding:11px 12px}
+.chips-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px}
+.chips-pick .opt{text-align:left;padding:10px 12px}
 details.note{margin-top:10px}
 details.note summary{cursor:pointer;font:500 .85rem var(--f-body);color:var(--navy);list-style:none;display:inline-flex;align-items:center;gap:6px;border:1px dashed var(--navy);border-radius:999px;padding:5px 12px;background:var(--navy-soft)}
 details.note summary::-webkit-details-marker{display:none}
@@ -285,6 +287,16 @@ const VALUES=[
  ["rel","Relationships — a team I like working with"],["sup","Support — a good boss and a stable company"],
  ["var","Variety and adventure — new places, new problems"],["pur","Purpose — helping people or making a difference"]
 ];
+
+/* What the work is about. Careers carry matching "sub" levels (0–1): generated ones from O*NET
+   knowledge areas (tools/build-careers.mjs), hand-tuned ones in careers.js. */
+const SUBJECTS=[["machines","Machines, engines & vehicles"],["electric","Electrical systems & wiring"],["build","Buildings & construction"],
+ ["tech","Computers & software"],["factory","Making products (factories, production lines)"],["transport","Driving & moving goods"],
+ ["food","Food & cooking"],["animals","Animals"],["nature","Plants, farming & the outdoors"],["science","Science & research"],
+ ["health","Patients & health care"],["mind","Helping people through hard times"],["kids","Kids & teens"],["teach","Teaching & training"],
+ ["money","Money, numbers & budgets"],["law","Laws, rules & government"],["safety","Safety, security & emergencies"],
+ ["art","Art, design & visuals"],["media","Writing, media & storytelling"],["sports","Sports & fitness"]];
+const SUBJ_LABEL=Object.fromEntries(SUBJECTS);
 
 const SCHOOL=["None","A few online courses","A certification (a few months)","A 1–2 year program","A 4-year degree or more"];
 const SLIDERS=[
@@ -980,6 +992,7 @@ const PAGES=[
  {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your resume and a few basics. Your resume is read only inside your browser. It's used to spot skills you already have, which powers the \"stepping-stone jobs\" in your results.",items:[],custom:"checkin"},
  {id:"int1",title:"Interests, part 1",short:"Interests 1",lede:"Rate each activity twice: how much you'd enjoy doing it as part of a job, and how good you are at it today. The list covers every kind of work on purpose, not just your field. If something isn't for you, \"Hate it\" is a useful answer, because that's how careers get ruled out.",items:lik(RI.slice(0,15),"enjoy")},
  {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. If you've never tried something, give your best guess for ability. Activities outside your field are there on purpose.",items:lik(RI.slice(15),"enjoy")},
+ {id:"sub",title:"What you'd work with",short:"Work with",lede:"Pick anything you'd enjoy working with day to day, as many as you like. This only lifts careers that match; leaving something unpicked never rules a career out. Skip it if nothing stands out.",items:[{t:"pick",id:"subjects",text:"What would you enjoy working with?",opts:SUBJECTS}]},
  {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"Read each statement as if it starts with \"I\" (so \"Am the life of the party\" means \"I am the life of the party\"). Rate how well it describes you as you usually are, not as you'd like to be. A few are worded negatively on purpose, so read each one before answering.",items:lik(B5.slice(0,15),"agree")},
  {id:"per2",title:"Personality, part 2",short:"Personality 2",lede:"Same as before: read each one as if it starts with \"I\", and watch for the negatively worded ones. Your first instinct is usually the most accurate.",items:lik(B5.slice(15),"agree")},
  {id:"val",title:"What matters most",short:"Values",lede:"Rank what matters most to you, then set your pay numbers. Your pay numbers feed straight into the pay side of the scoring.",items:[{t:"rank",id:"rank_values",text:"Put these in order, with the most important at the top",items:VALUES},SLIDERS[0],SLIDERS[1]]},
@@ -1198,9 +1211,12 @@ function compute(){
   const nDims=Object.keys(DIMS).filter(k=>!skip.has(k)).length;
   // Confidence grows with answers: early scores stay close to the middle so a few answers can't look like a sure thing.
   const totalQ=allItems().filter(i=>i.t!=="open").length, conf=Math.min(1,.35+.65*answered/(totalQ*.75));
-  return {R,B,D,skip,nDims,conf,riN,b5N,AB,abN,gaps,minPay,minSet,target,targetSet,curEdu,allowEdu,boost,skills:mySkills(),answered,total:allItems().filter(i=>i.t!=="open").length};
+  return {R,B,D,skip,nDims,conf,riN,b5N,AB,abN,gaps,minPay,minSet,target,targetSet,curEdu,allowEdu,boost,sch,subs:Array.isArray(A.subjects)?A.subjects:[],skills:mySkills(),answered,total:allItems().filter(i=>i.t!=="open").length};
 }
 
+// A career's interest profile: the full O*NET profile for generated careers (careers-bls.js),
+// otherwise the hand-picked three-letter code weighted 3-2-1.
+function careerRI(car){if(car.ri){const v={};"RIASEC".split("").forEach((k,i)=>v[k]=car.ri[i]);return v}return riVec(car.r)}
 function riVec(code){const v={R:0,I:0,A:0,S:0,E:0,C:0};[3,2,1].forEach((w,i)=>{if(code[i])v[code[i]]=w});return v}
 function cosineCentered(a,b){
   const ks=Object.keys(a),ma=mean(ks.map(k=>a[k])),mb=mean(ks.map(k=>b[k]));
@@ -1218,7 +1234,7 @@ function scoreCareer(car,P){
   const U=P.D;
   // Interest match needs a few interest answers; areas not rated yet sit at the average of the ones that were.
   let interest=null;
-  if(P.riN>=6){const vals=Object.values(P.R).filter(v=>v!=null), avg=mean(vals), Rf={};for(const k in P.R)Rf[k]=P.R[k]??avg;interest=(cosineCentered(Rf,riVec(car.r))+1)/2}
+  if(P.riN>=6){const vals=Object.values(P.R).filter(v=>v!=null), avg=mean(vals), Rf={};for(const k in P.R)Rf[k]=P.R[k]??avg;interest=(cosineCentered(Rf,careerRI(car))+1)/2}
   let pen=0,wsum=0; const parts=[];
   const spec=Object.assign({},SPEC,{en:[.3+.9*(car.d.en||0),1,1]});
   for(const k in spec){
@@ -1233,12 +1249,15 @@ function scoreCareer(car,P){
   if(P.minSet||P.targetSet){const a=P.minSet?Math.min(1,car.pay[0]/P.minPay):null, b=P.targetSet?Math.min(1,car.pay[1]/P.target):null;
     payFit=clamp(a!=null&&b!=null?.4*a+.6*b:(a??b))}
   const mid=car.pay[1];
-  let ability=null; if(P.abN>=6){const vals=Object.values(P.AB).filter(v=>v!=null),avg=mean(vals),Af={};for(const k in P.AB)Af[k]=P.AB[k]??avg;ability=(cosineCentered(Af,riVec(car.r))+1)/2}
+  let ability=null; if(P.abN>=6){const vals=Object.values(P.AB).filter(v=>v!=null),avg=mean(vals),Af={};for(const k in P.AB)Af[k]=P.AB[k]??avg;ability=(cosineCentered(Af,careerRI(car))+1)/2}
   const hit=car.sk.filter(s=>P.skills.has(s)), hasSk=P.skills.size>=3;
   // Careers with no listed core skills (some generated ones) get no resume score rather than 0/0.
   const skillFit=hasSk&&car.sk.length?clamp(hit.length/Math.min(3,car.sk.length)):null;
   // Blend only the parts we have evidence for. Work style counts more as more traits get answered.
-  const comp=[[interest,.33],[ability,.12],[skillFit,.1],[dimSim,.55*Math.min(1,P.nDims/8)],[payFit,.1+.25*U.pay]].filter(([v,w])=>v!=null&&w>0);
+  // Subject areas: how much the career is about something the person picked (only when they picked any).
+  let subjFit=null, subjTop=null;
+  if(P.subs&&P.subs.length){const s=car.sub||{};let sum=0,best=-1;for(const k of P.subs){const v=s[k]||0;sum+=v;if(v>best){best=v;subjTop=k}}subjFit=.5*sum/P.subs.length+.5*best}
+  const comp=[[interest,.33],[ability,.12],[skillFit,.1],[subjFit,.25],[dimSim,.55*Math.min(1,P.nDims/8)],[payFit,.1+.25*U.pay]].filter(([v,w])=>v!=null&&w>0);
   const cw=comp.reduce((a,[,w])=>a+w,0);
   let total=cw?comp.reduce((a,[v,w])=>a+v*w,0)/cw:.5;
   const flags=[];
@@ -1257,6 +1276,8 @@ function scoreCareer(car,P){
     if(/5 years or more/i.test(exp)&&yrs<5){total-=.07;flags.push("Usually needs 5+ years in a related job first, so it's a later step rather than a starting point")}
     else if(/less than 5/i.test(exp)&&yrs<1){total-=.03;flags.push("Usually needs some experience in a related job first")}
   }
+  // Willing to train (certification or more)? Lean toward jobs that reward training over ones that need none.
+  if(P.sch!=null&&P.sch>=2){const skilled=car.edu>=1||/apprentice|long-term|internship|residency/i.test((car.bls&&car.bls.ojt)||"");total+=skilled?.02:-.02}
   const ind=industryMatch(car); if(ind)total+=.02;
   // Field answers are things you told us directly, so they move the ranking more than general traits.
   const fb=clamp(1.6*(P.boost[car.id]||0),-.2,.15); total+=fb;
@@ -1276,7 +1297,7 @@ function scoreCareer(car,P){
     .map(x=>x.diff>0?"Asks for more "+DIMS[x.k]+" than you want.":"Less "+DIMS[x.k]+" than you'd like.");
   const gapsSk=car.sk.filter(s=>!P.skills.has(s));
   const shown=.5+(clamp(total)-.5)*P.conf;
-  return {car,fit:Math.round(clamp(shown)*100),interest,ability,skillFit,dimSim,payFit,ind,hit,gapsSk,why:[...(fb>=.05?["Lines up with what you said about "+FIELDQ[curField()].name+"."]:[]),...ints,...abr,...skr,...pros,...lows,...payr].slice(0,4),cons,flags};
+  return {car,fit:Math.round(clamp(shown)*100),interest,ability,skillFit,dimSim,payFit,ind,hit,gapsSk,subjFit,why:[...(fb>=.05?["Lines up with what you said about "+FIELDQ[curField()].name+"."]:[]),...(subjFit>=.6?["Works with "+SUBJ_LABEL[subjTop].toLowerCase()+", which you picked."]:[]),...ints,...abr,...skr,...pros,...lows,...payr].slice(0,4),cons,flags};
 }
 
 /* ============================================================
@@ -1321,6 +1342,9 @@ function renderItem(it,num){
     h+='<p class="qt">'+esc(it.text)+'</p><div class="row2">'+[["t","True"],["f","False"]].map(([v,l])=>'<button class="opt'+(a===v?" on":"")+'" data-id="'+it.id+'" data-v="'+v+'">'+l+'</button>').join("")+'</div>';
   }else if(it.t==="ab"){
     h+='<p class="qt">Which would you rather?</p><div class="vs"><button class="opt'+(a==="a"?" on":"")+'" data-id="'+it.id+'" data-v="a">'+esc(T(it.a))+'</button><span class="or">OR</span><button class="opt'+(a==="b"?" on":"")+'" data-id="'+it.id+'" data-v="b">'+esc(it.b)+'</button></div>';
+  }else if(it.t==="pick"){
+    const sel=Array.isArray(a)?a:[];
+    h+='<p class="qt">'+esc(it.text)+'</p><p class="small" style="margin:-4px 0 10px">Choose as many as you like.</p><div class="chips-pick">'+it.opts.map(([k,l])=>'<button class="opt'+(sel.includes(k)?" on":"")+'" aria-pressed="'+sel.includes(k)+'" data-pick="'+it.id+'" data-v="'+k+'">'+esc(l)+'</button>').join("")+'</div>';
   }else if(it.t==="sjt"||it.t==="mc"){
     h+='<p class="qt">'+esc(T(it.text))+'</p><div class="stack">'+it.opts.map((o,i)=>'<button class="opt'+(a===i?" on":"")+'" data-id="'+it.id+'" data-v="'+i+'">'+esc(T(o[0]))+'</button>').join("")+'</div>';
   }else if(it.t==="sl"){
@@ -1704,7 +1728,7 @@ function resultCard(s,rank,open){
   '<div class="small"><strong>Search for:</strong> '+esc(c.titles)+'</div>'+(c.step?'<div class="small"><strong>'+(c.gen?'Path in':'First move')+':</strong> '+esc(c.step)+'</div>':'')+
   blsBlock(c)+relBlock(c)+
   (c.gen?'<div class="small">'+(c.est?'This job has little O*NET data, so much of its profile is estimated from similar jobs. ':'')+'Profile computed from O*NET job data; AI exposure not rated yet.</div>':'')+
-  '<div class="small">'+[["Interest match",s.interest],["ability match",s.ability],["resume match",s.skillFit],["work-style match",s.dimSim],["pay match",s.payFit]].filter(x=>x[1]!=null).map(x=>x[0]+' '+pct(x[1])).join(' · ').replace(/^./,c=>c.toUpperCase())+'</div></div></details>';
+  '<div class="small">'+[["Interest match",s.interest],["ability match",s.ability],["resume match",s.skillFit],["subject match",s.subjFit],["work-style match",s.dimSim],["pay match",s.payFit]].filter(x=>x[1]!=null).map(x=>x[0]+' '+pct(x[1])).join(' · ').replace(/^./,c=>c.toUpperCase())+'</div></div></details>';
 }
 function mySkillsCount(){return mySkills().size}
 
@@ -1718,6 +1742,7 @@ function ansText(it){
   if(it.t==="sjt"||it.t==="mc")return T(it.opts[v][0]);
   if(it.t==="sl")return it.fmt(Number(v));
   if(it.t==="rank")return v.join(" > ");
+  if(it.t==="pick")return v.map(k=>SUBJ_LABEL[k]||k).join(", ");
   return String(v);
 }
 function summaryText({P,scored,code,mbti}){
@@ -1744,13 +1769,14 @@ function summaryText({P,scored,code,mbti}){
     L.push("Sweet spot (enjoy + skilled): "+(g.sweet.map(x=>x.text).join("; ")||"none"));
     L.push("Good at but not into it: "+(g.hidden.map(x=>x.text).join("; ")||"none"));
     L.push("Love it, still building: "+(g.grow.map(x=>x.text).join("; ")||"none"));}
+  L.push("Enjoys working with: "+(Array.isArray(A.subjects)?A.subjects.map(k=>SUBJ_LABEL[k]).join(", "):"not answered"));
   L.push("Values order: "+(Array.isArray(A.rank_values)?A.rank_values.map(k=>VALUES.find(v=>v[0]===k)[1].split(" — ")[0]).join(" > "):"not ranked"));
   L.push("Pay: min "+(P.minSet?"$"+P.minPay+"k":"not set")+", 5-yr target "+(P.targetSet?"$"+P.target+"k":"not set"));
   L.push("Work-style dims (0-100, unanswered left out): "+Object.keys(DIMS).filter(k=>!P.skip.has(k)).map(k=>DIMS[k]+" "+pct(P.D[k])).join(", ")+", pay priority "+pct(P.D.pay)+", patience for a longer path "+pct(P.D.pat));
   L.push("Skills found on resume (confirmed): "+([...P.skills].map(s=>SK[s][0]).join(", ")||"none"));
   L.push("");
   L.push("TOP 15:");
-  scored.slice(0,15).forEach((s,i)=>L.push((i+1)+". "+s.car.n+" — "+s.fit+"% ("+[["int",s.interest],["ability",s.ability],["resume",s.skillFit],["style",s.dimSim],["pay",s.payFit]].filter(x=>x[1]!=null).map(x=>x[0]+" "+pct(x[1])).join(", ")+")"+(s.flags.length?" | flags: "+s.flags.join("; "):"")));
+  scored.slice(0,15).forEach((s,i)=>L.push((i+1)+". "+s.car.n+" — "+s.fit+"% ("+[["int",s.interest],["ability",s.ability],["resume",s.skillFit],["subject",s.subjFit],["style",s.dimSim],["pay",s.payFit]].filter(x=>x[1]!=null).map(x=>x[0]+" "+pct(x[1])).join(", ")+")"+(s.flags.length?" | flags: "+s.flags.join("; "):"")));
   L.push("BOTTOM 5: "+scored.slice(-5).map(s=>s.car.n+" "+s.fit+"%").join(", "));
   const stp=stepping(scored,P);
   if(stp){L.push("");L.push("TOP STEPPING-STONE JOBS:");stp.slice(0,6).forEach((x,i)=>L.push((i+1)+". "+x.st.n+" — "+pct(x.ready)+"% ready → leads to "+x.tg.slice(0,3).map(t=>t.n+" ("+t.fit+"%)").join(", ")+(x.need.length?" | gaps: "+x.need.join(", "):"")))}
@@ -1796,6 +1822,11 @@ app.addEventListener("click",e=>{
   const b=e.target.closest("button"); if(!b)return;
   if(b.dataset.go!==undefined){go(Number(b.dataset.go));return}
   if(b.dataset.skill){const pr=state.profile,id=b.dataset.skill;pr.off=pr.off.includes(id)?pr.off.filter(x=>x!==id):[...pr.off,id];save();renderSkillChips();return}
+  if(b.dataset.pick){
+    const it=allItems().find(x=>x.id===b.dataset.pick), cur=Array.isArray(state.answers[it.id])?state.answers[it.id].slice():[], i=cur.indexOf(b.dataset.v);
+    if(i<0)cur.push(b.dataset.v); else cur.splice(i,1);
+    state.answers[it.id]=cur.length?cur:null; save(); rerenderItem(it); return;
+  }
   if(b.dataset.id){
     const it=allItems().find(x=>x.id===b.dataset.id);
     let v=b.dataset.v; if(it.t==="lik"||it.t==="sjt"||it.t==="mc")v=Number(v);
