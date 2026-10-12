@@ -231,13 +231,13 @@ const ABIL=["Can't do it","Shaky","Can do OK","Comfortable","Easily"];
 
 /* Holland RIASEC work activities, written in the style of the O*NET Interest Profiler */
 const RI=[
- ["ri1","Install and set up equipment or machines","R"],
+ ["ri1","Install systems like wiring, plumbing, or networks","R"],
  ["ri2","Figure out why a problem keeps happening when nobody else can","I"],
  ["ri3","Design how something looks (a logo, a page, a space)","A"],
  ["ri4","Teach a group how to do something new","S"],
  ["ri5","Pitch an idea to a skeptical boss and win them over","E"],
  ["ri6","Keep records or files clean, organized, and accurate","C"],
- ["ri7","Repair equipment, vehicles, or devices when they break","R"],
+ ["ri7","Repair things when they break (cars, devices, machines)","R"],
  ["ri8","Dig into numbers or records to explain what changed","I"],
  ["ri9","Write something original: a story, article, or marketing copy","A"],
  ["ri10","Coach someone until they're confident on their own","S"],
@@ -255,26 +255,27 @@ const RI=[
  ["ri22","Care for someone who is sick, hurt, or struggling","S"],
  ["ri23","Sell a product or service and earn commission on it","E"],
  ["ri24","Check documents for errors and rule-breaking","C"],
- ["ri25","Operate tools, vehicles, or specialized equipment","R"],
+ ["ri25","Drive or operate heavy machinery","R"],
  ["ri26","Test which of two approaches works better","I"],
  ["ri27","Perform, present creatively, or entertain an audience","A"],
  ["ri28","Help a community or group that needs support","S"],
  ["ri29","Start your own business or side hustle","E"],
- ["ri30","Manage schedules, files, and paperwork for a team","C"]
+ ["ri30","Process forms, orders, or payments accurately","C"]
 ];
 function itemText(it){return it.text}
-/* Big Five: public-domain IPIP items (Goldberg's 50-item Big-Five factor markers). k=+1 keyed, -1 reverse keyed */
+/* Big Five: public-domain IPIP items (Goldberg's 50-item Big-Five factor markers). k=+1 keyed, -1 reverse keyed.
+   Chosen so no two items are mirror images of each other (e.g. "vivid imagination" vs "don't have a good imagination"). */
 const B5=[
  ["b1","Am the life of the party.","E",1],["b2","Get stressed out easily.","N",1],["b3","Am always prepared.","C",1],
- ["b4","Am interested in people.","A",1],["b5","Have a vivid imagination.","O",1],["b6","Don't talk a lot.","E",-1],
+ ["b4","Take time out for others.","A",1],["b5","Have a vivid imagination.","O",1],["b6","Don't talk a lot.","E",-1],
  ["b7","Am relaxed most of the time.","N",-1],["b8","Leave my belongings around.","C",-1],["b9","Feel little concern for others.","A",-1],
  ["b10","Am not interested in abstract ideas.","O",-1],["b11","Feel comfortable around people.","E",1],["b12","Worry about things.","N",1],
  ["b13","Pay attention to details.","C",1],["b14","Sympathize with others' feelings.","A",1],["b15","Have excellent ideas.","O",1],
- ["b16","Keep in the background.","E",-1],["b17","Seldom feel blue.","N",-1],["b18","Make a mess of things.","C",-1],
- ["b19","Am not really interested in others.","A",-1],["b20","Do not have a good imagination.","O",-1],["b21","Start conversations.","E",1],
- ["b22","Get upset easily.","N",1],["b23","Get chores done right away.","C",1],["b24","Make people feel at ease.","A",1],
+ ["b16","Keep in the background.","E",-1],["b17","Seldom feel blue.","N",-1],["b18","Follow a schedule.","C",1],
+ ["b19","Am not really interested in others.","A",-1],["b20","Spend time reflecting on things.","O",1],["b21","Start conversations.","E",1],
+ ["b22","Change my mood a lot.","N",1],["b23","Get chores done right away.","C",1],["b24","Make people feel at ease.","A",1],
  ["b25","Am quick to understand things.","O",1],["b26","Am quiet around strangers.","E",-1],["b27","Get irritated easily.","N",1],
- ["b28","Shirk my duties.","C",-1],["b29","Insult people.","A",-1],["b30","Have difficulty understanding abstract ideas.","O",-1]
+ ["b28","Shirk (avoid) my duties.","C",-1],["b29","Insult people.","A",-1],["b30","Have a rich vocabulary.","O",1]
 ];
 const lik=(arr,scale)=>arr.map(([id,text,x,k])=>scale==="enjoy"?{t:"lik",id,text,scale,ri:x}:{t:"lik",id,text,scale,b5:x,k});
 
@@ -288,50 +289,39 @@ const VALUES=[
 const SCHOOL=["None","A few online courses","A certification (a few months)","A 1–2 year program","A 4-year degree or more"];
 const SLIDERS=[
  {t:"sl",id:"s_minpay",text:"Lowest yearly pay you'd accept for your next job",min:20,max:150,step:5,def:50,lo:"$20k",hi:"$150k",fmt:v=>"$"+v+"k"},
- {t:"sl",id:"s_target",text:"Yearly pay you want to be making in 5 years",min:40,max:300,step:10,def:90,lo:"$40k",hi:"$300k+",fmt:v=>"$"+v+"k"},
- {t:"sl",id:"s_travel",text:"Ideal share of your work week spent traveling",min:0,max:80,step:5,def:15,lo:"Never",hi:"80% — on the road most weeks",fmt:v=>v+"%",ev:(v,add)=>add("tr",Math.min(1,v/70),3)},
- {t:"sl",id:"s_coding",text:"How much coding or technical scripting you're OK doing long-term",min:0,max:100,step:5,def:20,lo:"None at all",hi:"Coding most days",fmt:v=>v+"%",ev:(v,add)=>add("c",v/100,3)},
+ {t:"sl",id:"s_target",text:"Yearly pay you'd like to be making in 5 years",min:40,max:300,step:10,def:90,lo:"$40k",hi:"$300k+",fmt:v=>"$"+v+"k"},
+ {t:"sl",id:"s_travel",text:"How much of your week you'd want to travel",min:0,max:80,step:5,def:15,lo:"Never",hi:"80% — on the road most weeks",fmt:v=>v+"%",ev:(v,add)=>add("tr",Math.min(1,v/70),3)},
+ {t:"sl",id:"s_coding",text:"How much coding or technical scripting you'd be OK doing long-term",min:0,max:100,step:5,def:20,lo:"None at all",hi:"Coding most days",fmt:v=>v+"%",ev:(v,add)=>add("c",v/100,3)},
  {t:"sl",id:"s_comm",text:"How you'd want to be paid",min:0,max:100,step:5,def:20,lo:"100% fixed pay (salary or hourly)",hi:"Mostly commission, uncapped",fmt:v=>v<10?"All fixed pay":v<40?"Mostly fixed pay":v<70?"Fixed pay + big bonus":"Heavy commission",ev:(v,add)=>add("rp",v/100,3)},
  {t:"sl",id:"s_hours",text:"If it paid noticeably more, how many hours a week would you regularly work?",min:30,max:65,step:1,def:45,lo:"30",hi:"65",fmt:v=>v+" hrs",ev:(v,add)=>add("h",Math.max(0,(v-38)/27),3)},
  {t:"sl",id:"s_onsite",text:"Where you'd want to work",min:0,max:100,step:5,def:40,lo:"Fully remote",hi:"Out in the field / on-site",fmt:v=>v<20?"Remote":v<45?"Hybrid":v<75?"Mostly in person":"In the field",ev:(v,add)=>add("o",v/100,2.5)},
- {t:"sl",id:"s_people",text:"How much of your day you'd want spent with people",min:0,max:100,step:5,def:50,lo:"Heads-down alone",hi:"With people all day",fmt:v=>v+"%",ev:(v,add)=>{add("cu",v/100,2.5);add("pr",v/100,.6)}},
- {t:"sl",id:"s_school",text:"How much more school or training you'd take on for the right career",min:0,max:4,step:1,def:1,lo:"None",hi:"4-year degree or more",fmt:v=>SCHOOL[v],ev:(v,add)=>add("pat",v/4,2)}
+ {t:"sl",id:"s_people",text:"How much of your day you'd want to spend with people",min:0,max:100,step:5,def:50,lo:"Heads-down alone",hi:"With people all day",fmt:v=>v+"%",ev:(v,add)=>{add("cu",v/100,2.5);add("pr",v/100,.6)}},
+ {t:"sl",id:"s_school",text:"How much more school or training you'd do for the right career",min:0,max:4,step:1,def:1,lo:"None",hi:"4-year degree or more",fmt:v=>SCHOOL[v],ev:(v,add)=>add("pat",v/4,2)}
 ];
 
 const TF=[
  ["tf1","I'd rather have a job where every week looks different.",{v:1},{v:.2}],
  ["tf2","Cold-calling strangers sounds miserable.",{s:.1,rp:.3},{s:.85}],
  ["tf3","I'm OK being on call some nights or weekends.",{h:.85},{h:.2}],
- ["tf4","I'd take a pay cut to work in an industry I love.",{pu:.7,pay:.4},{pay:.85}],
  ["tf5","I enjoy presenting to a room full of people.",{pr:1},{pr:.15}],
- ["tf6","I'd enjoy living out of a suitcase two to four days a week.",{tr:.9},{tr:.1}],
  ["tf7","I want to be managing people within five years.",{l:1},{l:.2}],
  ["tf8","Writing long documents drains me.",{w:.1},{w:.8}],
  ["tf9","Pressure and deadlines help me focus.",{p:.9},{p:.3}],
- ["tf10","I'd like to own my own business someday.",{en:1},{en:.1}],
- ["tf11","Commission-based pay would stress me out.",{rp:.1},{rp:.8}],
- ["tf12","I like being the person who explains complicated things in plain English.",{cu:.9,pr:.7},{cu:.4}],
+ ["tf12","I like explaining complicated things in plain English.",{cu:.9,pr:.7},{cu:.4}],
  ["tf13","I get bored once I've mastered something.",{v:.9},{v:.35}],
- ["tf14","I'd study on nights and weekends for a certification if it raised my pay.",{pay:.9,pat:.7},{pay:.5,pat:.3}],
+ ["tf14","I'd study nights and weekends for a certification that raises my pay.",{pay:.9,pat:.7},{pay:.5,pat:.3}],
  ["tf15","I'd be happy working with numbers and spreadsheets most of the day.",{da:1},{da:.2}],
  ["tf16","I want my work to directly help people.",{pu:1,cu:.7},{pu:.35}],
- ["tf17","Physical work (on my feet, lifting, outdoors) beats sitting all day.",{th:.9,o:.9},{th:.2,o:.3}],
- ["tf18","I'd rather follow a proven playbook than invent my own.",{au:.25,en:.1},{au:.85}]
+ ["tf17","Physical work (on my feet, lifting, outdoors) beats sitting all day.",{th:.9,o:.9},{th:.2,o:.3}]
 ].map(([id,text,T,F])=>({t:"tf",id,text,T,F}));
 
 const AB=[
  ["ab1","Build the solution","Sell the solution",{th:.6,da:.6,s:.1},{s:.9,cu:.8}],
  ["ab2","Be the go-to expert on one thing","Know a little about everything",{v:.2},{v:.9}],
  ["ab3","More money doing work that bores you","Less money doing work you love",{pay:1},{pay:.3,pu:.6}],
- ["ab4","Clear rules and a playbook","Freedom to figure it out yourself",{au:.2},{au:1,v:.7}],
  ["ab5","A few long-term {clients} you know well","Lots of short projects with new people",{v:.3,cu:.8},{v:.9}],
- ["ab6","Lead the team","Be the trusted expert advisor",{l:1},{l:.3}],
  ["ab7","Big, stable company","Fast-moving startup",{rp:.2,p:.4},{rp:.7,p:.8,en:.6}],
- ["ab8","Same workplace every day","A different city most weeks",{tr:0},{tr:1}],
- ["ab9","A day spent with people","A day spent with data and systems",{cu:1,da:.2},{da:.9,cu:.2}],
- ["ab10","Five hours of calls","Five hours of writing",{cu:1,w:.2},{w:.9,cu:.3}],
- ["ab11","Bonus tied to the team's results","Bonus tied to your own results",{rp:.3},{rp:.8,s:.7}],
- ["ab12","Hands on tools and equipment","Hands on a keyboard",{th:1,o:.8},{th:.2,da:.6}]
+ ["ab11","Bonus tied to the team's results","Bonus tied to your own results",{rp:.3},{rp:.8,s:.7}]
 ].map(([id,a,b,A,B])=>({t:"ab",id,a,b,A,B}));
 
 /* Scenarios use {tokens} that are filled in for the person's field (see FIELDS). Answer options keep the same scoring in every field. */
@@ -339,8 +329,8 @@ const SJT=[
  {id:"sj1",text:"{brk}. What do you do?",opts:[
   ["Try to fix it myself right away",{th:.9,o:.8,p:.7}],
   ["Keep everyone calm and updated while it gets fixed",{cu:.8,pr:.6}],
-  ["Find a workaround so things keep moving, and figure out the cause later",{da:.6,c:.4,p:.6}],
-  ["Get through it, then pitch my {boss} on a way to stop it happening again",{en:.6,s:.6,l:.6}]]},
+  ["Find a workaround now, figure out the cause later",{da:.6,c:.4,p:.6}],
+  ["Get through it, then pitch my {boss} on a way to stop it from happening again",{en:.6,s:.6,l:.6}]]},
  {id:"sj2",text:"Your {boss} asks for one volunteer. Which do you grab?",opts:[
   ["Lead the rollout of {init}",{l:1,pr:.6}],
   ["Build a report that shows leadership what's really going on",{da:1,c:.4}],
@@ -366,18 +356,13 @@ const SJT=[
   ["Analyze where things are stalling",{da:.9}],
   ["Rally the team and divide up the work",{l:1}],
   ["Stay calm and stick to the process",{p:.3,v:.3}]]},
- {id:"sj7",text:"The night before a big {event}, something goes seriously wrong at 9 p.m. You…",opts:[
-  ["Stay late and fix it hands-on",{th:.7,p:1,h:.9}],
-  ["Document what failed and ask to push the date",{p:.3,h:.2}],
-  ["Call in an expert and escalate",{cu:.6,p:.6}],
-  ["Take charge and coordinate everyone involved",{l:1,p:.8,h:.7}]]},
  {id:"sj8",text:"Four offers land on the same day. Which do you take?",opts:[
   ["$70k salary, fully remote, normal hours",{o:0,tr:0,rp:.1,pay:.6}],
   ["$55k base + $45k commission target",{rp:1,s:.8,pay:.9}],
   ["$80k salary, 60% travel",{tr:1,o:.9,pay:1}],
   ["$55k doing work that feels truly meaningful",{pu:1,pay:.2}]]},
  {id:"sj9",text:"In a meeting, {clash} strongly disagree. You…",opts:[
-  ["Translate each side so they understand each other",{cu:.8,pr:.7}],
+  ["Help each side understand the other",{cu:.8,pr:.7}],
   ["Pull the facts that settle it",{da:1}],
   ["Make the call and move things forward",{l:1,au:.8}],
   ["Stay out of it — not my fight",{l:.1,cu:.2}]]},
@@ -453,11 +438,11 @@ const FIELDQ={
      ["Businesses: contracts, deals, corporate clients",{da:.5,pay:.8},{corp:2,comp:.5},{contracts:.03}],
      ["Helping people who can't afford help (immigration, legal aid)",{pu:1,cu:.8},{pub:2},{policy:.03,attorney:.01}],
      ["Lawsuits and trials — building the case",{p:.8,w:.7},{lit:2},{legal:.02,legalops:.02}]]],
-   ["lg3","Working for someone you believe did something wrong (or a company whose choices you disagree with) would…",[
+   ["lg3","Working for someone you think is in the wrong (or a company whose choices you disagree with) would…",[
      ["Not bother me — everyone deserves representation",{},{crim:1,corp:1,lit:.5},{}],
      ["Bother me some, but I could do it",{},{lit:.5,comp:.3},{}],
      ["Really bother me — I need to believe in the side I'm on",{pu:.9},{pub:1.5,fam:.5,comp:.3},{}]]],
-   ["lg4","How do you feel about clients going through the worst moments of their lives?",[
+   ["lg4","Working with clients on the worst days of their lives…",[
      ["It's why I'd do this — I want to be there for them",{pu:1,cu:1},{fam:1.5,pub:1,crim:.5},{counsel:.02}],
      ["I can handle it, but I need breaks from it",{cu:.6},{lit:.5,crim:.3},{}],
      ["I'd rather the work be about documents and deals than emotions",{cu:.3},{corp:1,ops:1,comp:1},{}]]],
@@ -546,10 +531,10 @@ const FIELDQ={
    biz:["Business-facing tech","Translating between the business and the tech team.","Business Analyst, Implementation Consultant, Product Manager"],
    sales:["Tech sales & solutions","Showing customers how the tech solves their problem.","Sales Engineer, Solutions Consultant, Account Executive"]},
   qs:[
-   ["tc1","When something breaks, you'd rather…",[
-     ["Fix it myself with my hands on the keyboard",{th:.6,c:.5},{sup:1,cloud:1,sec:.5},{}],
-     ["Find out why and make sure it never happens again",{da:.8},{sec:1,data:.5,cloud:.5},{}],
-     ["Explain it to the person in plain English",{cu:.9,pr:.6},{biz:1,sales:1,sup:.5},{}]]],
+   ["tc1","Which part of fixing tech problems do you like best?",[
+     ["Getting hands-on and fixing it",{th:.6,c:.5},{sup:1,cloud:1,sec:.5},{}],
+     ["Finding the root cause so it doesn't come back",{da:.8},{sec:1,data:.5,cloud:.5},{}],
+     ["Walking the person through it",{cu:.9,pr:.6},{biz:1,sales:1,sup:.5},{}]]],
    ["tc2","How do you feel about coding every day?",[
      ["Love it",{c:1},{dev:2,cloud:1,data:.5},{swe:.04}],
      ["Some scripting is fine",{c:.5},{cloud:1,data:1,sec:1},{}],
@@ -661,9 +646,9 @@ const FIELDQ={
      ["Grow in it — I like it here",{},{mgmt:1,hotel:1,events:.5},{hosp:.03}],
      ["Move to the corporate side of it",{da:.5},{corp:2,train:1},{ops:.03}],
      ["Use my people skills somewhere new (sales, tech, office)",{v:.6},{sales:1,cs:1.5},{csm:.03,sales:.02}]]],
-   ["sv4","Commission-based pay…",[
-     ["Exciting — I'd bet on myself",{rp:1,s:.8},{sales:2},{sales:.03,realestate:.02}],
-     ["OK as a bonus on top of a salary",{rp:.5},{cs:1,mgmt:.5},{}],
+   ["sv4","Would you move into a sales job paid mostly on commission?",[
+     ["Yes, I'd bet on myself",{rp:1,s:.8},{sales:2},{sales:.03,realestate:.02}],
+     ["Only with a solid base salary",{rp:.5},{cs:1,mgmt:.5},{}],
      ["No thanks",{rp:.1},{corp:1,train:1,hotel:.5},{}]]]]},
  science:{name:"science",dirs:{
    lab:["Lab research","Experiments at the bench.","Lab Technician, Research Associate, Research Scientist"],
@@ -754,9 +739,9 @@ const FIELDQ={
      ["Talking to the public and the press",{pr:.9,w:.6},{comms:2},{writer:.03,mkt:.02}],
      ["Running the programs that serve people",{l:.6,pu:.8},{admin:2},{proj:.03,ops:.02}],
      ["Organizing people around a cause",{cu:.8,pu:.9,h:.6},{campaign:2},{}]]],
-   ["gv2","Government job, or the private side (lobbying, consulting, advocacy groups)?",[
-     ["Government: stable, mission-driven, good benefits",{pu:.7},{admin:1,analysis:1,regs:1},{policy:.02}],
-     ["Private side: usually more pay and more hustle",{pay:.7,s:.5},{leg:1.5,comms:.5},{consult:.02}],
+   ["gv2","Where would you rather work?",[
+     ["Government: stable, good benefits",{pu:.7},{admin:1,analysis:1,regs:1},{policy:.02}],
+     ["Private side (lobbying, consulting): more pay, more hustle",{pay:.7,s:.5},{leg:1.5,comms:.5},{consult:.02}],
      ["Nonprofit advocacy",{pu:1},{campaign:1.5,analysis:.5},{}]]],
    ["gv3","Election years, late nights, and a constant news cycle…",[
      ["Energizing",{p:.9,h:.8},{campaign:1,comms:1,leg:1},{}],
@@ -945,7 +930,7 @@ const FIELDQ={
      ["Taking care of buildings and tenants",{l:.5,cu:.7},{pm:2},{realestate:.02}],
      ["Watching projects get built",{o:.8,l:.5},{dev:2},{b119021:.04}],
      ["The numbers behind the deal",{da:1},{fin:2,invest:.5},{b132072:.03,fin:.02}]]],
-   ["re2","Commission-only income…",[
+   ["re2","Getting paid only when a deal closes…",[
      ["Exciting",{rp:1},{agent:1.5,cre:1},{realestate:.03}],
      ["I want a base salary",{rp:.3},{pm:1,dev:1,fin:1},{}],
      ["Only if I'm building my own investments",{en:.7},{invest:2},{entre:.02}]]],
@@ -983,26 +968,26 @@ const PATHQ=[
 const OPEN=[
  ["op1","Describe your best day at any job, class, or project you've had. What were you doing?","The day I…"],
  ["op2","What kinds of tasks or situations at work drain your energy the fastest?",""],
- ["op3","Think of a job, class, or role you expected to like but didn't. What specifically didn't you like?",""],
+ ["op3","Think of a job, class, or role you expected to like but didn't. What specifically didn't you like about it?",""],
  ["op4","If every job paid exactly the same, what work would you choose?",""],
- ["op5","What does a great life look like five years from now? Job, money, where you live, schedule.",""],
+ ["op5","What does a great life look like in five years? Think job, money, where you live, schedule.",""],
  ["op6","Whose job have you been jealous of? What about it?",""],
  ["op7","Anything that's a hard no for you in a job?","e.g. no cold calling, no night shifts, no moving…"],
  ["op8","Anything else an AI coach should know before analyzing your results?",""]
 ].map(([id,text,ph])=>({t:"open",id,text,ph}));
 
 const PAGES=[
- {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your resume and a few basics. The resume is read inside your browser only. It's used to spot skills you already have, which powers the \"stepping-stone jobs\" in your results.",items:[],custom:"checkin"},
- {id:"int1",title:"Interests, part 1",short:"Interests 1",lede:"Rate each activity twice: how much you'd enjoy it as part of a job, and how good you are at it today. These cover every kind of work on purpose, not just your field. If something isn't your world, a quick \"Hate it\" is a useful answer: it's how the combine rules careers out.",items:lik(RI.slice(0,15),"enjoy")},
- {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. If you've never tried something, rate your ability as your best guess. Activities outside your field are there on purpose.",items:lik(RI.slice(15),"enjoy")},
- {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"Read each one as starting with \"I\" (\"I am the life of the party\"). How well does it describe you as you usually are, not as you wish to be? A few are worded negatively on purpose, so read each one before answering.",items:lik(B5.slice(0,15),"agree")},
- {id:"per2",title:"Personality, part 2",short:"Personality 2",lede:"Same as before: read each one as starting with \"I\", and watch for the negatively worded ones. First instinct is usually the most accurate.",items:lik(B5.slice(15),"agree")},
- {id:"val",title:"What matters most",short:"Values",lede:"Rank these and set your pay numbers. They feed straight into the pay side of the scoring.",items:[{t:"rank",id:"rank_values",text:"Put these in order, most important at the top",items:VALUES},SLIDERS[0],SLIDERS[1]]},
- {id:"sty",title:"How you want to work",short:"Work style",lede:"Drag each slider to where you honestly land. Leave one untouched if you're unsure, and it won't count.",items:SLIDERS.slice(2)},
+ {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your resume and a few basics. Your resume is read only inside your browser. It's used to spot skills you already have, which powers the \"stepping-stone jobs\" in your results.",items:[],custom:"checkin"},
+ {id:"int1",title:"Interests, part 1",short:"Interests 1",lede:"Rate each activity twice: how much you'd enjoy doing it as part of a job, and how good you are at it today. The list covers every kind of work on purpose, not just your field. If something isn't for you, \"Hate it\" is a useful answer, because that's how careers get ruled out.",items:lik(RI.slice(0,15),"enjoy")},
+ {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. If you've never tried something, give your best guess for ability. Activities outside your field are there on purpose.",items:lik(RI.slice(15),"enjoy")},
+ {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"Read each statement as if it starts with \"I\" (so \"Am the life of the party\" means \"I am the life of the party\"). Rate how well it describes you as you usually are, not as you'd like to be. A few are worded negatively on purpose, so read each one before answering.",items:lik(B5.slice(0,15),"agree")},
+ {id:"per2",title:"Personality, part 2",short:"Personality 2",lede:"Same as before: read each one as if it starts with \"I\", and watch for the negatively worded ones. Your first instinct is usually the most accurate.",items:lik(B5.slice(15),"agree")},
+ {id:"val",title:"What matters most",short:"Values",lede:"Rank what matters most to you, then set your pay numbers. Your pay numbers feed straight into the pay side of the scoring.",items:[{t:"rank",id:"rank_values",text:"Put these in order, with the most important at the top",items:VALUES},SLIDERS[0],SLIDERS[1]]},
+ {id:"sty",title:"How you want to work",short:"Work style",lede:"Drag each slider to where you honestly land. If you're unsure about one, leave it untouched and it won't count.",items:SLIDERS.slice(2)},
  {id:"tf",title:"True or false",short:"True/false",lede:"Quick gut calls. If it's mostly true, pick True.",items:TF},
  {id:"ab",title:"This or that",short:"This or that",lede:"Pick the one you'd choose if you had to. Both can be fine.",items:AB},
  {id:"sj1",title:"Scenarios, part 1",short:"Scenarios 1",lede:"Pick what you'd actually do, not what sounds best.",items:SJT.slice(0,6)},
- {id:"sj2",title:"Scenarios, part 2",short:"Scenarios 2",lede:"Six more.",items:SJT.slice(6)},
+ {id:"sj2",title:"Scenarios, part 2",short:"Scenarios 2",lede:"Five more.",items:SJT.slice(6)},
  {id:"path",title:"Your career path",short:"Your path",lede:"Where you are now and what's in the way. These shape how hard your results push toward quick wins versus longer paths.",items:PATHQ},
  {id:"fieldq",custom:"field",get title(){const F=FIELDQ[curField()];return F?"Your take on "+F.name:"Questions for your field"},short:"Your field",get lede(){return FIELDQ[curField()]?"These only show up for people in "+FIELDS[curField()].label.toLowerCase()+". They point you toward the right corner of your field, and nudge the main ranking.":""},get items(){return fieldItems()}},
  {id:"open",title:"In your own words",short:"Your words",lede:"These don't change your score here. They go into the summary you can paste into an AI assistant, so a few honest sentences go a long way. Skip any you want.",items:OPEN}
