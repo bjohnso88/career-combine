@@ -263,18 +263,19 @@ const RI=[
  ["ri30","Process forms, orders, or payments accurately","C"]
 ];
 function itemText(it){return it.text}
-/* Big Five: public-domain IPIP items (Goldberg's 50-item Big-Five factor markers). k=+1 keyed, -1 reverse keyed */
+/* Big Five: public-domain IPIP items (Goldberg's 50-item Big-Five factor markers). k=+1 keyed, -1 reverse keyed.
+   Chosen so no two items are mirror images of each other (e.g. "vivid imagination" vs "don't have a good imagination"). */
 const B5=[
  ["b1","Am the life of the party.","E",1],["b2","Get stressed out easily.","N",1],["b3","Am always prepared.","C",1],
- ["b4","Am interested in people.","A",1],["b5","Have a vivid imagination.","O",1],["b6","Don't talk a lot.","E",-1],
+ ["b4","Take time out for others.","A",1],["b5","Have a vivid imagination.","O",1],["b6","Don't talk a lot.","E",-1],
  ["b7","Am relaxed most of the time.","N",-1],["b8","Leave my belongings around.","C",-1],["b9","Feel little concern for others.","A",-1],
  ["b10","Am not interested in abstract ideas.","O",-1],["b11","Feel comfortable around people.","E",1],["b12","Worry about things.","N",1],
  ["b13","Pay attention to details.","C",1],["b14","Sympathize with others' feelings.","A",1],["b15","Have excellent ideas.","O",1],
- ["b16","Keep in the background.","E",-1],["b17","Seldom feel blue.","N",-1],["b18","Make a mess of things.","C",-1],
- ["b19","Am not really interested in others.","A",-1],["b20","Do not have a good imagination.","O",-1],["b21","Start conversations.","E",1],
- ["b22","Get upset easily.","N",1],["b23","Get chores done right away.","C",1],["b24","Make people feel at ease.","A",1],
+ ["b16","Keep in the background.","E",-1],["b17","Seldom feel blue.","N",-1],["b18","Follow a schedule.","C",1],
+ ["b19","Am not really interested in others.","A",-1],["b20","Spend time reflecting on things.","O",1],["b21","Start conversations.","E",1],
+ ["b22","Change my mood a lot.","N",1],["b23","Get chores done right away.","C",1],["b24","Make people feel at ease.","A",1],
  ["b25","Am quick to understand things.","O",1],["b26","Am quiet around strangers.","E",-1],["b27","Get irritated easily.","N",1],
- ["b28","Shirk my duties.","C",-1],["b29","Insult people.","A",-1],["b30","Have difficulty understanding abstract ideas.","O",-1]
+ ["b28","Shirk (avoid) my duties.","C",-1],["b29","Insult people.","A",-1],["b30","Have a rich vocabulary.","O",1]
 ];
 const lik=(arr,scale)=>arr.map(([id,text,x,k])=>scale==="enjoy"?{t:"lik",id,text,scale,ri:x}:{t:"lik",id,text,scale,b5:x,k});
 
@@ -995,8 +996,8 @@ const PAGES=[
  {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your resume and a few basics. The resume is read inside your browser only. It's used to spot skills you already have, which powers the \"stepping-stone jobs\" in your results.",items:[],custom:"checkin"},
  {id:"int1",title:"Interests, part 1",short:"Interests 1",lede:"Rate each activity twice: how much you'd enjoy it, and how good you are at it now. They cover all kinds of work on purpose. If it's not your thing, \"Hate it\" helps rule careers out.",items:lik(RI.slice(0,15),"enjoy")},
  {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. Never tried it? Guess your ability.",items:lik(RI.slice(15),"enjoy")},
- {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"Read each one as starting with \"I\" (\"I am the life of the party\"). How well does it describe you as you usually are, not as you wish to be? A few are worded negatively on purpose, so read each one before answering.",items:lik(B5.slice(0,15),"agree")},
- {id:"per2",title:"Personality, part 2",short:"Personality 2",lede:"Same as before: read each one as starting with \"I\", and watch for the negatively worded ones. First instinct is usually the most accurate.",items:lik(B5.slice(15),"agree")},
+ {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"Read each one as \"I ___\" (\"I am the life of the party\"). Answer for how you usually are, not how you'd like to be. Some are worded negatively, so read carefully.",items:lik(B5.slice(0,15),"agree")},
+ {id:"per2",title:"Personality, part 2",short:"Personality 2",lede:"Same as before. Go with your first instinct.",items:lik(B5.slice(15),"agree")},
  {id:"val",title:"What matters most",short:"Values",lede:"Rank these and set your pay numbers. They feed straight into the pay side of the scoring.",items:[{t:"rank",id:"rank_values",text:"Put these in order, most important at the top",items:VALUES},SLIDERS[0],SLIDERS[1]]},
  {id:"sty",title:"How you want to work",short:"Work style",lede:"Drag each slider to where you honestly land. Leave one untouched if you're unsure, and it won't count.",items:SLIDERS.slice(2)},
  {id:"tf",title:"True or false",short:"True/false",lede:"Quick gut calls. If it's mostly true, pick True.",items:TF},
