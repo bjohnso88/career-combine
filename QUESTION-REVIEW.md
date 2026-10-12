@@ -15,6 +15,6 @@ tighten wording. Branch `claude/question-review`, PR to `main`, Bix merges.
 - [x] 3. Values & sliders: shorter wording
 - [x] 4. True/false & this-or-that: drop duplicates of sliders/other items (tf4, tf6, tf10, tf11, tf18, ab4, ab6, ab8, ab9, ab10, ab12); tighten wording
 - [x] 5. Scenarios: drop sj7 (same as sj1); tighten options
-- [ ] 6. Career path & open-ended: tighten wording
+- [x] 6. Career path & open-ended: tighten wording
 - [ ] 7. Field questions: fix overlaps (tc1 vs sj1, sv4 vs pay slider) and wordy ones (lg3, lg4)
 - [ ] 8. Test every field, update README counts, finish PR, delete this file

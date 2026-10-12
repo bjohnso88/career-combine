@@ -960,24 +960,24 @@ const PATHQ=[
  {id:"pa1",text:"How do you feel about your current (or most recent) job?",opts:[["Love it — I want to grow where I am",{pat:.6}],["It's fine, but I want more",{}],["Ready to leave",{pat:.35}],["Not working right now / still in school",{}]]},
  {id:"pa2",text:"What's the main reason you'd look for something new?",opts:[["More money",{pay:1}],["Room to grow",{pat:.6}],["Burned out — I need something different",{}],["I honestly don't know what I want yet",{}],["Getting my first real job",{}]]},
  {id:"pa3",text:"What's holding you back the most?",opts:[["Not sure which direction to go",{}],["Missing skills, a degree, or a certification",{}],["No time to study or apply",{pat:.3}],["Afraid of taking a pay cut",{pay:.9}],["No network — no one to refer me",{}]]},
- {id:"pa4",text:"Would you take a lower-level \"stepping-stone\" job if it clearly led to a better career?",opts:[["Yes, if it pays about the same",{pat:.7}],["Yes, even with a small pay cut",{pat:1,pay:.4}],["Only if it pays more",{pat:.4,pay:.9}],["No",{pat:.1}]]},
+ {id:"pa4",text:"Would you take a lower-level job if it clearly led somewhere better?",opts:[["Yes, if it pays about the same",{pat:.7}],["Yes, even with a small pay cut",{pat:1,pay:.4}],["Only if it pays more",{pat:.4,pay:.9}],["No",{pat:.1}]]},
  {id:"pa5",text:"How soon do you need a change?",opts:[["Within 3 months",{pat:.15}],["Within a year",{pat:.45}],["In 1–3 years",{pat:.8}],["No rush — just exploring",{pat:.9}]]},
  {id:"pa6",text:"Open to moving for the right job?",opts:[["Yes, anywhere",{tr:.6}],["Within my region",{}],["No, I'm staying put",{tr:.2}]]}
 ].map(o=>Object.assign({t:"mc"},o));
 
 const OPEN=[
- ["op1","Describe your best day at any job, class, or project you've had. What were you doing?","The day I…"],
+ ["op1","Think of your best day at a job, class, or project. What were you doing?","The day I…"],
  ["op2","What kinds of tasks or situations at work drain your energy the fastest?",""],
- ["op3","Think of a job, class, or role you expected to like but didn't. What specifically didn't you like?",""],
+ ["op3","What's a job or class you expected to like but didn't? Why?",""],
  ["op4","If every job paid exactly the same, what work would you choose?",""],
- ["op5","What does a great life look like five years from now? Job, money, where you live, schedule.",""],
+ ["op5","What does a great life look like in five years? Think job, money, where you live, schedule.",""],
  ["op6","Whose job have you been jealous of? What about it?",""],
  ["op7","Anything that's a hard no for you in a job?","e.g. no cold calling, no night shifts, no moving…"],
  ["op8","Anything else an AI coach should know before analyzing your results?",""]
 ].map(([id,text,ph])=>({t:"open",id,text,ph}));
 
 const PAGES=[
- {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your resume and a few basics. The resume is read inside your browser only. It's used to spot skills you already have, which powers the \"stepping-stone jobs\" in your results.",items:[],custom:"checkin"},
+ {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your resume and a few basics. Your resume stays in your browser and is used to spot skills you already have.",items:[],custom:"checkin"},
  {id:"int1",title:"Interests, part 1",short:"Interests 1",lede:"Rate each activity twice: how much you'd enjoy it, and how good you are at it now. They cover all kinds of work on purpose. If it's not your thing, \"Hate it\" helps rule careers out.",items:lik(RI.slice(0,15),"enjoy")},
  {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. Never tried it? Guess your ability.",items:lik(RI.slice(15),"enjoy")},
  {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"Read each one as \"I ___\" (\"I am the life of the party\"). Answer for how you usually are, not how you'd like to be. Some are worded negatively, so read carefully.",items:lik(B5.slice(0,15),"agree")},
@@ -988,9 +988,9 @@ const PAGES=[
  {id:"ab",title:"This or that",short:"This or that",lede:"Pick one, even if both sound fine.",items:AB},
  {id:"sj1",title:"Scenarios, part 1",short:"Scenarios 1",lede:"Pick what you'd actually do, not what sounds best.",items:SJT.slice(0,6)},
  {id:"sj2",title:"Scenarios, part 2",short:"Scenarios 2",lede:"Five more.",items:SJT.slice(6)},
- {id:"path",title:"Your career path",short:"Your path",lede:"Where you are now and what's in the way. These shape how hard your results push toward quick wins versus longer paths.",items:PATHQ},
+ {id:"path",title:"Your career path",short:"Your path",lede:"Where you are now and what's in the way.",items:PATHQ},
  {id:"fieldq",custom:"field",get title(){const F=FIELDQ[curField()];return F?"Your take on "+F.name:"Questions for your field"},short:"Your field",get lede(){return FIELDQ[curField()]?"These only show up for people in "+FIELDS[curField()].label.toLowerCase()+". They point you toward the right corner of your field, and nudge the main ranking.":""},get items(){return fieldItems()}},
- {id:"open",title:"In your own words",short:"Your words",lede:"These don't change your score here. They go into the summary you can paste into an AI assistant, so a few honest sentences go a long way. Skip any you want.",items:OPEN}
+ {id:"open",title:"In your own words",short:"Your words",lede:"These don't change your score. They go into the summary you can paste into an AI assistant. Skip any you want.",items:OPEN}
 ];
 function allItems(){return PAGES.flatMap(p=>p.items)}
 
