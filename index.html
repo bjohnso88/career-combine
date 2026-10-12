@@ -329,8 +329,8 @@ const SJT=[
  {id:"sj1",text:"{brk}. What do you do?",opts:[
   ["Try to fix it myself right away",{th:.9,o:.8,p:.7}],
   ["Keep everyone calm and updated while it gets fixed",{cu:.8,pr:.6}],
-  ["Find a workaround so things keep moving, and figure out the cause later",{da:.6,c:.4,p:.6}],
-  ["Get through it, then pitch my {boss} on a way to stop it happening again",{en:.6,s:.6,l:.6}]]},
+  ["Find a workaround now, figure out the cause later",{da:.6,c:.4,p:.6}],
+  ["Get through it, then pitch my {boss} a way to prevent it",{en:.6,s:.6,l:.6}]]},
  {id:"sj2",text:"Your {boss} asks for one volunteer. Which do you grab?",opts:[
   ["Lead the rollout of {init}",{l:1,pr:.6}],
   ["Build a report that shows leadership what's really going on",{da:1,c:.4}],
@@ -339,9 +339,9 @@ const SJT=[
  {id:"sj3",text:"{client} is unhappy with {deliv}. First move?",opts:[
   ["Call them right away and hear them out",{cu:1,p:.6}],
   ["Dig into the details to see what actually went wrong",{da:.9,c:.3}],
-  ["Pull the team together, make a plan, and own the timeline",{l:.9}],
-  ["Fix it, then suggest a bigger change that prevents it for good",{s:.9,rp:.5}]]},
- {id:"sj4",text:"You get a free afternoon at work with nothing urgent. You'd most likely…",opts:[
+  ["Get the team together and own the fix",{l:.9}],
+  ["Fix it, then offer an upgrade that prevents it",{s:.9,rp:.5}]]},
+ {id:"sj4",text:"You get a free afternoon at work. You'd most likely…",opts:[
   ["Learn a new technical skill or tool",{c:.7,da:.7}],
   ["Study for a certification",{pay:.8,pat:.8}],
   ["Reach out to people who have jobs I want",{cu:.7,s:.6,en:.4}],
@@ -356,18 +356,13 @@ const SJT=[
   ["Analyze where things are stalling",{da:.9}],
   ["Rally the team and divide up the work",{l:1}],
   ["Stay calm and stick to the process",{p:.3,v:.3}]]},
- {id:"sj7",text:"The night before a big {event}, something goes seriously wrong at 9 p.m. You…",opts:[
-  ["Stay late and fix it hands-on",{th:.7,p:1,h:.9}],
-  ["Document what failed and ask to push the date",{p:.3,h:.2}],
-  ["Call in an expert and escalate",{cu:.6,p:.6}],
-  ["Take charge and coordinate everyone involved",{l:1,p:.8,h:.7}]]},
  {id:"sj8",text:"Four offers land on the same day. Which do you take?",opts:[
   ["$70k salary, fully remote, normal hours",{o:0,tr:0,rp:.1,pay:.6}],
   ["$55k base + $45k commission target",{rp:1,s:.8,pay:.9}],
   ["$80k salary, 60% travel",{tr:1,o:.9,pay:1}],
   ["$55k doing work that feels truly meaningful",{pu:1,pay:.2}]]},
  {id:"sj9",text:"In a meeting, {clash} strongly disagree. You…",opts:[
-  ["Translate each side so they understand each other",{cu:.8,pr:.7}],
+  ["Help each side understand the other",{cu:.8,pr:.7}],
   ["Pull the facts that settle it",{da:1}],
   ["Make the call and move things forward",{l:1,au:.8}],
   ["Stay out of it — not my fight",{l:.1,cu:.2}]]},
@@ -992,7 +987,7 @@ const PAGES=[
  {id:"tf",title:"True or false",short:"True/false",lede:"Quick gut calls. If it's mostly true, pick True.",items:TF},
  {id:"ab",title:"This or that",short:"This or that",lede:"Pick one, even if both sound fine.",items:AB},
  {id:"sj1",title:"Scenarios, part 1",short:"Scenarios 1",lede:"Pick what you'd actually do, not what sounds best.",items:SJT.slice(0,6)},
- {id:"sj2",title:"Scenarios, part 2",short:"Scenarios 2",lede:"Six more.",items:SJT.slice(6)},
+ {id:"sj2",title:"Scenarios, part 2",short:"Scenarios 2",lede:"Five more.",items:SJT.slice(6)},
  {id:"path",title:"Your career path",short:"Your path",lede:"Where you are now and what's in the way. These shape how hard your results push toward quick wins versus longer paths.",items:PATHQ},
  {id:"fieldq",custom:"field",get title(){const F=FIELDQ[curField()];return F?"Your take on "+F.name:"Questions for your field"},short:"Your field",get lede(){return FIELDQ[curField()]?"These only show up for people in "+FIELDS[curField()].label.toLowerCase()+". They point you toward the right corner of your field, and nudge the main ranking.":""},get items(){return fieldItems()}},
  {id:"open",title:"In your own words",short:"Your words",lede:"These don't change your score here. They go into the summary you can paste into an AI assistant, so a few honest sentences go a long way. Skip any you want.",items:OPEN}
