@@ -137,6 +137,7 @@ body.has-live.live-open{padding-bottom:240px}
 @media (max-width:600px){.live-top .lm:nth-child(n+2){display:none}}
 @media (prefers-reduced-motion:reduce){.lm.flash{animation:none}}
 @media print{.live{display:none!important}}
+@media (max-width:700px){body.typing .live{display:none!important}}
 /* results */
 .top3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0}
 .top3 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
@@ -284,7 +285,7 @@ const SLIDERS=[
  {t:"sl",id:"s_target",text:"Yearly pay you want to be making in 5 years",min:40,max:300,step:10,def:90,lo:"$40k",hi:"$300k+",fmt:v=>"$"+v+"k"},
  {t:"sl",id:"s_travel",text:"Ideal share of your work week spent traveling",min:0,max:80,step:5,def:15,lo:"Never",hi:"80% — on the road most weeks",fmt:v=>v+"%",ev:(v,add)=>add("tr",Math.min(1,v/70),3)},
  {t:"sl",id:"s_coding",text:"How much coding or technical scripting you're OK doing long-term",min:0,max:100,step:5,def:20,lo:"None at all",hi:"Coding most days",fmt:v=>v+"%",ev:(v,add)=>add("c",v/100,3)},
- {t:"sl",id:"s_comm",text:"How you'd want to be paid",min:0,max:100,step:5,def:20,lo:"100% fixed salary",hi:"Mostly commission, uncapped",fmt:v=>v<10?"All salary":v<40?"Mostly salary":v<70?"Salary + big bonus":"Heavy commission",ev:(v,add)=>add("rp",v/100,3)},
+ {t:"sl",id:"s_comm",text:"How you'd want to be paid",min:0,max:100,step:5,def:20,lo:"100% fixed pay (salary or hourly)",hi:"Mostly commission, uncapped",fmt:v=>v<10?"All fixed pay":v<40?"Mostly fixed pay":v<70?"Fixed pay + big bonus":"Heavy commission",ev:(v,add)=>add("rp",v/100,3)},
  {t:"sl",id:"s_hours",text:"If it paid noticeably more, how many hours a week would you regularly work?",min:30,max:65,step:1,def:45,lo:"30",hi:"65",fmt:v=>v+" hrs",ev:(v,add)=>add("h",Math.max(0,(v-38)/27),3)},
  {t:"sl",id:"s_onsite",text:"Where you'd want to work",min:0,max:100,step:5,def:40,lo:"Fully remote",hi:"Out in the field / on-site",fmt:v=>v<20?"Remote":v<45?"Hybrid":v<75?"Mostly in person":"In the field",ev:(v,add)=>add("o",v/100,2.5)},
  {t:"sl",id:"s_people",text:"How much of your day you'd want spent with people",min:0,max:100,step:5,def:50,lo:"Heads-down alone",hi:"With people all day",fmt:v=>v+"%",ev:(v,add)=>{add("cu",v/100,2.5);add("pr",v/100,.6)}},
@@ -1037,6 +1038,9 @@ const LS_KEY="careerCombine.v2";
 const blankProfile=()=>({name:"",stage:"",years:"",edu:"",job:"",industry:"",target:"",resume:"",auto:[],manual:[],off:[],field:""});
 let state={answers:{},page:-1,profile:blankProfile()};
 try{const s=localStorage.getItem(LS_KEY);if(s){const o=JSON.parse(s);if(o&&o.answers){state=o;state.profile=Object.assign(blankProfile(),o.profile||{})}}}catch(e){}
+// Text boxes (notes and open-ended answers) don't change the score, so they only write storage.
+// Rebuilding the header and live bar while someone types made phones jump the page around.
+function saveQuiet(){try{localStorage.setItem(LS_KEY,JSON.stringify(state))}catch(e){}}
 function save(){try{localStorage.setItem(LS_KEY,JSON.stringify(state))}catch(e){} updateHeader(); if(typeof updateSkip==='function')updateSkip(); if(typeof scheduleLive==='function')scheduleLive()}
 const app=document.getElementById("app");
 const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -1054,7 +1058,9 @@ function updateHeader(){
     PAGES.map((p,i)=>{const full=p.custom==="checkin"?checkinDone():(p.items.filter(it=>it.t!=="open").every(isAns)&&p.items.some(isAns));
       return '<button data-go="'+i+'" class="'+(state.page===i?"cur ":"")+(full?"full":"")+'">'+esc(p.short)+'</button>'}).join("")+
     '<button data-go="99" class="'+(state.page===99?"cur":"")+'">Results</button>';
-  const cur=chips.querySelector(".cur"); if(cur)cur.scrollIntoView({block:"nearest",inline:"nearest"});
+  const cur=chips.querySelector(".cur");
+  if(cur){const l=cur.offsetLeft-chips.offsetLeft, r=l+cur.offsetWidth;
+    if(l<chips.scrollLeft)chips.scrollLeft=l-8; else if(r>chips.scrollLeft+chips.clientWidth)chips.scrollLeft=r-chips.clientWidth+8;}
 }
 
 function renderItem(it,num){
@@ -1523,8 +1529,8 @@ app.addEventListener("input",e=>{
   if(t.dataset.sl){const it=allItems().find(x=>x.id===t.dataset.sl);state.answers[it.id]=Number(t.value);
     const v=document.getElementById("val-"+it.id);v.textContent=it.fmt(Number(t.value));v.classList.remove("unset");
     document.getElementById("q-"+it.id).classList.add("ans");const c=document.getElementById("clr-"+it.id);if(c)c.hidden=false;save()}
-  if(t.dataset.note){state.answers[t.dataset.note+"_note"]=t.value;clearTimeout(t._s);t._s=setTimeout(save,300)}
-  if(t.dataset.open){state.answers[t.dataset.open]=t.value;clearTimeout(t._s);t._s=setTimeout(save,300)}
+  if(t.dataset.note){state.answers[t.dataset.note+"_note"]=t.value;clearTimeout(t._s);t._s=setTimeout(saveQuiet,300)}
+  if(t.dataset.open){state.answers[t.dataset.open]=t.value;clearTimeout(t._s);t._s=setTimeout(saveQuiet,300)}
   if(t.dataset.pf&&t.tagName!=="SELECT"){state.profile[t.dataset.pf]=t.value.trim();clearTimeout(t._s);t._s=setTimeout(save,250)}
 });
 app.addEventListener("change",e=>{const t=e.target;if(t.dataset.rk===undefined)return;
@@ -1570,6 +1576,9 @@ function updateLive(){
     (live.open?'<ol class="live-list">'+top.map((s,i)=>'<li><span class="n">'+(i+1)+'</span><span>'+esc(s.car.n)+'</span>'+arrow(s.car.id)+'<span class="f">'+s.fit+'%</span></li>').join("")+'</ol><p class="live-note">Based only on your '+P.answered+' answers so far. <a href="#" data-goresults="1">See full results →</a></p>':'')+
     '</div>';
 }
+const isTextBox=el=>el&&(el.tagName==="TEXTAREA"||(el.tagName==="INPUT"&&/^(text|search|email|number)$/.test(el.type)));
+document.addEventListener("focusin",e=>{if(isTextBox(e.target))document.body.classList.add("typing")});
+document.addEventListener("focusout",e=>{if(isTextBox(e.target))document.body.classList.remove("typing")});
 document.getElementById("live").addEventListener("click",e=>{
   if(e.target.closest("[data-livetog]")){live.open=!live.open;updateLive();return}
   if(e.target.closest("[data-goresults]")){e.preventDefault();go(99)}
