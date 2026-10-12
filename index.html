@@ -303,36 +303,25 @@ const TF=[
  ["tf1","I'd rather have a job where every week looks different.",{v:1},{v:.2}],
  ["tf2","Cold-calling strangers sounds miserable.",{s:.1,rp:.3},{s:.85}],
  ["tf3","I'm OK being on call some nights or weekends.",{h:.85},{h:.2}],
- ["tf4","I'd take a pay cut to work in an industry I love.",{pu:.7,pay:.4},{pay:.85}],
  ["tf5","I enjoy presenting to a room full of people.",{pr:1},{pr:.15}],
- ["tf6","I'd enjoy living out of a suitcase two to four days a week.",{tr:.9},{tr:.1}],
  ["tf7","I want to be managing people within five years.",{l:1},{l:.2}],
  ["tf8","Writing long documents drains me.",{w:.1},{w:.8}],
  ["tf9","Pressure and deadlines help me focus.",{p:.9},{p:.3}],
- ["tf10","I'd like to own my own business someday.",{en:1},{en:.1}],
- ["tf11","Commission-based pay would stress me out.",{rp:.1},{rp:.8}],
- ["tf12","I like being the person who explains complicated things in plain English.",{cu:.9,pr:.7},{cu:.4}],
+ ["tf12","I like explaining complicated things in plain English.",{cu:.9,pr:.7},{cu:.4}],
  ["tf13","I get bored once I've mastered something.",{v:.9},{v:.35}],
- ["tf14","I'd study on nights and weekends for a certification if it raised my pay.",{pay:.9,pat:.7},{pay:.5,pat:.3}],
+ ["tf14","I'd study nights and weekends for a certification that raises my pay.",{pay:.9,pat:.7},{pay:.5,pat:.3}],
  ["tf15","I'd be happy working with numbers and spreadsheets most of the day.",{da:1},{da:.2}],
  ["tf16","I want my work to directly help people.",{pu:1,cu:.7},{pu:.35}],
- ["tf17","Physical work (on my feet, lifting, outdoors) beats sitting all day.",{th:.9,o:.9},{th:.2,o:.3}],
- ["tf18","I'd rather follow a proven playbook than invent my own.",{au:.25,en:.1},{au:.85}]
+ ["tf17","Physical work (on my feet, lifting, outdoors) beats sitting all day.",{th:.9,o:.9},{th:.2,o:.3}]
 ].map(([id,text,T,F])=>({t:"tf",id,text,T,F}));
 
 const AB=[
  ["ab1","Build the solution","Sell the solution",{th:.6,da:.6,s:.1},{s:.9,cu:.8}],
  ["ab2","Be the go-to expert on one thing","Know a little about everything",{v:.2},{v:.9}],
  ["ab3","More money doing work that bores you","Less money doing work you love",{pay:1},{pay:.3,pu:.6}],
- ["ab4","Clear rules and a playbook","Freedom to figure it out yourself",{au:.2},{au:1,v:.7}],
  ["ab5","A few long-term {clients} you know well","Lots of short projects with new people",{v:.3,cu:.8},{v:.9}],
- ["ab6","Lead the team","Be the trusted expert advisor",{l:1},{l:.3}],
  ["ab7","Big, stable company","Fast-moving startup",{rp:.2,p:.4},{rp:.7,p:.8,en:.6}],
- ["ab8","Same workplace every day","A different city most weeks",{tr:0},{tr:1}],
- ["ab9","A day spent with people","A day spent with data and systems",{cu:1,da:.2},{da:.9,cu:.2}],
- ["ab10","Five hours of calls","Five hours of writing",{cu:1,w:.2},{w:.9,cu:.3}],
- ["ab11","Bonus tied to the team's results","Bonus tied to your own results",{rp:.3},{rp:.8,s:.7}],
- ["ab12","Hands on tools and equipment","Hands on a keyboard",{th:1,o:.8},{th:.2,da:.6}]
+ ["ab11","Bonus tied to the team's results","Bonus tied to your own results",{rp:.3},{rp:.8,s:.7}]
 ].map(([id,a,b,A,B])=>({t:"ab",id,a,b,A,B}));
 
 /* Scenarios use {tokens} that are filled in for the person's field (see FIELDS). Answer options keep the same scoring in every field. */
@@ -1001,7 +990,7 @@ const PAGES=[
  {id:"val",title:"What matters most",short:"Values",lede:"Rank what matters most, then set your pay numbers.",items:[{t:"rank",id:"rank_values",text:"Rank these from most to least important",items:VALUES},SLIDERS[0],SLIDERS[1]]},
  {id:"sty",title:"How you want to work",short:"Work style",lede:"Drag each slider to where you land. Unsure? Leave it, and it won't count.",items:SLIDERS.slice(2)},
  {id:"tf",title:"True or false",short:"True/false",lede:"Quick gut calls. If it's mostly true, pick True.",items:TF},
- {id:"ab",title:"This or that",short:"This or that",lede:"Pick the one you'd choose if you had to. Both can be fine.",items:AB},
+ {id:"ab",title:"This or that",short:"This or that",lede:"Pick one, even if both sound fine.",items:AB},
  {id:"sj1",title:"Scenarios, part 1",short:"Scenarios 1",lede:"Pick what you'd actually do, not what sounds best.",items:SJT.slice(0,6)},
  {id:"sj2",title:"Scenarios, part 2",short:"Scenarios 2",lede:"Six more.",items:SJT.slice(6)},
  {id:"path",title:"Your career path",short:"Your path",lede:"Where you are now and what's in the way. These shape how hard your results push toward quick wins versus longer paths.",items:PATHQ},
