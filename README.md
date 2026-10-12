@@ -20,9 +20,9 @@ drills and the results come from your answers.
 | Personality | 30 statements | Big Five traits, using public-domain IPIP items |
 | Values | Ranking + 2 sliders | What matters most, plus your pay floor and 5-year pay target |
 | Work style | 7 sliders | Travel, coding, commission, hours, remote vs. on-site, people time, more school |
-| True/false | 18 | Quick gut calls on work preferences |
-| This or that | 12 | Forced choices between two kinds of work |
-| Scenarios | 12 | What you'd actually do in real work situations, worded for your field |
+| True/false | 13 | Quick gut calls on work preferences |
+| This or that | 6 | Forced choices between two kinds of work |
+| Scenarios | 11 | What you'd actually do in real work situations, worded for your field |
 | Your path | 6 | Where you are now, why you're looking, and what's in the way |
 | Your field | 4–6 | Questions only for your field, like law school and practice areas for legal, or shifts and patient care for healthcare. 19 fields have their own section; "Something else" lets people type their field and uses the general questions |
 | Your words | 8 open-ended | Not scored. These go into the AI summary |
