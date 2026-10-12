@@ -192,6 +192,12 @@ footer a{color:var(--navy)}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 @media print{header.top,.nav,footer,.noprint,details.note{display:none!important}.res,.panel{break-inside:avoid}}
+body.pdfmode #app{width:980px;max-width:none}
+body.pdfmode .res,body.pdfmode .panel,body.pdfmode .card{break-inside:avoid;page-break-inside:avoid}
+body.pdfmode .res .body{grid-template-columns:1fr 1fr;gap:6px 24px}
+body.pdfmode .res .body>*{grid-column:1/-1}
+body.pdfmode .res .body>div:not([class]){grid-column:auto}
+body.pdfmode .noprint,body.pdfmode .nav,body.pdfmode details.note,body.pdfmode .live,body.pdfmode #sumtext,body.pdfmode .pdf-hide{display:none!important}
 </style>
 </head>
 <body>
@@ -1421,6 +1427,55 @@ function addSkill(){
 const PDFJS='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js';
 const PDFJS_WORKER='https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
 const MAMMOTH='https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js';
+/* Results PDF: jsPDF + html2canvas (both MIT), loaded only when someone clicks Download PDF.
+   Everything runs in the browser, so results still never leave the device.
+   Each block on the results page (a career card, a panel, a heading) becomes one image, and blocks
+   are packed onto letter-size pages so a card is never cut in half. */
+const JSPDF='https://cdn.jsdelivr.net/npm/jspdf@4.2.1/dist/jspdf.umd.min.js';
+const HTML2CANVAS='https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js';
+async function downloadPdf(btn){
+  const label=btn?btn.textContent:"", root=document.documentElement, prevTheme=root.getAttribute("data-theme");
+  const closed=[...app.querySelectorAll("details.res:not([open]),details.method:not([open])")];
+  if(btn){btn.disabled=true;btn.textContent="Making your PDF…"}
+  try{
+    if(!window.jspdf)await loadScript(JSPDF);
+    if(!window.html2canvas)await loadScript(HTML2CANVAS);
+    root.setAttribute("data-theme","light"); document.body.classList.add("pdfmode"); closed.forEach(d=>d.open=true);
+    const pdf=new window.jspdf.jsPDF({unit:"mm",format:"letter",orientation:"portrait"});
+    const PW=pdf.internal.pageSize.getWidth(), PH=pdf.internal.pageSize.getHeight(), M=10, W=PW-2*M, GAP=3;
+    const blocks=[...app.children].filter(el=>el.offsetHeight>0&&getComputedStyle(el).display!=="none");
+    const shots=[];
+    for(const el of blocks){const c=await window.html2canvas(el,{scale:2,backgroundColor:"#ffffff",useCORS:true,logging:false});
+      shots.push({c,h:c.height*W/c.width,head:/^H[1-3]$/.test(el.tagName)||el.classList.contains("kicker")})}
+    let y=M;
+    for(let i=0;i<shots.length;i++){
+      const {c,h}=shots[i];
+      // A heading stays on the same page as the block after it.
+      let need=h; for(let j=i;shots[j]&&shots[j].head&&shots[j+1];j++)need+=shots[j+1].h+GAP;
+      if(y>M&&y+Math.min(need,PH-2*M)>PH-M){pdf.addPage();y=M}
+      if(h<=PH-2*M){pdf.addImage(c.toDataURL("image/jpeg",.9),"JPEG",M,y,W,h);y+=h+GAP;continue}
+      // Taller than a page (rare): slice it across pages.
+      const pxPerMm=c.width/W; let done=0;
+      while(done<c.height){
+        const room=(PH-M-y)*pxPerMm, slice=Math.min(room,c.height-done);
+        const part=document.createElement("canvas"); part.width=c.width; part.height=slice;
+        part.getContext("2d").drawImage(c,0,done,c.width,slice,0,0,c.width,slice);
+        pdf.addImage(part.toDataURL("image/jpeg",.9),"JPEG",M,y,W,slice/pxPerMm);
+        done+=slice; y+=slice/pxPerMm+GAP;
+        if(done<c.height){pdf.addPage();y=M}
+      }
+    }
+    const name=(state.profile.name||"").trim().replace(/[^a-z0-9]+/gi,"-").replace(/^-|-$/g,"");
+    pdf.save("career-combine-results"+(name?"-"+name:"")+".pdf");
+  }catch(err){
+    toast("Couldn't make the PDF here. Opening print instead: choose \"Save as PDF\" as the printer.");
+    setTimeout(()=>window.print(),600);
+  }finally{
+    closed.forEach(d=>d.open=false); document.body.classList.remove("pdfmode");
+    if(prevTheme==null)root.removeAttribute("data-theme"); else root.setAttribute("data-theme",prevTheme);
+    if(btn){btn.disabled=false;btn.textContent=label}
+  }
+}
 function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement("script");s.src=src;s.onload=res;s.onerror=()=>rej(new Error("Couldn't load the file reader. Check your connection, or paste the text instead."));document.head.appendChild(s)})}
 async function readFile(file){
   const n=file.name.toLowerCase();
@@ -1541,11 +1596,12 @@ function renderResults(){
   }
   if(low)h+='<div class="warnbox"><strong>Early read.</strong> You\'ve answered '+P.answered+' of '+P.total+' scored questions, and these are based only on those. The ranking firms up as you answer more. <button class="btn sm" data-go="'+firstUnansweredPage()+'">Keep going</button></div>';
   h+='<div class="top3">'+top.slice(0,3).map((s,i)=>'<div class="card"><div class="rk">#'+(i+1)+(s.ind?' · '+esc(pr.industry.trim()):'')+'</div><div class="nm">'+esc(s.car.n)+'</div><div class="pc">'+s.fit+'%</div><div class="small">'+esc(subline(s.car))+'</div></div>').join("")+'</div>';
+  h+='<div class="nav noprint" style="margin:6px 0 4px"><button class="btn" data-act="pdf">Download results as PDF</button></div>';
   h+='<p class="small">Fit blends your interests (about a third), work-style match (about half), pay fit (weighted by how much you ranked pay), and smaller boosts for abilities you rated high and skills on your resume. Only parts you\'ve answered count. Dealbreakers subtract points.</p>';
   lastScored=scored;
   h+=top.map((s,i)=>resultCard(s,i+1,i<3)).join("");
-  h+='<h2 class="sec">Look up any career</h2><p class="lede">All '+scored.length.toLocaleString("en-US")+' careers are scored for you. Search to see where any job lands.</p>'+
-    '<input type="search" id="careerSearch" placeholder="Try nurse, electrician, pilot, accountant…" aria-label="Search careers" autocomplete="off"><div id="searchOut"></div>';
+  h+='<div class="noprint"><h2 class="sec">Look up any career</h2><p class="lede">All '+scored.length.toLocaleString("en-US")+' careers are scored for you. Search to see where any job lands.</p>'+
+    '<input type="search" id="careerSearch" placeholder="Try nurse, electrician, pilot, accountant…" aria-label="Search careers" autocomplete="off"><div id="searchOut"></div></div>';
   h+=dirsPanel();
   if(indMatches.length)h+='<h2 class="sec">Through your industry lens</h2><p class="lede">Further down the list, but these connect to '+esc(pr.industry.trim())+'.</p>'+indMatches.map(s=>resultCard(s,"+",false)).join("");
   const riPanel=P.riN>=6
@@ -1564,8 +1620,8 @@ function renderResults(){
   h+='<div class="grid2"><div class="panel"><strong>Work style</strong>'+(ws.length?ws.map(k=>meter(cap(DIMS[k]),null,P.D[k])).join("")+'<p class="small">0 = avoid, 100 = want a lot. For long hours, this is your tolerance. Traits you haven\'t answered anything about are left out.</p>':'<p class="small">Answer the work style, true/false, and scenario sections to see this.</p>')+'</div>'+
     '<div class="panel"><strong>What matters most</strong>'+(vals?'<ol>'+vals.map(v=>'<li>'+esc(v)+'</li>').join("")+'</ol>':'<p class="small">Not ranked yet.</p>')+
     payLine+'</div></div>';
-  h+='<h2 class="sec">Take it to an AI coach</h2><p class="lede">Copy this and paste it into Claude, ChatGPT, or any AI assistant. It includes every answer, your notes, your resume, and the full ranking, plus instructions, so the AI can go much deeper than the scoring here.</p>'+
-    '<div class="nav noprint" style="margin-top:0"><button class="btn pri" data-act="copysum">Copy summary for AI</button><button class="btn" data-act="print">Print / save as PDF</button><button class="btn" data-act="copybackup">Copy answer backup</button></div><pre class="sum" id="sumtext">'+esc(summaryText({P,scored,code,mbti}))+'</pre>';
+  h+='<h2 class="sec pdf-hide">Take it to an AI coach</h2><p class="lede pdf-hide">Copy this and paste it into Claude, ChatGPT, or any AI assistant. It includes every answer, your notes, your resume, and the full ranking, plus instructions, so the AI can go much deeper than the scoring here.</p>'+
+    '<div class="nav noprint" style="margin-top:0"><button class="btn pri" data-act="copysum">Copy summary for AI</button><button class="btn" data-act="pdf">Download PDF</button><button class="btn" data-act="print">Print</button><button class="btn" data-act="copybackup">Copy answer backup</button></div><pre class="sum" id="sumtext">'+esc(summaryText({P,scored,code,mbti}))+'</pre>';
   h+='<div class="panel"><details class="method"><summary>How this works and its limits</summary><div class="small" style="margin-top:8px;display:grid;gap:8px">'+
     '<p><b>Interests (RIASEC).</b> Holland\'s six interest types are the backbone of O*NET, the U.S. Labor Department\'s occupation database. Meta-analysis (Nye et al., 2012) found interest–job fit relates to job performance and staying in a job. Each activity is also rated for ability, because interests and abilities are related but distinct (Ackerman &amp; Heggestad, 1997): what you enjoy predicts staying power, while what you\'re already good at shapes how fast you can break in.</p>'+
     '<p><b>Personality (Big Five).</b> The 30 items come from Goldberg\'s public-domain IPIP markers. The Big Five has decades of evidence linking it to work outcomes (Barrick &amp; Mount, 1991). MBTI is popular but has weak test-retest reliability (Pittenger, 2005), so it\'s shown only for fun.</p>'+
@@ -1766,6 +1822,7 @@ app.addEventListener("click",e=>{
   const act=b.dataset.act;
   if(act==="copysum"){copyText(document.getElementById("sumtext").textContent,"Copied — paste it into Claude, ChatGPT, or any AI assistant");return}
   if(act==="print"){window.print();return}
+  if(act==="pdf"){downloadPdf(b);return}
   if(act==="copybackup"){copyText(JSON.stringify({v:2,answers:state.answers,profile:state.profile}),"Backup copied");return}
   if(act==="restore"){try{const o=JSON.parse(document.getElementById("in-backup").value);if(!o||!o.answers)throw 0;state.answers=o.answers;state.profile=Object.assign(blankProfile(),o.profile||{});save();toast("Answers restored");render()}catch(err){toast("That doesn't look like a backup. Paste the full text you copied.")}return}
   if(act==="reset"){document.getElementById("resetconfirm").hidden=false;return}
