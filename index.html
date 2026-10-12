@@ -289,14 +289,14 @@ const VALUES=[
 const SCHOOL=["None","A few online courses","A certification (a few months)","A 1–2 year program","A 4-year degree or more"];
 const SLIDERS=[
  {t:"sl",id:"s_minpay",text:"Lowest yearly pay you'd accept for your next job",min:20,max:150,step:5,def:50,lo:"$20k",hi:"$150k",fmt:v=>"$"+v+"k"},
- {t:"sl",id:"s_target",text:"Yearly pay you want to be making in 5 years",min:40,max:300,step:10,def:90,lo:"$40k",hi:"$300k+",fmt:v=>"$"+v+"k"},
- {t:"sl",id:"s_travel",text:"Ideal share of your work week spent traveling",min:0,max:80,step:5,def:15,lo:"Never",hi:"80% — on the road most weeks",fmt:v=>v+"%",ev:(v,add)=>add("tr",Math.min(1,v/70),3)},
- {t:"sl",id:"s_coding",text:"How much coding or technical scripting you're OK doing long-term",min:0,max:100,step:5,def:20,lo:"None at all",hi:"Coding most days",fmt:v=>v+"%",ev:(v,add)=>add("c",v/100,3)},
+ {t:"sl",id:"s_target",text:"Yearly pay you want in 5 years",min:40,max:300,step:10,def:90,lo:"$40k",hi:"$300k+",fmt:v=>"$"+v+"k"},
+ {t:"sl",id:"s_travel",text:"How much of your week you'd want to travel",min:0,max:80,step:5,def:15,lo:"Never",hi:"80% — on the road most weeks",fmt:v=>v+"%",ev:(v,add)=>add("tr",Math.min(1,v/70),3)},
+ {t:"sl",id:"s_coding",text:"How much coding you'd be OK doing long-term",min:0,max:100,step:5,def:20,lo:"None at all",hi:"Coding most days",fmt:v=>v+"%",ev:(v,add)=>add("c",v/100,3)},
  {t:"sl",id:"s_comm",text:"How you'd want to be paid",min:0,max:100,step:5,def:20,lo:"100% fixed pay (salary or hourly)",hi:"Mostly commission, uncapped",fmt:v=>v<10?"All fixed pay":v<40?"Mostly fixed pay":v<70?"Fixed pay + big bonus":"Heavy commission",ev:(v,add)=>add("rp",v/100,3)},
- {t:"sl",id:"s_hours",text:"If it paid noticeably more, how many hours a week would you regularly work?",min:30,max:65,step:1,def:45,lo:"30",hi:"65",fmt:v=>v+" hrs",ev:(v,add)=>add("h",Math.max(0,(v-38)/27),3)},
+ {t:"sl",id:"s_hours",text:"Hours a week you'd work for noticeably more pay",min:30,max:65,step:1,def:45,lo:"30",hi:"65",fmt:v=>v+" hrs",ev:(v,add)=>add("h",Math.max(0,(v-38)/27),3)},
  {t:"sl",id:"s_onsite",text:"Where you'd want to work",min:0,max:100,step:5,def:40,lo:"Fully remote",hi:"Out in the field / on-site",fmt:v=>v<20?"Remote":v<45?"Hybrid":v<75?"Mostly in person":"In the field",ev:(v,add)=>add("o",v/100,2.5)},
- {t:"sl",id:"s_people",text:"How much of your day you'd want spent with people",min:0,max:100,step:5,def:50,lo:"Heads-down alone",hi:"With people all day",fmt:v=>v+"%",ev:(v,add)=>{add("cu",v/100,2.5);add("pr",v/100,.6)}},
- {t:"sl",id:"s_school",text:"How much more school or training you'd take on for the right career",min:0,max:4,step:1,def:1,lo:"None",hi:"4-year degree or more",fmt:v=>SCHOOL[v],ev:(v,add)=>add("pat",v/4,2)}
+ {t:"sl",id:"s_people",text:"How much of your day you'd want to spend with people",min:0,max:100,step:5,def:50,lo:"Heads-down alone",hi:"With people all day",fmt:v=>v+"%",ev:(v,add)=>{add("cu",v/100,2.5);add("pr",v/100,.6)}},
+ {t:"sl",id:"s_school",text:"How much more school or training you'd do for the right career",min:0,max:4,step:1,def:1,lo:"None",hi:"4-year degree or more",fmt:v=>SCHOOL[v],ev:(v,add)=>add("pat",v/4,2)}
 ];
 
 const TF=[
@@ -998,8 +998,8 @@ const PAGES=[
  {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. Never tried it? Guess your ability.",items:lik(RI.slice(15),"enjoy")},
  {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"Read each one as \"I ___\" (\"I am the life of the party\"). Answer for how you usually are, not how you'd like to be. Some are worded negatively, so read carefully.",items:lik(B5.slice(0,15),"agree")},
  {id:"per2",title:"Personality, part 2",short:"Personality 2",lede:"Same as before. Go with your first instinct.",items:lik(B5.slice(15),"agree")},
- {id:"val",title:"What matters most",short:"Values",lede:"Rank these and set your pay numbers. They feed straight into the pay side of the scoring.",items:[{t:"rank",id:"rank_values",text:"Put these in order, most important at the top",items:VALUES},SLIDERS[0],SLIDERS[1]]},
- {id:"sty",title:"How you want to work",short:"Work style",lede:"Drag each slider to where you honestly land. Leave one untouched if you're unsure, and it won't count.",items:SLIDERS.slice(2)},
+ {id:"val",title:"What matters most",short:"Values",lede:"Rank what matters most, then set your pay numbers.",items:[{t:"rank",id:"rank_values",text:"Rank these from most to least important",items:VALUES},SLIDERS[0],SLIDERS[1]]},
+ {id:"sty",title:"How you want to work",short:"Work style",lede:"Drag each slider to where you land. Unsure? Leave it, and it won't count.",items:SLIDERS.slice(2)},
  {id:"tf",title:"True or false",short:"True/false",lede:"Quick gut calls. If it's mostly true, pick True.",items:TF},
  {id:"ab",title:"This or that",short:"This or that",lede:"Pick the one you'd choose if you had to. Both can be fine.",items:AB},
  {id:"sj1",title:"Scenarios, part 1",short:"Scenarios 1",lede:"Pick what you'd actually do, not what sounds best.",items:SJT.slice(0,6)},
