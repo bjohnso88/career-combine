@@ -1201,6 +1201,9 @@ function compute(){
   return {R,B,D,skip,nDims,conf,riN,b5N,AB,abN,gaps,minPay,minSet,target,targetSet,curEdu,allowEdu,boost,skills:mySkills(),answered,total:allItems().filter(i=>i.t!=="open").length};
 }
 
+// A career's interest profile: the full O*NET profile for generated careers (careers-bls.js),
+// otherwise the hand-picked three-letter code weighted 3-2-1.
+function careerRI(car){if(car.ri){const v={};"RIASEC".split("").forEach((k,i)=>v[k]=car.ri[i]);return v}return riVec(car.r)}
 function riVec(code){const v={R:0,I:0,A:0,S:0,E:0,C:0};[3,2,1].forEach((w,i)=>{if(code[i])v[code[i]]=w});return v}
 function cosineCentered(a,b){
   const ks=Object.keys(a),ma=mean(ks.map(k=>a[k])),mb=mean(ks.map(k=>b[k]));
@@ -1218,7 +1221,7 @@ function scoreCareer(car,P){
   const U=P.D;
   // Interest match needs a few interest answers; areas not rated yet sit at the average of the ones that were.
   let interest=null;
-  if(P.riN>=6){const vals=Object.values(P.R).filter(v=>v!=null), avg=mean(vals), Rf={};for(const k in P.R)Rf[k]=P.R[k]??avg;interest=(cosineCentered(Rf,riVec(car.r))+1)/2}
+  if(P.riN>=6){const vals=Object.values(P.R).filter(v=>v!=null), avg=mean(vals), Rf={};for(const k in P.R)Rf[k]=P.R[k]??avg;interest=(cosineCentered(Rf,careerRI(car))+1)/2}
   let pen=0,wsum=0; const parts=[];
   const spec=Object.assign({},SPEC,{en:[.3+.9*(car.d.en||0),1,1]});
   for(const k in spec){
@@ -1233,7 +1236,7 @@ function scoreCareer(car,P){
   if(P.minSet||P.targetSet){const a=P.minSet?Math.min(1,car.pay[0]/P.minPay):null, b=P.targetSet?Math.min(1,car.pay[1]/P.target):null;
     payFit=clamp(a!=null&&b!=null?.4*a+.6*b:(a??b))}
   const mid=car.pay[1];
-  let ability=null; if(P.abN>=6){const vals=Object.values(P.AB).filter(v=>v!=null),avg=mean(vals),Af={};for(const k in P.AB)Af[k]=P.AB[k]??avg;ability=(cosineCentered(Af,riVec(car.r))+1)/2}
+  let ability=null; if(P.abN>=6){const vals=Object.values(P.AB).filter(v=>v!=null),avg=mean(vals),Af={};for(const k in P.AB)Af[k]=P.AB[k]??avg;ability=(cosineCentered(Af,careerRI(car))+1)/2}
   const hit=car.sk.filter(s=>P.skills.has(s)), hasSk=P.skills.size>=3;
   // Careers with no listed core skills (some generated ones) get no resume score rather than 0/0.
   const skillFit=hasSk&&car.sk.length?clamp(hit.length/Math.min(3,car.sk.length)):null;

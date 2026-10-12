@@ -185,6 +185,13 @@ of Labor Statistics publishes national wages for, about 710 more after overlaps 
   Travel and commission pay have no O\*NET measure and use rules by job family.
   Jobs with thin O\*NET data borrow from similar jobs and are marked on their card.
 
+Generated careers also keep their full O\*NET interest profile (`ri`, six scores), so two
+careers with the same three-letter code can still be told apart.
+
+**Checking calibration.** `python3 tools/calibrate.py` answers every question the way an
+ideal fit for each career would, then reports where that career lands (needs Python
+Playwright). A well-calibrated build puts nearly every career in its own top 10.
+
 `tools/build-report.md` lists how well each trait agrees with the hand-tuned
 careers, which occupations were skipped and why, and a spot check of the results.
 

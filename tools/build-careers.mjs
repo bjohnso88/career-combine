@@ -416,7 +416,10 @@ for (const soc of Object.keys(oews).sort()) {
   careers.push({
     id: "b" + soc.replace("-", ""),
     n: o.title,
-    r, pay, d,
+    r,
+    // Full O*NET interest profile (R,I,A,S,E,C on 0–1), so careers that share a three-letter code still differ.
+    ri: "RIASEC".split("").map(L => r2(clamp((ints[L] - 1) / 6))),
+    pay, d,
     ease: easeOf(edu, z), ai: "Not rated yet", trv: travelText(d.tr || 0), wlb: wlbText(d.h || 0, d.p || 0), edu,
     start: "", end: "",
     titles: titlesFor(soc) || o.title,
