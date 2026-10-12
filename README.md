@@ -17,6 +17,7 @@ drills and the results come from your answers.
 | --- | --- | --- |
 | Check-in | Resume + basics | Skills found on your resume, experience, education, and the field you work in |
 | Interests | 30 activities, each rated twice | How much you'd **enjoy** each kind of work and how **good** you are at it now (Holland RIASEC) |
+| What you'd work with | Pick any of 20 | Subjects you'd enjoy working with (animals, food, machines, kids, money…). Only lifts careers that match |
 | Personality | 30 statements | Big Five traits, using public-domain IPIP items |
 | Values | Ranking + 2 sliders | What matters most, plus your pay floor and 5-year pay target |
 | Work style | 7 sliders | Travel, coding, commission, hours, remote vs. on-site, people time, more school |
@@ -186,7 +187,9 @@ of Labor Statistics publishes national wages for, about 710 more after overlaps 
   Jobs with thin O\*NET data borrow from similar jobs and are marked on their card.
 
 Generated careers also keep their full O\*NET interest profile (`ri`, six scores), so two
-careers with the same three-letter code can still be told apart.
+careers with the same three-letter code can still be told apart, and subject areas (`sub`)
+for the "What you'd work with" question, from O\*NET knowledge areas plus job-family rules for
+animals, food, kids, nature, sports, and electrical work. Hand-tuned careers set `sub` by hand.
 
 **Checking calibration.** `python3 tools/calibrate.py` answers every question the way an
 ideal fit for each career would, then reports where that career lands (needs Python

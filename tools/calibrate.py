@@ -19,7 +19,7 @@ with sync_playwright() as p:
           else if(it.t==="sl"){const m={s_travel:(d.tr||0)*70,s_coding:(d.c||0)*100,s_comm:(d.rp||0)*100,s_hours:38+(d.h||0)*27,s_onsite:(d.o||0)*100,s_people:(d.cu||0)*100,s_school:[0,2,4,4][c.edu]};if(it.id in m)A[it.id]=Math.max(it.min,Math.min(it.max,Math.round(m[it.id]/it.step)*it.step))}
           else if(it.t==="tf"){A[it.id]=dist(it.T,d)<=dist(it.F,d)?"t":"f"}
           else if(it.t==="ab"){A[it.id]=dist(it.A,d)<=dist(it.B,d)?"a":"b"}
-          else if(it.t==="pick"&&it.pickFor){A[it.id]=it.pickFor(c)}
+          else if(it.t==="pick"){const top=Object.entries(c.sub||{}).filter(([k,v])=>v>=.6).sort((x,y)=>y[1]-x[1]).slice(0,3).map(x=>x[0]);A[it.id]=top.length?top:null}
           else if(it.opts){let best=0,bd=9;it.opts.forEach((o,i)=>{const e=dist(o[1]||{},d);if(e<bd){bd=e;best=i}});A[it.id]=best}
           else if(it.t==="rank"){A[it.id]=VALUES.map(v=>v[0])}
         }};
