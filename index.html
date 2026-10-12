@@ -231,13 +231,13 @@ const ABIL=["Can't do it","Shaky","Can do OK","Comfortable","Easily"];
 
 /* Holland RIASEC work activities, written in the style of the O*NET Interest Profiler */
 const RI=[
- ["ri1","Install and set up equipment or machines","R"],
- ["ri2","Figure out why a problem keeps happening when nobody else can","I"],
+ ["ri1","Install systems like wiring, plumbing, or networks","R"],
+ ["ri2","Figure out why a problem keeps happening","I"],
  ["ri3","Design how something looks (a logo, a page, a space)","A"],
  ["ri4","Teach a group how to do something new","S"],
  ["ri5","Pitch an idea to a skeptical boss and win them over","E"],
  ["ri6","Keep records or files clean, organized, and accurate","C"],
- ["ri7","Repair equipment, vehicles, or devices when they break","R"],
+ ["ri7","Repair things when they break (cars, devices, machines)","R"],
  ["ri8","Dig into numbers or records to explain what changed","I"],
  ["ri9","Write something original: a story, article, or marketing copy","A"],
  ["ri10","Coach someone until they're confident on their own","S"],
@@ -249,18 +249,18 @@ const RI=[
  ["ri16","Calm down a frustrated {cust} and solve their problem","S"],
  ["ri17","Lead a team to hit a goal by a deadline","E"],
  ["ri18","Track a project's budget, dates, and tasks","C"],
- ["ri19","Work outdoors or on a job site instead of at a desk","R"],
+ ["ri19","Work outdoors or on a job site","R"],
  ["ri20","Research a complicated topic in depth","I"],
  ["ri21","Come up with a brand, campaign, or creative concept","A"],
  ["ri22","Care for someone who is sick, hurt, or struggling","S"],
  ["ri23","Sell a product or service and earn commission on it","E"],
  ["ri24","Check documents for errors and rule-breaking","C"],
- ["ri25","Operate tools, vehicles, or specialized equipment","R"],
+ ["ri25","Drive or operate heavy machinery","R"],
  ["ri26","Test which of two approaches works better","I"],
  ["ri27","Perform, present creatively, or entertain an audience","A"],
  ["ri28","Help a community or group that needs support","S"],
  ["ri29","Start your own business or side hustle","E"],
- ["ri30","Manage schedules, files, and paperwork for a team","C"]
+ ["ri30","Process forms, orders, or payments accurately","C"]
 ];
 function itemText(it){return it.text}
 /* Big Five: public-domain IPIP items (Goldberg's 50-item Big-Five factor markers). k=+1 keyed, -1 reverse keyed */
@@ -993,8 +993,8 @@ const OPEN=[
 
 const PAGES=[
  {id:"chk",title:"Check-in",short:"Check-in",lede:"Start with your resume and a few basics. The resume is read inside your browser only. It's used to spot skills you already have, which powers the \"stepping-stone jobs\" in your results.",items:[],custom:"checkin"},
- {id:"int1",title:"Interests, part 1",short:"Interests 1",lede:"Rate each activity twice: how much you'd enjoy it as part of a job, and how good you are at it today. These cover every kind of work on purpose, not just your field. If something isn't your world, a quick \"Hate it\" is a useful answer: it's how the combine rules careers out.",items:lik(RI.slice(0,15),"enjoy")},
- {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. If you've never tried something, rate your ability as your best guess. Activities outside your field are there on purpose.",items:lik(RI.slice(15),"enjoy")},
+ {id:"int1",title:"Interests, part 1",short:"Interests 1",lede:"Rate each activity twice: how much you'd enjoy it, and how good you are at it now. They cover all kinds of work on purpose. If it's not your thing, \"Hate it\" helps rule careers out.",items:lik(RI.slice(0,15),"enjoy")},
+ {id:"int2",title:"Interests, part 2",short:"Interests 2",lede:"Same two ratings. Never tried it? Guess your ability.",items:lik(RI.slice(15),"enjoy")},
  {id:"per1",title:"Personality, part 1",short:"Personality 1",lede:"Read each one as starting with \"I\" (\"I am the life of the party\"). How well does it describe you as you usually are, not as you wish to be? A few are worded negatively on purpose, so read each one before answering.",items:lik(B5.slice(0,15),"agree")},
  {id:"per2",title:"Personality, part 2",short:"Personality 2",lede:"Same as before: read each one as starting with \"I\", and watch for the negatively worded ones. First instinct is usually the most accurate.",items:lik(B5.slice(15),"agree")},
  {id:"val",title:"What matters most",short:"Values",lede:"Rank these and set your pay numbers. They feed straight into the pay side of the scoring.",items:[{t:"rank",id:"rank_values",text:"Put these in order, most important at the top",items:VALUES},SLIDERS[0],SLIDERS[1]]},
