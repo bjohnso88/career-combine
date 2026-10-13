@@ -44,7 +44,7 @@ header.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:1p
 .meta{font-family:var(--f-mono);font-size:.8rem;color:var(--muted);font-variant-numeric:tabular-nums}
 .themebtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;width:32px;height:32px;cursor:pointer;font-size:14px}
 .bar{height:8px;background:var(--line);border-radius:4px;overflow:hidden}
-.bar>i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s}
+.bar>i{display:block;height:100%;background:var(--navy);width:0;transition:width .3s}
 .chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin}
 .chips button{flex:0 0 auto;font:500 .78rem var(--f-body);border:1px solid var(--line);background:var(--chip);color:var(--ink);border-radius:999px;padding:4px 10px;cursor:pointer;white-space:nowrap}
 .chips button.cur{background:var(--navy);color:var(--surface);border-color:var(--navy)}
@@ -79,7 +79,7 @@ details.note textarea{min-height:64px;margin-top:6px;font-size:.92rem}
 .vs .or{align-self:center;font-family:var(--f-display);font-weight:700;color:var(--muted)}
 .vs .opt{padding:14px 10px}
 .sl{display:flex;flex-direction:column;gap:6px}
-.sl input[type=range]{width:100%;accent-color:var(--navy)}
+.sl input[type=range]{width:100%;height:32px;accent-color:var(--navy);touch-action:pan-y}
 .sl .ends{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);gap:8px}
 .sl .val{font-family:var(--f-mono);font-size:1.1rem;color:var(--navy);font-variant-numeric:tabular-nums}
 .sl .val.unset{color:var(--muted)}
@@ -133,7 +133,7 @@ label.f{display:block;font-weight:600;margin:14px 0 6px}
 .live-list .f{font-family:var(--f-mono);color:var(--navy)}
 .live-note{font-size:.8rem;color:var(--muted);margin:6px 0 0}
 .live-bar{flex:1;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
-.live-bar i{display:block;height:100%;background:var(--accent)}
+.live-bar i{display:block;height:100%;background:var(--navy)}
 body.has-live{padding-bottom:84px}
 body.has-live.live-open{padding-bottom:240px}
 @media (max-width:600px){.live-top .lm:nth-child(n+2){display:none}}
@@ -145,7 +145,7 @@ body.has-live.live-open{padding-bottom:240px}
 .top3 .card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0}
 .top3 .card .rk{font-family:var(--f-mono);font-size:.75rem;color:var(--muted)}
 .top3 .card .nm{font-family:var(--f-display);font-size:1.35rem;line-height:1.1;margin:4px 0;font-weight:700}
-.top3 .card .pc{font-family:var(--f-display);font-size:2.4rem;color:var(--accent);line-height:1}
+.top3 .card .pc{font-family:var(--f-display);font-size:2.4rem;color:var(--navy);line-height:1}
 .res{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
 .res summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:2.2em 1fr auto;gap:10px;align-items:center}
 .res summary::-webkit-details-marker{display:none}
@@ -1548,14 +1548,15 @@ function renderStart(){
   '<p class="lede">'+(allItems().length)+' questions in '+PAGES.length+' short sections, plus your resume. Answers save automatically in this browser, so you can stop and pick up later. Nothing is uploaded anywhere.</p>'+
   '<div class="panel"><strong>What you\'ll do</strong><ul class="intro-list">'+
   '<li><b>1</b><span>Drop in your resume. It\'s read in your browser to spot the skills you already have.</span></li>'+
-  '<li><b>30</b><span>Work activities, each rated twice: how much you\'d enjoy it and how good you are at it. Based on the Holland (RIASEC) model the U.S. Department of Labor uses in O*NET.</span></li>'+
-  '<li><b>30</b><span>Personality items from the public-domain IPIP Big Five inventory.</span></li>'+
-  '<li><b>10</b><span>A values ranking and sliders for pay, travel, coding, hours, school, and where you work.</span></li>'+
-  '<li><b>30</b><span>True/false and this-or-that gut calls.</span></li>'+
-  '<li><b>12</b><span>Work scenarios: what would you actually do?</span></li>'+
-  '<li><b>6</b><span>Questions about your career path: where you are and what\'s in the way.</span></li>'+
-  '<li><b>4–6</b><span>Questions made for your field (legal, healthcare, education, trades, and more), unlocked by your resume.</span></li>'+
-  '<li><b>8</b><span>Open-ended questions for an AI coach to read later.</span></li></ul>'+
+  '<li><b>'+RI.length+'</b><span>Work activities, each rated twice: how much you\'d enjoy it and how good you are at it. Based on the Holland (RIASEC) model the U.S. Department of Labor uses in O*NET.</span></li>'+
+  '<li><b>'+SUBJECTS.length+'</b><span>Subjects to pick from: what you\'d enjoy working with, like animals, machines, food, or money.</span></li>'+
+  '<li><b>'+B5.length+'</b><span>Personality items from the public-domain IPIP Big Five inventory.</span></li>'+
+  '<li><b>'+(SLIDERS.length+1)+'</b><span>A values ranking and sliders for pay, travel, coding, hours, school, and where you work.</span></li>'+
+  '<li><b>'+(TF.length+AB.length)+'</b><span>True/false and this-or-that gut calls.</span></li>'+
+  '<li><b>'+SJT.length+'</b><span>Work scenarios: what would you actually do?</span></li>'+
+  '<li><b>'+PATHQ.length+'</b><span>Questions about your career path: where you are and what\'s in the way.</span></li>'+
+  '<li><b>4–6</b><span>Questions made for your field (legal, healthcare, education, trades, and more), unlocked when you pick your field.</span></li>'+
+  '<li><b>'+OPEN.length+'</b><span>Open-ended questions for an AI coach to read later.</span></li></ul>'+
   '<p class="small">At the end you get '+C.length+' careers ranked by fit with reasons and red flags, your personality and interest profile, stepping-stone jobs you could land now, and a summary to paste into Claude or ChatGPT for a deeper read.</p></div>'+
   '<div class="nav"><span></span><button class="btn pri" data-go="'+(n||checkinDone()?firstUnansweredPage():0)+'">'+(n?"Pick up where you left off →":"Start the combine →")+'</button></div>'+
   '<div class="panel"><strong>Backup and restore</strong><p class="small">Answers live only in this browser. Copy a backup if you might switch devices, and paste it here to restore.</p>'+
