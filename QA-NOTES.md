@@ -8,8 +8,8 @@ Branch `claude/qa-deep-dive`. Commit + push after each step so work can resume.
 - [x] 2. Edge cases: nothing answered, partial, all-max/all-min, extreme pay, education limits, field switching
 - [x] 3. Saved answers from older versions (removed questions, old fields), backup/restore, start over
 - [x] 4. Layout: every page at 320/390/desktop, light + dark
-- [ ] 5. Results details: cards, search, live bar, summary text, PDF, links
-- [ ] 6. Performance (load + live bar speed)
+- [x] 5. Results details: cards, search, live bar, summary text, PDF, links
+- [x] 6. Performance (load + live bar speed)
 - [ ] 7. Fix findings, retest, finish PR, delete this file
 
 ## Findings
@@ -24,3 +24,8 @@ Branch `claude/qa-deep-dive`. Commit + push after each step so work can resume.
 - L2 Start page counts were stale (30 true/false+this-or-that, 12 scenarios), missed the new subjects step, and said field questions unlock "by your resume". Fixed: counts computed from the question lists; wording corrected.
 - L3 Fit percentages on the top-3 cards, the progress bar, and the live-matches bar were red, which testers read as "error". Fixed: navy (red stays for the brand name).
 - OK: no page scrolls sideways at 320px, 390px (dark), or desktop.
+- R4 The "Fit blends..." explanation doesn't mention the subjects step. Fix: add it.
+- R7 Stepping stones list unrelated jobs (CNA/EMT for a tech person) because they're ranked by readiness alone. Fix: rank by how high the target careers are in your results.
+- R8 MBTI shows "ENFJ" when every Big Five answer is exactly neutral. Fix: show "?" when a trait is close to the middle.
+- R6 Hand-tuned careers' education levels sometimes differ from BLS typical entry. Leave (hand-tuned = realistic hiring).
+- OK: performance — page load 0.5s with 4x slower CPU, results render 0.33s, scoring all 800 careers 0.09s. careers-bls.js is 182KB gzipped.
