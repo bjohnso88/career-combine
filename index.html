@@ -1295,7 +1295,7 @@ function scoreCareer(car,P){
   const lows=parts.filter(x=>["c","s","rp","h","tr"].includes(x.k)&&x.cd<=.25&&x.ud<=.3).slice(0,1)
     .map(x=>"Light on "+DIMS[x.k]+", which suits you.");
   const top2=P.riN>=6?Object.entries(P.R).filter(e=>e[1]!=null).sort((a,b)=>b[1]-a[1]).slice(0,2).map(e=>e[0]):[];
-  const ints=top2.includes(car.r[0])?["Matches your strongest interest area: "+RNAME[car.r[0]]+" ("+RDESC[car.r[0]]+")."]:[];
+  const ints=top2.includes(car.r[0])&&P.R[car.r[0]]>=.6?["Matches your strongest interest area: "+RNAME[car.r[0]]+" ("+RDESC[car.r[0]]+")."]:[];
   const topAb=(Object.entries(P.AB).filter(e=>e[1]!=null).sort((a,b)=>b[1]-a[1])[0]||[null])[0];
   const abr=ability!=null&&topAb&&car.r[0]===topAb&&P.AB[topAb]>=.6?["Plays to what you're already good at: "+RNAME[topAb].toLowerCase()+" work, so it should be quicker to break in."]:[];
   const skr=hit.length?["Your resume already shows "+hit.slice(0,3).map(s=>SK[s][0]).join(", ")+"."]:[];
@@ -1304,7 +1304,7 @@ function scoreCareer(car,P){
     .map(x=>x.diff>0?"Asks for more "+DIMS[x.k]+" than you want.":"Less "+DIMS[x.k]+" than you'd like.");
   const gapsSk=car.sk.filter(s=>!P.skills.has(s));
   const shown=.5+(clamp(total)-.5)*P.conf;
-  return {car,fit:Math.round(clamp(shown)*100),interest,ability,skillFit,dimSim,payFit,ind,hit,gapsSk,subjFit,why:[...(fb>=.05?["Lines up with what you said about "+FIELDQ[curField()].name+"."]:[]),...(subjFit>=.6?["Works with "+SUBJ_LABEL[subjTop].toLowerCase()+", which you picked."]:[]),...ints,...abr,...skr,...pros,...lows,...payr].slice(0,4),cons,flags};
+  return {car,fit:Math.round(clamp(shown)*100),interest,ability,skillFit,dimSim,payFit,ind,hit,gapsSk,subjFit,why:[...(fb>=.05?["Lines up with what you said about "+FIELDQ[curField()].name+"."]:[]),...(subjFit>=.6?["Involves "+SUBJ_LABEL[subjTop].toLowerCase()+", which you picked."]:[]),...ints,...abr,...skr,...pros,...lows,...payr].slice(0,4),cons,flags};
 }
 
 /* ============================================================
@@ -1753,7 +1753,7 @@ function ansText(it){
   if(it.t==="tf")return v==="t"?"True":"False";
   if(it.t==="ab")return v==="a"?T(it.a):it.b;
   if(it.t==="sjt"||it.t==="mc")return T(it.opts[v][0]);
-  if(it.t==="sl")return it.fmt(Number(v));
+  if(it.t==="sl")return it.fmt(Math.round(Number(v)/(it.step||1))*(it.step||1)); // snap odd saved values to a real slider stop
   if(it.t==="rank")return v.join(" > ");
   if(it.t==="pick")return v.filter(k=>k in SUBJ_LABEL).map(k=>SUBJ_LABEL[k]).join(", ");
   return String(v);
@@ -1809,7 +1809,7 @@ function summaryText({P,scored,code,mbti}){
   OPEN.forEach(o=>L.push("Q: "+o.text+"\nA: "+(A[o.id]?String(A[o.id]).trim():"(skipped)")));
   L.push("");
   L.push("KEY ANSWERS:");
-  SLIDERS.forEach(s=>L.push("- "+s.text+": "+(A[s.id]!=null?s.fmt(Number(A[s.id])):"(skipped)")));
+  SLIDERS.forEach(s=>L.push("- "+s.text+": "+ansText(s)));
   TF.forEach(t=>L.push("- "+t.text+" "+(A[t.id]==="t"?"TRUE":A[t.id]==="f"?"FALSE":"(skipped)")));
   AB.forEach(b=>L.push("- "+T(b.a)+" vs "+b.b+": "+(A[b.id]==="a"?T(b.a):A[b.id]==="b"?b.b:"(skipped)")));
   SJT.forEach(s=>L.push("- "+T(s.text)+" → "+(A[s.id]!=null?T(s.opts[A[s.id]][0]):"(skipped)")));
