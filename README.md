@@ -232,10 +232,11 @@ To build on your own computer instead: `bash tools/fetch-data.sh`, then
 exposure: Not rated yet" with a researched rating. Careers without research just don't
 show the section. The file loads after the page, so it never slows down startup.
 
-A weekly Claude scheduled task researches the next 20 careers and opens a pull request
-(title starting "Career research:"); nothing goes live until it's reviewed and merged.
-If last week's research pull request is still open, the task adds to it instead of
-opening a second one, so they never conflict. Order: the 46 hand-tuned careers first,
+A weekly Claude scheduled task researches the next 20 careers and opens a new pull
+request each time (title starting "Career research:"); nothing goes live until it's
+reviewed and merged. It skips careers already researched, including ones waiting in a
+research pull request that isn't merged yet. If merging one research pull request causes
+a conflict in another, the next run merges main into the older one to fix it. Order: the 46 hand-tuned careers first,
 then tech, healthcare, and trades jobs (biggest employment first), then everything else;
 once every career is done, the oldest check comes up again (about once a year).
 
