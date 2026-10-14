@@ -69,6 +69,7 @@ All of them run in the browser.
 | `index.html` | The app: page, styles, questions, scoring, and results |
 | `careers.js` | The 46 hand-tuned careers. Edit these by hand |
 | `careers-bls.js` | Every other U.S. occupation, generated from BLS and O*NET data. Don't edit by hand; rebuild it (see [Career data](#career-data)) |
+| `careers-research.js` | A deeper look at each career (pay right now, outlook, AI impact, what people in the job say, how people get there), with sources and a "last checked" date. Added about 20 careers a week (see [Career research](#career-research)) |
 | `tools/` | The script that builds `careers-bls.js` and its download helper. Not published |
 | `source-data/bls/` | The two BLS files the build uses (see [Career data](#career-data)). Not published |
 | `.github/workflows/build-careers.yml` | The GitHub Action that rebuilds `careers-bls.js` on GitHub's servers |
@@ -223,6 +224,28 @@ in `source-data/bls/README.md`.
 
 To build on your own computer instead: `bash tools/fetch-data.sh`, then
 `cd tools && npm ci && cd ..`, then `node tools/build-careers.mjs`.
+
+## Career research
+
+`careers-research.js` adds a "Deeper look" section to each researched career's card
+(collapsed by default, with sources and a "last checked" date), and replaces "AI
+exposure: Not rated yet" with a researched rating. Careers without research just don't
+show the section. The file loads after the page, so it never slows down startup.
+
+A weekly Claude scheduled task researches the next 20 careers and opens a pull request
+(title starting "Career research:"); nothing goes live until it's reviewed and merged.
+If last week's research pull request is still open, the task adds to it instead of
+opening a second one, so they never conflict. Order: the 46 hand-tuned careers first,
+then tech, healthcare, and trades jobs (biggest employment first), then everything else;
+once every career is done, the oldest check comes up again (about once a year).
+
+- `node tools/research.mjs next 20` lists the next careers to research
+- `node tools/research.mjs check` validates the file (fields, dates, sources)
+- `node tools/research.mjs status` shows how many are done
+
+Research never edits `careers-bls.js` (it's rebuilt monthly). If research shows a
+generated career's profile is off, the pull request lists the proposed change instead;
+hand-tuned careers in `careers.js` can be corrected directly.
 
 ## Limits
 
