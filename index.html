@@ -160,6 +160,13 @@ body.has-live.live-open{padding-bottom:240px}
 .bls{border-top:1px dashed var(--line);padding-top:8px;font-size:.85rem}
 .bls .src{font-family:var(--f-mono);font-size:.7rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
 .bls a{color:inherit}
+.rsch{border-top:1px dashed var(--line);padding-top:8px;font-size:.85rem}
+.res .rsch summary{display:list-item;list-style:disclosure-closed inside;padding:0;cursor:pointer;font-weight:600}
+.res .rsch[open] summary{list-style-type:disclosure-open}
+.res .rsch summary::-webkit-details-marker{display:inline}
+.rsch summary .small{font-weight:400}
+.rsch p{margin:6px 0}
+.rsch a{color:inherit}
 .linkbtn{background:none;border:0;padding:0;font:inherit;color:inherit;text-decoration:underline;cursor:pointer}
 .desc{color:var(--muted);font-size:.9rem;margin:0}
 input[type=search]{width:100%;font:inherit;color:var(--ink);background:var(--chip);border:1px solid var(--line);border-radius:8px;padding:10px;margin-bottom:10px}
@@ -218,6 +225,7 @@ body.pdfmode .noprint,body.pdfmode .nav,body.pdfmode details.note,body.pdfmode .
 
 <script src="careers.js"></script>
 <script src="careers-bls.js"></script>
+<script src="careers-research.js" defer></script>
 <script>
 "use strict";
 /* ============================================================
@@ -1695,6 +1703,19 @@ function subline(c){
   if(c.start&&c.end)return c.start+" → "+c.end;
   return (c.bls?"Median pay "+c.bls.pay.med+" · ":"")+cap(EDU_NEED[c.edu]);
 }
+/* Deeper research (careers-research.js, loaded after the page so it never slows startup).
+   Not every career has it yet; the weekly research task adds about 20 a week. */
+const researchOf=c=>typeof CAREER_RESEARCH!=="undefined"&&CAREER_RESEARCH[c.id]||null;
+const aiLabel=c=>{const r=researchOf(c);return r?r.ai.rating:c.ai};
+const niceDate=d=>{const t=new Date(d+"T12:00:00");return isNaN(t)?d:t.toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"})};
+function researchBlock(c){
+  const r=researchOf(c); if(!r)return '';
+  const row=(h,t)=>'<p><strong>'+h+'</strong> '+esc(t)+'</p>';
+  return '<details class="rsch"><summary>Deeper look: pay, outlook, AI, what people say <span class="small">· last checked '+esc(niceDate(r.checked))+'</span></summary>'+
+    row("Pay right now:",r.pay)+row("Outlook:",r.growth)+row("AI impact ("+r.ai.rating+"):",r.ai.text)+row("What people in the job say:",r.sentiment)+
+    row("How people get there:",r.path)+row("Good to know:",r.notes)+
+    '<div class="small">Sources: '+r.sources.map(x=>'<a href="'+esc(x[1])+'" target="_blank" rel="noopener noreferrer">'+esc(x[0])+'</a>').join(' · ')+'</div></details>';
+}
 /* Official BLS numbers, with links, for careers tied to a BLS occupation. */
 function blsBlock(c){
   const b=c.bls; if(!b)return '';
@@ -1723,11 +1744,11 @@ function resultCard(s,rank,open){
   (c.desc?'<p class="desc">'+esc(c.desc)+'</p>':'')+
   (s.why.length?'<div><span class="good">Why it fits</span><ul class="why">'+s.why.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>':'')+
   (watch.length?'<div><span class="flag">Watch out for</span><ul class="why">'+watch.map(x=>'<li>'+esc(x)+'</li>').join("")+'</ul></div>':'')+
-  '<div class="facts"><div><span>Pay (entry · yr 4 · senior)</span>$'+c.pay[0]+'k · $'+c.pay[1]+'k · $'+c.pay[2]+'k</div><div><span>Travel</span>'+esc(c.trv)+'</div><div><span>Work-life</span>'+esc(c.wlb)+'</div><div><span>Ease of entry</span>'+esc(c.ease)+'</div><div><span>Typical education</span>'+esc(cap(EDU_NEED[c.edu]))+'</div><div><span>AI exposure</span>'+esc(c.ai)+'</div><div><span>Interest code</span>'+c.r+'</div></div>'+
+  '<div class="facts"><div><span>Pay (entry · yr 4 · senior)</span>$'+c.pay[0]+'k · $'+c.pay[1]+'k · $'+c.pay[2]+'k</div><div><span>Travel</span>'+esc(c.trv)+'</div><div><span>Work-life</span>'+esc(c.wlb)+'</div><div><span>Ease of entry</span>'+esc(c.ease)+'</div><div><span>Typical education</span>'+esc(cap(EDU_NEED[c.edu]))+'</div><div><span>AI exposure</span>'+esc(aiLabel(c))+'</div><div><span>Interest code</span>'+c.r+'</div></div>'+
   (mySkillsCount()?'<div class="small"><strong>Skills to build:</strong> '+(s.gapsSk.length?esc(s.gapsSk.slice(0,3).map(k=>SK[k][0]).join(", ")):"none of the core ones — go deeper")+'</div>':'')+
   '<div class="small"><strong>Search for:</strong> '+esc(c.titles)+'</div>'+(c.step?'<div class="small"><strong>'+(c.gen?'Path in':'First move')+':</strong> '+esc(c.step)+'</div>':'')+
-  blsBlock(c)+relBlock(c)+
-  (c.gen?'<div class="small">'+(c.est?'This job has little O*NET data, so much of its profile is estimated from similar jobs. ':'')+'Profile computed from O*NET job data; AI exposure not rated yet.</div>':'')+
+  blsBlock(c)+researchBlock(c)+relBlock(c)+
+  (c.gen?'<div class="small">'+(c.est?'This job has little O*NET data, so much of its profile is estimated from similar jobs. ':'')+'Profile computed from O*NET job data'+(researchOf(c)?'.':'; AI exposure not rated yet.')+'</div>':'')+
   '<div class="small">'+[["Interest match",s.interest],["ability match",s.ability],["resume match",s.skillFit],["subject match",s.subjFit],["work-style match",s.dimSim],["pay match",s.payFit]].filter(x=>x[1]!=null).map(x=>x[0]+' '+pct(x[1])).join(' · ').replace(/^./,c=>c.toUpperCase())+'</div></div></details>';
 }
 function mySkillsCount(){return mySkills().size}
@@ -1924,6 +1945,8 @@ document.getElementById("themeBtn").addEventListener("click",()=>{
 try{const t=localStorage.getItem("careerCombine.theme");if(t)document.documentElement.dataset.theme=t}catch(e){}
 
 render();
+// Research loads after the page (defer). If someone lands straight on their results, redraw once it arrives.
+document.addEventListener("DOMContentLoaded",()=>{if(typeof CAREER_RESEARCH!=="undefined"&&Object.keys(CAREER_RESEARCH).length&&app.querySelector("details.res"))render()});
 updateLive();
 window.__combine={get state(){return state},set state(v){state=v},analyze,detectSkills,go,render};
 </script>
