@@ -195,6 +195,11 @@ animals, food, kids, nature, sports, and electrical work. Hand-tuned careers set
 ideal fit for each career would, then reports where that career lands (needs Python
 Playwright). A well-calibrated build puts nearly every career in its own top 10.
 
+**Checking realistic people.** `python3 tools/personas.py` answers the whole assessment the way
+15 realistic people would (a nurse type, a salesperson, an undecided new grad, and so on), not
+tailored to any career, and checks that sensible careers land in each person's top 10. Add
+`--verbose` to see the "Why it fits" reasons. Run both checks after changing scoring or questions.
+
 `tools/build-report.md` lists how well each trait agrees with the hand-tuned
 careers, which occupations were skipped and why, and a spot check of the results.
 
