@@ -111,15 +111,15 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - Pediatric Surgeons: median $559k, code ISR, edu 3
 - Cardiologists: median $496k, code IRS, edu 3
 - Radiologists: median $421k, code IRC, edu 3
-- Anesthesiologists: median $391k, code ISR, edu 3
 - Orthopedic Surgeons, Except Pediatric: median $359k, code IRS, edu 3
-- Oral and Maxillofacial Surgeons: median $352k, code IRS, edu 3
-- Emergency Medicine Physicians: median $336k, code ISC, edu 3
+- Anesthesiologists: median $391k, code ISR, edu 3
 - Dermatologists: median $329k, code IRS, edu 3
-- Physicians, Pathologists: median $312k, code IRC, edu 3
-- Prosthodontists: median $311k, code RIS, edu 3
+- Emergency Medicine Physicians: median $336k, code ISC, edu 3
 - Ophthalmologists, Except Pediatric: median $300k, code ISR, edu 3
+- Oral and Maxillofacial Surgeons: median $352k, code IRS, edu 3
+- Physicians, Pathologists: median $312k, code IRC, edu 3
 - Obstetricians and Gynecologists: median $293k, code ISR, edu 3
-- Orthodontists: median $289k, code IRC, edu 3
 - Psychiatrists: median $282k, code ISC, edu 3
 - General Internal Medicine Physicians: median $257k, code ISR, edu 3
+- Prosthodontists: median $311k, code RIS, edu 3
+- Neurologists: median $249k, code ISR, edu 3
