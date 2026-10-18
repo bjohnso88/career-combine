@@ -8,6 +8,10 @@
 //   r      RIASEC code: the three highest O*NET interest scores.
 //   pay    [entry, ~year 4, senior] in $k: average of BLS 10th/25th percentiles, the median,
 //          and average of the 75th/90th percentiles (OEWS national, annual wages).
+//          Physicians and surgeons (29-1211 to 29-1249) use [median, average of median/75th,
+//          average of 75th/90th] instead: their low percentiles include part-time and reduced-hours
+//          doctors, so the 10th/25th fall far below what a new doctor earns after residency
+//          (2025–26 physician surveys put typical starting offers near the BLS median).
 //   d      17 demand levels (0–1): O*NET work activities, work context, and skills, each
 //          rescaled, then calibrated against the hand-tuned careers in careers.js that cover
 //          the same occupation, so both kinds sit on the same scale. Travel, commission pay,
@@ -441,7 +445,10 @@ for (const soc of Object.keys(oews).sort()) {
   const e = ep[soc];
   const z = jobZone[soc] != null ? Math.round(jobZone[soc]) : null;
   const edu = EDU_LEVEL(e?.edu) ?? zoneEdu(z);
-  const pay = [payPoint(o.p.p10, o.p.p25), payPoint(o.p.med), payPoint(o.p.p75, o.p.p90)];
+  const physician = /^29-12[1-4]\d$/.test(soc);
+  const pay = physician
+    ? [payPoint(o.p.med), payPoint(o.p.med, o.p.p75), payPoint(o.p.p75, o.p.p90)]
+    : [payPoint(o.p.p10, o.p.p25), payPoint(o.p.med), payPoint(o.p.p75, o.p.p90)];
   if (pay.some(x => x == null)) { skipped.push(`${soc} ${o.title} (incomplete wages)`); continue; }
   const onetCode = (onetCodes[soc] || []).find(c => c.endsWith(".00")) || (onetCodes[soc] || [])[0];
   careers.push({
