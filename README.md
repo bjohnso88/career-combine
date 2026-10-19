@@ -201,6 +201,11 @@ Playwright). A well-calibrated build puts nearly every career in its own top 10.
 tailored to any career, and checks that sensible careers land in each person's top 10. Add
 `--verbose` to see the "Why it fits" reasons. Run both checks after changing scoring or questions.
 
+**Reviewed overrides.** A few generated careers have a value that career research showed is
+off (for example, pay for jobs where most workers are self-employed, which BLS wage surveys
+leave out). These live in the `OVERRIDES` list near the end of `tools/build-careers.mjs`, each
+with its reason, and are applied after the computed values so the monthly rebuild keeps them.
+
 `tools/build-report.md` lists how well each trait agrees with the hand-tuned
 careers, which occupations were skipped and why, and a spot check of the results.
 
