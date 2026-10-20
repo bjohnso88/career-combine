@@ -29,6 +29,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 | pu | 42 | 0.83 | y = 0.11 + 0.91x |
 - override 29-1022 Oral and Maxillofacial Surgeons: {"pay":[205,352,526],"edu":3,"ease":"Hard"}
 - override 29-1291 Acupuncturists: {"pay":[40,55,102],"edu":3,"ease":"Hard"}
+- override 29-2036 Medical Dosimetrists: {"pay":[122,147,176],"edu":3,"ease":"Hard"}
 - override 49-9063 Musical Instrument Repairers and Tuners: {"pay":[34,46,65],"edu":1,"ease":"Easy"}
 
 ## Result
