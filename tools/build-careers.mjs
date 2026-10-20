@@ -496,6 +496,10 @@ const OVERRIDES = {
   // 12-month accredited dosimetry program (often a post-bachelor's certificate), so it sits above
   // a plain bachelor's. Level 3 also makes ease "Hard".
   "29-2036": { edu: 3 },
+  // Short-term substitute teachers: BLS lists a bachelor's, but only some states require one
+  // (e.g. AZ, CA, IL); many accept some college credits, and Texas lets districts hire with a
+  // high school diploma. Level 1 (some college / certificate) is the more typical bar.
+  "25-3031": { edu: 1 },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
