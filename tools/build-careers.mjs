@@ -492,6 +492,10 @@ const OVERRIDES = {
   // Musical instrument repairers: many enter through 1–2 year repair programs (e.g. Minnesota State
   // College Southeast in Red Wing), so a postsecondary certificate is the more typical level.
   "49-9063": { edu: 1 },
+  // Medical dosimetrists: since 2017 the MDCB certification exam requires a bachelor's degree plus a
+  // 12-month accredited dosimetry program (often a post-bachelor's certificate), so it sits above
+  // a plain bachelor's. Level 3 also makes ease "Hard".
+  "29-2036": { edu: 3 },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
