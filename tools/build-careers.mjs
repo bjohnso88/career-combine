@@ -500,12 +500,16 @@ const OVERRIDES = {
   // (e.g. AZ, CA, IL); many accept some college credits, and Texas lets districts hire with a
   // high school diploma. Level 1 (some college / certificate) is the more typical bar.
   "25-3031": { edu: 1 },
+  // Police sergeants and other first-line police supervisors: a promotion-only job. You first serve
+  // about 4–5+ years as a patrol officer, then pass a promotional exam, so it is not an easy entry.
+  "33-1012": { ease: "Hard" },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
   if (!ov) continue;
   if (ov.pay) c.pay = typeof ov.pay === "function" ? ov.pay(oews[c.bls.soc]) : ov.pay;
   if (ov.edu != null) { c.edu = ov.edu; c.ease = easeOf(ov.edu, jobZone[c.bls.soc] != null ? Math.round(jobZone[c.bls.soc]) : null); }
+  if (ov.ease) c.ease = ov.ease;
   log(`- override ${c.bls.soc} ${c.n}: ${JSON.stringify({ pay: c.pay, edu: c.edu, ease: c.ease })}`);
 }
 
