@@ -32,6 +32,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 29-1291 Acupuncturists: {"pay":[40,55,102],"edu":3,"ease":"Hard"}
 - override 29-2036 Medical Dosimetrists: {"pay":[122,147,176],"edu":3,"ease":"Hard"}
 - override 33-1012 First-Line Supervisors of Police and Detectives: {"pay":[73,106,149],"edu":0,"ease":"Hard"}
+- override 33-3021 Detectives and Criminal Investigators: {"pay":[62,94,141],"edu":0,"ease":"Hard"}
 - override 49-9063 Musical Instrument Repairers and Tuners: {"pay":[34,46,65],"edu":1,"ease":"Easy"}
 
 ## Result
