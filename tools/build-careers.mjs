@@ -506,6 +506,16 @@ const OVERRIDES = {
   // Detectives and criminal investigators: almost always promoted from patrol officer after several
   // years, so not an easy entry despite the high school education level.
   "33-3021": { ease: "Hard" },
+  // Fire captains and lieutenants (first-line fire supervisors): promotion-only. You are hired as a
+  // firefighter, serve several years (one 2026 lieutenant posting asks 5 years plus paramedic
+  // certification), then pass a written exam and assessment center.
+  "33-1021": { ease: "Hard" },
+  // Security supervisors: most are promoted from security guard (some come from military or police),
+  // so experience is needed, but the bar is lower than police or fire.
+  "33-1091": { ease: "Medium" },
+  // Entertainment and recreation supervisors: usually promoted from recreation worker or lifeguard;
+  // BLS lists under 5 years of related experience.
+  "39-1014": { ease: "Medium" },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
