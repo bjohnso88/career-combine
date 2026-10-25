@@ -503,6 +503,9 @@ const OVERRIDES = {
   // Police sergeants and other first-line police supervisors: a promotion-only job. You first serve
   // about 4–5+ years as a patrol officer, then pass a promotional exam, so it is not an easy entry.
   "33-1012": { ease: "Hard" },
+  // Detectives and criminal investigators: almost always promoted from patrol officer after several
+  // years, so not an easy entry despite the high school education level.
+  "33-3021": { ease: "Hard" },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
