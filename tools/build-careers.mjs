@@ -555,6 +555,25 @@ const OVERRIDES = {
   "27-3023": { wlb: "Demanding" },
   "17-3013": { wlb: "Mixed" },
   "17-3027": { wlb: "Mixed" },
+  // --- From the research batch of 2026-10-26 (PR #43) ---
+  // Locomotive engineers: must be 21+, need FRA certification, and nearly always work years as a
+  // conductor first.
+  "53-4011": { ease: "Medium", stepNote: "Most start as railroad conductors." },
+  // Refinery operators: a process technology (PTEC) degree or plant or military experience is the
+  // usual way in.
+  "51-8093": { ease: "Medium" },
+  // Sailors and marine oilers: entry needs a Coast Guard credential, a TSA TWIC card, drug and
+  // medical tests, and STCW safety training.
+  "53-5011": { ease: "Medium" },
+  // Welding machine operators: Fabricator and Mig Welder are manual welding titles.
+  "51-4122": { titles: "Robotic Welding Operator, Spot Welder, Welding Machine Operator, Machine Operator" },
+  // Hands-on production work whose O*NET skill or subject mapping came up empty or off.
+  "51-9195": { sk: ["handson", "safety", "training"], sub: { factory: 0.7 } }, // molders: lists were empty
+  "51-5113": { sub: { factory: 0.7 } }, // print binders: subject list was empty
+  "45-2093": { sk: ["handson", "safety", "training"] }, // animal farmworkers: only "training"
+  "51-4193": { sk: ["handson", "safety", "training", "operations"] }, // plating: "engineering", "teaching" don't fit
+  // Industrial designers work mostly in offices (BLS); design and art matter more than factory knowledge.
+  "27-1021": { sub: { machines: 0.74, tech: 0.42, art: 0.6, factory: 0.3 } },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
