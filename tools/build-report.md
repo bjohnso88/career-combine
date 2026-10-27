@@ -27,16 +27,32 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 | pr | 40 | 0.47 | y = 0.14 + 0.72x |
 | en | 42 | 0.36 | y = -0.23 + 0.63x |
 | pu | 42 | 0.83 | y = 0.11 + 0.91x |
+- override 17-3013 Mechanical Drafters: {"pay":[53,72,96],"edu":1,"ease":"Easy","wlb":"Mixed"}
+- override 17-3027 Mechanical Engineering Technologists and Technicians: {"pay":[54,75,97],"edu":1,"ease":"Easy","wlb":"Mixed"}
+- override 23-2093 Title Examiners, Abstractors, and Searchers: {"pay":[43,59,83],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Some states require a title license, so check your state."}
 - override 25-3031 Substitute Teachers, Short-Term: {"pay":[31,42,60],"edu":1,"ease":"Medium"}
+- override 27-1023 Floral Designers: {"pay":[31,37,48],"edu":0,"ease":"Easy","sub":{"art":0.7}}
+- override 27-3023 News Analysts, Reporters, and Journalists: {"pay":[41,62,121],"edu":2,"ease":"Medium","wlb":"Demanding"}
+- override 27-3042 Technical Writers: {"pay":[64,90,130],"edu":2,"ease":"Medium","titles":"Technical Writer, Documentation Specialist, Engineering Writer, Information Developer"}
 - override 29-1022 Oral and Maxillofacial Surgeons: {"pay":[205,352,526],"edu":3,"ease":"Hard"}
 - override 29-1291 Acupuncturists: {"pay":[40,55,102],"edu":3,"ease":"Hard"}
 - override 29-2036 Medical Dosimetrists: {"pay":[122,147,176],"edu":3,"ease":"Hard"}
+- override 33-1011 First-Line Supervisors of Correctional Officers: {"pay":[56,78,116],"edu":0,"ease":"Medium"}
 - override 33-1012 First-Line Supervisors of Police and Detectives: {"pay":[73,106,149],"edu":0,"ease":"Hard"}
 - override 33-1021 First-Line Supervisors of Firefighting and Prevention Workers: {"pay":[63,94,130],"edu":1,"ease":"Hard"}
 - override 33-1091 First-Line Supervisors of Security Workers: {"pay":[41,56,82],"edu":0,"ease":"Medium"}
 - override 33-3021 Detectives and Criminal Investigators: {"pay":[62,94,141],"edu":0,"ease":"Hard"}
+- override 33-9021 Private Detectives and Investigators: {"pay":[39,51,86],"edu":0,"ease":"Medium"}
 - override 39-1014 First-Line Supervisors of Entertainment and Recreation Workers, Except Gambling Services: {"pay":[37,49,71],"edu":0,"ease":"Medium"}
+- override 43-4011 Brokerage Clerks: {"pay":[54,66,91],"edu":0,"ease":"Easy","titles":"Registered Sales Assistant, Sales Assistant, Trading Assistant, Brokerage Clerk"}
 - override 49-9063 Musical Instrument Repairers and Tuners: {"pay":[34,46,65],"edu":1,"ease":"Easy"}
+- override 51-2011 Aircraft Structure, Surfaces, Rigging, and Systems Assemblers: {"pay":[53,65,95],"edu":0,"ease":"Easy","sk":["handson","training","teaching"]}
+- override 51-2031 Engine and Other Machine Assemblers: {"pay":[42,54,76],"edu":0,"ease":"Easy","sk":["handson"]}
+- override 51-9081 Dental Laboratory Technicians: {"pay":[39,50,70],"edu":0,"ease":"Easy","sk":["handson","healthcare","training","pm","teaching","customer"]}
+- override 53-2012 Commercial Pilots: {"pay":[72,123,229],"edu":1,"ease":"Hard"}
+- override 53-3054 Taxi Drivers: {"pay":[36,42,68],"edu":0,"ease":"Easy","titles":"Taxi Driver, Cab Driver, Rideshare Driver, Uber or Lyft Driver"}
+- override 53-5021 Captains, Mates, and Pilots of Water Vessels: {"pay":[56,92,149],"edu":1,"ease":"Hard"}
+- override 53-7021 Crane and Tower Operators: {"pay":[48,68,93],"edu":0,"ease":"Medium"}
 
 ## Result
 - 756 careers written to careers-bls.js

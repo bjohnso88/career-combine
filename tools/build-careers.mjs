@@ -516,6 +516,45 @@ const OVERRIDES = {
   // Entertainment and recreation supervisors: usually promoted from recreation worker or lifeguard;
   // BLS lists under 5 years of related experience.
   "39-1014": { ease: "Medium" },
+  // --- From research batches of 2026-10-26 (PRs #40 and #41) ---
+  // Commercial pilots: a commercial certificate needs 250+ flight hours, an FAA medical and tens of
+  // thousands of dollars of flight training, so not an easy entry.
+  "53-2012": { ease: "Hard" },
+  // Correctional officer supervisors: promotion-only; years as a correctional officer, usually plus
+  // a promotion exam.
+  "33-1011": { ease: "Medium" },
+  // Ship and boat captains, mates and pilots: a Coast Guard license takes years of documented sea time
+  // (about 1,440 days for a towboat master) or a 4-year maritime academy degree.
+  "53-5021": { ease: "Hard" },
+  // Private detectives: BLS says entrants usually bring years of related experience, and most states
+  // require a license.
+  "33-9021": { ease: "Medium" },
+  // Crane operators: OSHA requires certification by crane type plus an employer evaluation, and
+  // employers want related experience.
+  "53-7021": { ease: "Medium" },
+  // Technical writers: O*NET's reported titles include Grant Writer and Requirements Analyst, which
+  // are different jobs (Writers and Authors; business/systems analysts).
+  "27-3042": { titles: "Technical Writer, Documentation Specialist, Engineering Writer, Information Developer" },
+  // Taxi drivers: BLS counts rideshare drivers in this occupation, and they drive its projected growth.
+  "53-3054": { titles: "Taxi Driver, Cab Driver, Rideshare Driver, Uber or Lyft Driver" },
+  // Brokerage clerks: Sales Trader is a licensed trading role, not a clerk job.
+  "43-4011": { titles: "Registered Sales Assistant, Sales Assistant, Trading Assistant, Brokerage Clerk" },
+  // Title examiners: several states (for example Texas and Florida, per job postings) require a title
+  // license, which the BLS entry line doesn't mention.
+  "23-2093": { stepNote: "Some states require a title license, so check your state." },
+  // Hands-on bench and factory work that O*NET's skill mapping missed or mislabeled.
+  "51-9081": { sk: ["handson", "healthcare", "training", "pm", "teaching", "customer"] },
+  "51-2011": { sk: ["handson", "training", "teaching"] },
+  "51-2031": { sk: ["handson"] }, // engine assemblers: "customer" doesn't fit factory work
+  // Floral designers: O*NET's "production" knowledge tags this as factory work; it is retail and
+  // creative work, so use the art subject instead.
+  "27-1023": { sub: { art: 0.7 } },
+  // Work-life balance: journalists work odd hours (a 2025 survey: 83% work outside normal hours at
+  // least weekly, 42% left a job over burnout); drafters and mechanical technicians mostly keep
+  // standard full-time office hours.
+  "27-3023": { wlb: "Demanding" },
+  "17-3013": { wlb: "Mixed" },
+  "17-3027": { wlb: "Mixed" },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
@@ -523,7 +562,12 @@ for (const c of careers) {
   if (ov.pay) c.pay = typeof ov.pay === "function" ? ov.pay(oews[c.bls.soc]) : ov.pay;
   if (ov.edu != null) { c.edu = ov.edu; c.ease = easeOf(ov.edu, jobZone[c.bls.soc] != null ? Math.round(jobZone[c.bls.soc]) : null); }
   if (ov.ease) c.ease = ov.ease;
-  log(`- override ${c.bls.soc} ${c.n}: ${JSON.stringify({ pay: c.pay, edu: c.edu, ease: c.ease })}`);
+  if (ov.wlb) c.wlb = ov.wlb;
+  if (ov.titles) c.titles = ov.titles;
+  if (ov.sk) c.sk = ov.sk;
+  if (ov.sub) c.sub = ov.sub;
+  if (ov.stepNote) c.step = (c.step ? c.step + " " : "") + ov.stepNote;
+  log(`- override ${c.bls.soc} ${c.n}: ${JSON.stringify({ pay: c.pay, edu: c.edu, ease: c.ease, ...(ov.wlb ? { wlb: c.wlb } : {}), ...(ov.titles ? { titles: c.titles } : {}), ...(ov.sk ? { sk: c.sk } : {}), ...(ov.sub ? { sub: c.sub } : {}), ...(ov.stepNote ? { step: c.step } : {}) })}`);
 }
 
 /* ---------------- write ---------------- */
