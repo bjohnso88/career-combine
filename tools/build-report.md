@@ -29,7 +29,9 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 | pu | 42 | 0.83 | y = 0.11 + 0.91x |
 - override 17-3013 Mechanical Drafters: {"pay":[53,72,96],"edu":1,"ease":"Easy","wlb":"Mixed"}
 - override 17-3027 Mechanical Engineering Technologists and Technicians: {"pay":[54,75,97],"edu":1,"ease":"Easy","wlb":"Mixed"}
+- override 19-5012 Occupational Health and Safety Technicians: {"pay":[49,62,90],"edu":0,"ease":"Easy","titles":"Construction Safety Consultant, Industrial Hygiene Technician, Safety Specialist, Safety Technician"}
 - override 23-2093 Title Examiners, Abstractors, and Searchers: {"pay":[43,59,83],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Some states require a title license, so check your state."}
+- override 25-2051 Special Education Teachers, Preschool: {"pay":[49,65,111],"edu":2,"ease":"Medium","d":{"tr":0.2},"trv":"Some","wlb":"Mixed"}
 - override 25-3031 Substitute Teachers, Short-Term: {"pay":[31,42,60],"edu":1,"ease":"Medium"}
 - override 27-1021 Commercial and Industrial Designers: {"pay":[60,84,124],"edu":2,"ease":"Medium","sub":{"machines":0.74,"tech":0.42,"art":0.6,"factory":0.3}}
 - override 27-1023 Floral Designers: {"pay":[31,37,48],"edu":0,"ease":"Easy","sub":{"art":0.7}}
@@ -44,23 +46,31 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 33-1091 First-Line Supervisors of Security Workers: {"pay":[41,56,82],"edu":0,"ease":"Medium"}
 - override 33-3021 Detectives and Criminal Investigators: {"pay":[62,94,141],"edu":0,"ease":"Hard"}
 - override 33-9021 Private Detectives and Investigators: {"pay":[39,51,86],"edu":0,"ease":"Medium"}
+- override 37-3012 Pesticide Handlers, Sprayers, and Applicators, Vegetation: {"pay":[37,46,56],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Most states require a pesticide applicator license (a core exam plus a category exam)."}
+- override 39-1013 First-Line Supervisors of Gambling Services Workers: {"pay":[46,64,80],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; less than 5 years of experience in a related job. A state or tribal gaming license is required, and most supervisors first work 1–3 years as dealers."}
 - override 39-1014 First-Line Supervisors of Entertainment and Recreation Workers, Except Gambling Services: {"pay":[37,49,71],"edu":0,"ease":"Medium"}
+- override 39-4021 Funeral Attendants: {"pay":[29,36,46],"edu":0,"ease":"Easy","titles":"Funeral Assistant, Funeral Attendant, Funeral Home Assistant, Transfer Care Specialist"}
 - override 43-4011 Brokerage Clerks: {"pay":[54,66,91],"edu":0,"ease":"Easy","titles":"Registered Sales Assistant, Sales Assistant, Trading Assistant, Brokerage Clerk"}
 - override 45-2093 Farmworkers, Farm, Ranch, and Aquacultural Animals: {"pay":[29,37,50],"edu":0,"ease":"Easy","sk":["handson","safety","training"]}
 - override 49-9063 Musical Instrument Repairers and Tuners: {"pay":[34,46,65],"edu":1,"ease":"Easy"}
 - override 51-2011 Aircraft Structure, Surfaces, Rigging, and Systems Assemblers: {"pay":[53,65,95],"edu":0,"ease":"Easy","sk":["handson","training","teaching"]}
 - override 51-2031 Engine and Other Machine Assemblers: {"pay":[42,54,76],"edu":0,"ease":"Easy","sk":["handson"]}
+- override 51-3093 Food Cooking Machine Operators and Tenders: {"pay":[34,42,51],"edu":0,"ease":"Easy","d":{"au":0.4},"trv":"Some","wlb":"Mixed"}
 - override 51-4122 Welding, Soldering, and Brazing Machine Setters, Operators, and Tenders: {"pay":[39,48,62],"edu":0,"ease":"Easy","titles":"Robotic Welding Operator, Spot Welder, Welding Machine Operator, Machine Operator"}
 - override 51-4193 Plating Machine Setters, Operators, and Tenders, Metal and Plastic: {"pay":[36,44,55],"edu":0,"ease":"Easy","sk":["handson","safety","training","operations"]}
 - override 51-5113 Print Binding and Finishing Workers: {"pay":[35,42,54],"edu":0,"ease":"Easy","sub":{"factory":0.7}}
+- override 51-8013 Power Plant Operators: {"pay":[71,102,126],"edu":0,"ease":"Medium"}
 - override 51-8093 Petroleum Pump System Operators, Refinery Operators, and Gaugers: {"pay":[67,97,111],"edu":0,"ease":"Medium"}
 - override 51-9081 Dental Laboratory Technicians: {"pay":[39,50,70],"edu":0,"ease":"Easy","sk":["handson","healthcare","training","pm","teaching","customer"]}
+- override 51-9141 Semiconductor Processing Technicians: {"pay":[42,51,74],"edu":0,"ease":"Easy","d":{"h":0.7},"trv":"Some","wlb":"Demanding"}
 - override 51-9195 Molders, Shapers, and Casters, Except Metal and Plastic: {"pay":[38,46,57],"edu":0,"ease":"Easy","sk":["handson","safety","training"],"sub":{"factory":0.7}}
 - override 53-2012 Commercial Pilots: {"pay":[72,123,229],"edu":1,"ease":"Hard"}
 - override 53-3054 Taxi Drivers: {"pay":[36,42,68],"edu":0,"ease":"Easy","titles":"Taxi Driver, Cab Driver, Rideshare Driver, Uber or Lyft Driver"}
 - override 53-4011 Locomotive Engineers: {"pay":[68,81,101],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; less than 5 years of experience in a related job; then moderate-term on-the-job training. Most start as railroad conductors."}
 - override 53-5011 Sailors and Marine Oilers: {"pay":[38,52,76],"edu":0,"ease":"Medium"}
 - override 53-5021 Captains, Mates, and Pilots of Water Vessels: {"pay":[56,92,149],"edu":1,"ease":"Hard"}
+- override 53-6032 Aircraft Service Attendants: {"pay":[35,40,52],"edu":0,"ease":"Easy","d":{"cu":0.3,"pr":0.2},"trv":"Some","wlb":"Demanding"}
+- override 53-6061 Passenger Attendants: {"pay":[30,38,44],"edu":0,"ease":"Easy","d":{"pr":0.3},"trv":"Some","wlb":"Mixed"}
 - override 53-7021 Crane and Tower Operators: {"pay":[48,68,93],"edu":0,"ease":"Medium"}
 
 ## Result
