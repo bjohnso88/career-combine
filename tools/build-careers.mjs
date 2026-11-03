@@ -574,6 +574,25 @@ const OVERRIDES = {
   "51-4193": { sk: ["handson", "safety", "training", "operations"] }, // plating: "engineering", "teaching" don't fit
   // Industrial designers work mostly in offices (BLS); design and art matter more than factory knowledge.
   "27-1021": { sub: { machines: 0.74, tech: 0.42, art: 0.6, factory: 0.3 } },
+  // --- From the research batch of 2026-11-02 (PR #45) ---
+  // Aircraft fuelers and deicers mostly work alone on the ramp: little people time or presenting.
+  "53-6032": { d: { cu: 0.3, pr: 0.2 } },
+  // About 40% of passenger attendants are school bus monitors, which involves little presenting.
+  "53-6061": { d: { pr: 0.3 } },
+  // Food cooking machine operators are tied to the line and its supervisors.
+  "51-3093": { d: { au: 0.4 } },
+  // Chip plants run 12-hour shifts around the clock.
+  "51-9141": { d: { h: 0.7 } },
+  // Early-intervention teachers often drive to family homes.
+  "25-2051": { d: { tr: 0.2 } },
+  // Funeral Director is a separate licensed job that needs mortuary school.
+  "39-4021": { titles: "Funeral Assistant, Funeral Attendant, Funeral Home Assistant, Transfer Care Specialist" },
+  // Industrial hygienists (including CIH) need a degree; this job's typical entry is high school.
+  "19-5012": { titles: "Construction Safety Consultant, Industrial Hygiene Technician, Safety Specialist, Safety Technician" },
+  "37-3012": { stepNote: "Most states require a pesticide applicator license (a core exam plus a category exam)." },
+  "39-1013": { stepNote: "A state or tribal gaming license is required, and most supervisors first work 1–3 years as dealers." },
+  // Power plant operators: aptitude tests and years of on-site training; nuclear operators need an NRC license.
+  "51-8013": { ease: "Medium" },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
@@ -585,8 +604,13 @@ for (const c of careers) {
   if (ov.titles) c.titles = ov.titles;
   if (ov.sk) c.sk = ov.sk;
   if (ov.sub) c.sub = ov.sub;
+  if (ov.d) { // work-style levels: merge, then refresh the travel and work-life labels built from them
+    c.d = { ...c.d, ...ov.d };
+    c.trv = travelText(c.d.tr || 0);
+    if (!ov.wlb) c.wlb = wlbText(c.d.h || 0, c.d.p || 0);
+  }
   if (ov.stepNote) c.step = (c.step ? c.step + " " : "") + ov.stepNote;
-  log(`- override ${c.bls.soc} ${c.n}: ${JSON.stringify({ pay: c.pay, edu: c.edu, ease: c.ease, ...(ov.wlb ? { wlb: c.wlb } : {}), ...(ov.titles ? { titles: c.titles } : {}), ...(ov.sk ? { sk: c.sk } : {}), ...(ov.sub ? { sub: c.sub } : {}), ...(ov.stepNote ? { step: c.step } : {}) })}`);
+  log(`- override ${c.bls.soc} ${c.n}: ${JSON.stringify({ pay: c.pay, edu: c.edu, ease: c.ease, ...(ov.wlb ? { wlb: c.wlb } : {}), ...(ov.titles ? { titles: c.titles } : {}), ...(ov.sk ? { sk: c.sk } : {}), ...(ov.sub ? { sub: c.sub } : {}), ...(ov.d ? { d: ov.d, trv: c.trv, wlb: c.wlb } : {}), ...(ov.stepNote ? { step: c.step } : {}) })}`);
 }
 
 /* ---------------- write ---------------- */
