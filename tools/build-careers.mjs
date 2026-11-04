@@ -593,6 +593,41 @@ const OVERRIDES = {
   "39-1013": { stepNote: "A state or tribal gaming license is required, and most supervisors first work 1–3 years as dealers." },
   // Power plant operators: aptitude tests and years of on-site training; nuclear operators need an NRC license.
   "51-8013": { ease: "Medium" },
+  // --- From the research batch of 2026-11-03 (PR #47) ---
+  // Air traffic controllers: chronic mandatory overtime; 30–35% of trainees do not finish the FAA Academy.
+  "53-2021": { ease: "Hard", d: { h: 0.75 }, stepNote: "Applicants must be U.S. citizens, apply before age 31, pass the ATSA aptitude test, a medical exam and a security check, and finish the FAA Academy; controllers must retire at 56." },
+  // Transportation inspectors: FRA and FAA postings say frequent or extensive travel.
+  "53-6051": { d: { tr: 0.5 }, titles: "Aviation Safety Inspector, Marine Cargo Surveyor, Petroleum Inspector, Railroad Safety Inspector", stepNote: "Most inspectors first spend years in the industry they inspect; FAA aviation safety inspectors, for example, need pilot or mechanic certificates and long experience." },
+  // Camera operators: mostly on location, often 12-hour-plus shoot days.
+  "27-4031": { d: { tr: 0.5, h: 0.7 } },
+  // Geoscientists: field camps and remote rotations.
+  "19-2042": { d: { tr: 0.3 }, stepNote: "About 38 states license Professional Geologists (ASBOG exams), which is needed to sign public reports." },
+  // Jewelers: bench work is the core of the job; skills were all retail.
+  "51-9071": { d: { th: 0.85 }, sk: ["handson", "design", "customer", "sales"] },
+  // Materials engineers split time across labs and plant floors.
+  "17-2131": { d: { th: 0.45 } },
+  // Religious activities directors: evenings, weekends, retreats.
+  "21-2021": { d: { h: 0.6 } },
+  // Ag graders: O*NET says 73% make repetitive motions almost constantly; Excel does not fit.
+  "45-2041": { d: { v: 0.3 }, sk: ["handson", "safety"] },
+  // Textile winding: repetitive machine tending.
+  "51-6064": { d: { v: 0.3 } },
+  // Conveyor operators: on-site line work with little presenting.
+  "53-7011": { d: { pr: 0.1 } },
+  // Morticians: licensed job.
+  "39-4031": { ease: "Medium", stepNote: "Funeral directors need a state license: usually age 21, an accredited mortuary science program, a board exam, and a 1–3 year internship." },
+  // Entry requirements found in the research (licenses, training, portfolio).
+  "41-2012": { stepNote: "A state or tribal gaming license, a background check, and usually a drug test are required." },
+  "51-9021": { stepNote: "Quarry and mine jobs require federal MSHA new-miner training (24 hours, 8 of them before starting)." },
+  "19-1031": { stepNote: "Federal soil conservationist jobs require at least 30 semester hours in natural resource or agriculture courses, 12 of them in soils or plant science." },
+  "17-2111": { stepNote: "A PE license (FE exam, experience, then PE exam) and the CSP certification are common for moving up." },
+  "27-1022": { stepNote: "A portfolio is required, and most jobs are in New York and California." },
+  // Bioengineers: Biomedical Technician is a different job (medical equipment repairer).
+  "17-2031": { titles: "Biomedical Engineer, Process Engineer, Research Engineer" },
+  // Broadcast announcers: jobs projected to fall 8%, with on-air cuts in 2026.
+  "27-3011": { ease: "Hard" },
+  // Broadcast technicians: engineering roles need RF and IP networking skills.
+  "27-4012": { ease: "Medium" },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
