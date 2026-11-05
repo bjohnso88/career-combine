@@ -383,7 +383,8 @@ const EDU_LEVEL = s => {
 };
 const zoneEdu = z => z == null ? 1 : z <= 2 ? 0 : z === 3 ? 1 : z === 4 ? 2 : 3;
 const easeOf = (edu, z) => (edu >= 3 || z >= 5) ? "Hard" : (edu === 2 || z >= 4) ? "Medium" : "Easy";
-const travelText = x => x < .1 ? "Rare" : x < .3 ? "Some" : x < .6 ? "Regular" : "Frequent";
+// 0.1 is the default for jobs with no known travel, so it counts as Rare.
+const travelText = x => x <= .1 ? "Rare" : x < .3 ? "Some" : x < .6 ? "Regular" : "Frequent";
 const wlbText = (h, p) => (h >= .6 || p >= .85) ? "Demanding" : (h >= .35 || p >= .7) ? "Mixed" : "Good";
 const k = x => x == null ? null : Math.round(x);
 const payPoint = (...ws) => { const v = ws.map(w => w.top ? TOP : w.k).filter(x => x != null); return v.length ? Math.round(mean(v)) : null; };
@@ -628,6 +629,37 @@ const OVERRIDES = {
   "27-3011": { ease: "Hard" },
   // Broadcast technicians: engineering roles need RF and IP networking skills.
   "27-4012": { ease: "Medium" },
+  // --- From the research batch of 2026-11-04 (PR #49) ---
+  // Food roasting and baking operators: line work with little presenting or customer time.
+  "51-3091": { d: { pr: 0.15, cu: 0.25 } },
+  // Upholsterers: shop work with little presenting.
+  "51-6093": { d: { pr: 0.15 } },
+  // Lathe operators: machine work with little customer time or presenting.
+  "51-4034": { d: { cu: 0.25, pr: 0.2 } },
+  // Logging equipment operators: mostly solo machine time with a small crew.
+  "45-4022": { d: { cu: 0.25 }, stepNote: "Logger safety training is often expected, and a commercial driver's license (CDL) helps." },
+  // Tire builders: 12-hour rotating shifts and mandatory overtime; 'Tire Technician' usually means a shop tire changer.
+  "51-9197": { d: { h: 0.7 }, titles: "Green Tire Builder, Retread Technician, Tire Builder, Tire Retreader" },
+  // Special effects artists: BLS stresses programming skills; layoffs and studio closures make entry hard.
+  "27-1014": { d: { c: 0.35 }, sk: ["design", "media", "programming"], ease: "Hard" },
+  // Wellhead pumpers drive a route between wells all day.
+  "53-7073": { d: { tr: 0.4 }, stepNote: "A valid driver's license and a good driving record are required." },
+  // Petroleum engineers: rig visits and offshore rotations.
+  "17-2171": { d: { tr: 0.35 } },
+  // Middle school CTE teachers spend much of the day in shops, kitchens and labs.
+  "25-2023": { d: { th: 0.45 } },
+  // Zoologists and wildlife biologists: mostly field and lab research.
+  "19-1023": { d: { cu: 0.45 } },
+  "17-1012": { stepNote: "All 50 states require a license: the LARE exam plus supervised experience." },
+  "19-4092": { stepNote: "A proficiency exam or lab approval may be needed before working cases alone, and some states license analysts." },
+  // Bailiffs: many sheriff's offices require a peace officer license.
+  "33-3011": { ease: "Medium", stepNote: "Many sheriff's offices require a peace officer license and law enforcement experience, plus a background check, polygraph and physical test." },
+  "51-8091": { stepNote: "Employers often want 2–3 years of industrial or military experience or a process technology degree, plus a TWIC security card." },
+  // Gas plant operators: years of on-site training; many postings ask for plant experience.
+  "51-8092": { ease: "Medium", stepNote: "Employers often give aptitude tests, and most plants run rotating 12-hour day and night shifts." },
+  "39-2011": { stepNote: "No state license is required; the optional CPDT-KA certification needs 300 hours of training experience plus an exam." },
+  // Microbiologists: Clinical Laboratory Scientist belongs to clinical lab technologists (29-2011).
+  "19-1022": { titles: "Bacteriologist, Microbiological Analyst, Microbiologist" },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
