@@ -660,6 +660,49 @@ const OVERRIDES = {
   "39-2011": { stepNote: "No state license is required; the optional CPDT-KA certification needs 300 hours of training experience plus an exam." },
   // Microbiologists: Clinical Laboratory Scientist belongs to clinical lab technologists (29-2011).
   "19-1022": { titles: "Bacteriologist, Microbiological Analyst, Microbiologist" },
+  // --- From the research batch of 2026-11-05 (PR #51) ---
+  // Calibration technicians: field calibration roles travel weekly.
+  "17-3028": { d: { tr: 0.3 }, stepNote: "The ASQ Certified Calibration Technician (CCT) credential needs 3–5 years of experience." },
+  // Umpires and referees: a different venue each game; irregular evenings, weekends and holidays.
+  "27-2023": { d: { tr: 0.3 }, wlb: "Mixed" },
+  // Soil and plant scientists: fieldwork (BLS).
+  "19-1013": { d: { tr: 0.25 } },
+  // Agricultural inspectors: farms, plants, ports, and emergency rotations.
+  "45-2011": { d: { tr: 0.25 } },
+  // Emergency management directors travel regularly to local agencies (BLS).
+  "11-9161": { d: { tr: 0.25 } },
+  // Sound engineering technicians: live, touring and location work.
+  "27-4014": { d: { tr: 0.3 } },
+  // Food scientists: some jobs travel to plants for production trials (BLS).
+  "19-1012": { d: { tr: 0.25 } },
+  // Fiberglass laminators: hand layup work; skill list did not fit.
+  "51-2051": { d: { th: 0.9 }, sk: ["handson", "safety"], stepNote: "A respirator fit test is usually required." },
+  // Locker room attendants: standing all shift, cleaning and lifting.
+  "39-3093": { d: { th: 0.75 } },
+  // Airfield operations: snow removal and heavy equipment.
+  "53-2022": { d: { th: 0.7 }, stepNote: "A TSA background check is required, and many airports prefer an aviation degree." },
+  // Food science technicians: sampling, swabbing, and the plant floor.
+  "19-4013": { d: { th: 0.55 } },
+  // Cleaning and pickling operators: repetitive machine tending.
+  "51-9192": { d: { v: 0.4 } },
+  // Furniture finishers: factory finishing work.
+  "51-7021": { d: { v: 0.55 } },
+  // Cartographers: Python in about a third of GIS postings.
+  "17-1021": { d: { c: 0.3 } },
+  // Barbers: about 80% are self-employed; state license required everywhere.
+  "39-5011": { d: { en: 0.6 }, ease: "Medium", stepNote: "Every state requires a barber license, usually after 600–1,500+ hours of barber school and a state exam." },
+  // Tailors: many run their own shops.
+  "51-6052": { d: { en: 0.35 } },
+  // Funeral home managers: licensed job.
+  "11-9171": { ease: "Medium", stepNote: "Most states require a funeral director license: an accredited mortuary science program, a 1–3 year apprenticeship, and a board exam." },
+  // Fire inspectors: certification plus years of fire service.
+  "33-2021": { ease: "Medium", stepNote: "State certification (NFPA 1031 for inspectors, 1033 for investigators) is usually required." },
+  // Postmasters: usually reached by promotion inside USPS.
+  "11-9131": { ease: "Medium", stepNote: "Postmasters are usually promoted from inside the Postal Service, after work as a clerk, carrier or supervisor." },
+  // Athletes: about 1% of college players are drafted by a major league.
+  "27-2021": { ease: "Hard" },
+  "23-1021": { stepNote: "A law license is required; federal administrative law judges must be licensed attorneys." },
+  "43-3041": { stepNote: "Most states with casinos require a gaming license and background check." },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
