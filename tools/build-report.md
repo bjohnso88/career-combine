@@ -27,20 +27,29 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 | pr | 40 | 0.47 | y = 0.14 + 0.72x |
 | en | 42 | 0.36 | y = -0.23 + 0.63x |
 | pu | 42 | 0.83 | y = 0.11 + 0.91x |
+- override 11-9131 Postmasters and Mail Superintendents: {"pay":[88,97,107],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; less than 5 years of experience in a related job; then moderate-term on-the-job training. Postmasters are usually promoted from inside the Postal Service, after work as a clerk, carrier or supervisor."}
+- override 11-9161 Emergency Management Directors: {"pay":[61,93,146],"edu":2,"ease":"Medium","d":{"tr":0.25},"trv":"Some","wlb":"Demanding"}
+- override 11-9171 Funeral Home Managers: {"pay":[56,79,130],"edu":1,"ease":"Medium","step":"Typical entry: associate's degree; less than 5 years of experience in a related job. Most states require a funeral director license: an accredited mortuary science program, a 1–3 year apprenticeship, and a board exam."}
 - override 17-1012 Landscape Architects: {"pay":[59,80,117],"edu":2,"ease":"Medium","step":"Typical entry: bachelor's degree; then internship/residency. All 50 states require a license: the LARE exam plus supervised experience."}
+- override 17-1021 Cartographers and Photogrammetrists: {"pay":[60,81,114],"edu":2,"ease":"Medium","d":{"c":0.3},"trv":"Rare","wlb":"Demanding"}
 - override 17-2031 Bioengineers and Biomedical Engineers: {"pay":[79,109,152],"edu":2,"ease":"Medium","titles":"Biomedical Engineer, Process Engineer, Research Engineer"}
 - override 17-2111 Health and Safety Engineers, Except Mining Safety Engineers and Inspectors: {"pay":[80,115,157],"edu":2,"ease":"Medium","step":"Typical entry: bachelor's degree. A PE license (FE exam, experience, then PE exam) and the CSP certification are common for moving up."}
 - override 17-2131 Materials Engineers: {"pay":[80,113,159],"edu":2,"ease":"Medium","d":{"th":0.45},"trv":"Some","wlb":"Mixed"}
 - override 17-2171 Petroleum Engineers: {"pay":[94,145,226],"edu":2,"ease":"Medium","d":{"tr":0.35},"trv":"Regular","wlb":"Demanding"}
 - override 17-3013 Mechanical Drafters: {"pay":[53,72,96],"edu":1,"ease":"Easy","wlb":"Mixed"}
 - override 17-3027 Mechanical Engineering Technologists and Technicians: {"pay":[54,75,97],"edu":1,"ease":"Easy","wlb":"Mixed"}
+- override 17-3028 Calibration Technologists and Technicians: {"pay":[52,68,99],"edu":1,"ease":"Easy","d":{"tr":0.3},"trv":"Regular","wlb":"Mixed","step":"Typical entry: associate's degree. The ASQ Certified Calibration Technician (CCT) credential needs 3–5 years of experience."}
+- override 19-1012 Food Scientists and Technologists: {"pay":[61,89,131],"edu":2,"ease":"Medium","d":{"tr":0.25},"trv":"Some","wlb":"Demanding"}
+- override 19-1013 Soil and Plant Scientists: {"pay":[55,79,121],"edu":2,"ease":"Hard","d":{"tr":0.25},"trv":"Some","wlb":"Demanding"}
 - override 19-1022 Microbiologists: {"pay":[61,88,136],"edu":2,"ease":"Medium","titles":"Bacteriologist, Microbiological Analyst, Microbiologist"}
 - override 19-1023 Zoologists and Wildlife Biologists: {"pay":[55,77,111],"edu":2,"ease":"Medium","d":{"cu":0.45},"trv":"Rare","wlb":"Demanding"}
 - override 19-1031 Conservation Scientists: {"pay":[53,73,101],"edu":2,"ease":"Medium","step":"Typical entry: bachelor's degree. Federal soil conservationist jobs require at least 30 semester hours in natural resource or agriculture courses, 12 of them in soils or plant science."}
 - override 19-2042 Geoscientists, Except Hydrologists and Geographers: {"pay":[67,102,170],"edu":2,"ease":"Medium","d":{"tr":0.3},"trv":"Regular","wlb":"Demanding","step":"Typical entry: bachelor's degree. About 38 states license Professional Geologists (ASBOG exams), which is needed to sign public reports."}
+- override 19-4013 Food Science Technicians: {"pay":[43,52,71],"edu":1,"ease":"Easy","d":{"th":0.55},"trv":"Some","wlb":"Demanding"}
 - override 19-4092 Forensic Science Technicians: {"pay":[53,72,106],"edu":2,"ease":"Medium","step":"Typical entry: bachelor's degree; then moderate-term on-the-job training. A proficiency exam or lab approval may be needed before working cases alone, and some states license analysts."}
 - override 19-5012 Occupational Health and Safety Technicians: {"pay":[49,62,90],"edu":0,"ease":"Easy","titles":"Construction Safety Consultant, Industrial Hygiene Technician, Safety Specialist, Safety Technician"}
 - override 21-2021 Directors, Religious Activities and Education: {"pay":[39,52,86],"edu":2,"ease":"Medium","d":{"h":0.6},"trv":"Rare","wlb":"Demanding"}
+- override 23-1021 Administrative Law Judges, Adjudicators, and Hearing Officers: {"pay":[71,118,184],"edu":3,"ease":"Hard","step":"Typical entry: doctoral or professional degree; 5 years or more of experience in a related job; then short-term on-the-job training. A law license is required; federal administrative law judges must be licensed attorneys."}
 - override 23-2093 Title Examiners, Abstractors, and Searchers: {"pay":[43,59,83],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Some states require a title license, so check your state."}
 - override 25-2023 Career/Technical Education Teachers, Middle School: {"pay":[54,65,91],"edu":2,"ease":"Medium","d":{"th":0.45},"trv":"Rare","wlb":"Demanding"}
 - override 25-2051 Special Education Teachers, Preschool: {"pay":[49,65,111],"edu":2,"ease":"Medium","d":{"tr":0.2},"trv":"Some","wlb":"Mixed"}
@@ -49,10 +58,13 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 27-1021 Commercial and Industrial Designers: {"pay":[60,84,124],"edu":2,"ease":"Medium","sub":{"machines":0.74,"tech":0.42,"art":0.6,"factory":0.3}}
 - override 27-1022 Fashion Designers: {"pay":[46,81,127],"edu":2,"ease":"Medium","step":"Typical entry: bachelor's degree. A portfolio is required, and most jobs are in New York and California."}
 - override 27-1023 Floral Designers: {"pay":[31,37,48],"edu":0,"ease":"Easy","sub":{"art":0.7}}
+- override 27-2021 Athletes and Sports Competitors: {"pay":[32,67,426],"edu":0,"ease":"Hard"}
+- override 27-2023 Umpires, Referees, and Other Sports Officials: {"pay":[29,41,70],"edu":0,"ease":"Easy","wlb":"Mixed","d":{"tr":0.3},"trv":"Regular"}
 - override 27-3011 Broadcast Announcers and Radio Disc Jockeys: {"pay":[32,47,107],"edu":2,"ease":"Hard"}
 - override 27-3023 News Analysts, Reporters, and Journalists: {"pay":[41,62,121],"edu":2,"ease":"Medium","wlb":"Demanding"}
 - override 27-3042 Technical Writers: {"pay":[64,90,130],"edu":2,"ease":"Medium","titles":"Technical Writer, Documentation Specialist, Engineering Writer, Information Developer"}
 - override 27-4012 Broadcast Technicians: {"pay":[36,60,104],"edu":1,"ease":"Medium"}
+- override 27-4014 Sound Engineering Technicians: {"pay":[44,73,119],"edu":1,"ease":"Easy","d":{"tr":0.3},"trv":"Regular","wlb":"Demanding"}
 - override 27-4031 Camera Operators, Television, Video, and Film: {"pay":[45,75,121],"edu":2,"ease":"Medium","d":{"tr":0.5,"h":0.7},"trv":"Regular","wlb":"Demanding"}
 - override 29-1022 Oral and Maxillofacial Surgeons: {"pay":[205,352,526],"edu":3,"ease":"Hard"}
 - override 29-1291 Acupuncturists: {"pay":[40,55,102],"edu":3,"ease":"Hard"}
@@ -61,6 +73,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 33-1012 First-Line Supervisors of Police and Detectives: {"pay":[73,106,149],"edu":0,"ease":"Hard"}
 - override 33-1021 First-Line Supervisors of Firefighting and Prevention Workers: {"pay":[63,94,130],"edu":1,"ease":"Hard"}
 - override 33-1091 First-Line Supervisors of Security Workers: {"pay":[41,56,82],"edu":0,"ease":"Medium"}
+- override 33-2021 Fire Inspectors and Investigators: {"pay":[53,76,107],"edu":1,"ease":"Medium","step":"Typical entry: postsecondary nondegree award; 5 years or more of experience in a related job; then moderate-term on-the-job training. State certification (NFPA 1031 for inspectors, 1033 for investigators) is usually required."}
 - override 33-3011 Bailiffs: {"pay":[38,57,86],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Many sheriff's offices require a peace officer license and law enforcement experience, plus a background check, polygraph and physical test."}
 - override 33-3021 Detectives and Criminal Investigators: {"pay":[62,94,141],"edu":0,"ease":"Hard"}
 - override 33-9021 Private Detectives and Investigators: {"pay":[39,51,86],"edu":0,"ease":"Medium"}
@@ -68,24 +81,31 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 39-1013 First-Line Supervisors of Gambling Services Workers: {"pay":[46,64,80],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; less than 5 years of experience in a related job. A state or tribal gaming license is required, and most supervisors first work 1–3 years as dealers."}
 - override 39-1014 First-Line Supervisors of Entertainment and Recreation Workers, Except Gambling Services: {"pay":[37,49,71],"edu":0,"ease":"Medium"}
 - override 39-2011 Animal Trainers: {"pay":[32,40,65],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. No state license is required; the optional CPDT-KA certification needs 300 hours of training experience plus an exam."}
+- override 39-3093 Locker Room, Coatroom, and Dressing Room Attendants: {"pay":[29,36,49],"edu":0,"ease":"Easy","d":{"th":0.75},"trv":"Rare","wlb":"Mixed"}
 - override 39-4021 Funeral Attendants: {"pay":[29,36,46],"edu":0,"ease":"Easy","titles":"Funeral Assistant, Funeral Attendant, Funeral Home Assistant, Transfer Care Specialist"}
 - override 39-4031 Morticians, Undertakers, and Funeral Arrangers: {"pay":[38,55,80],"edu":1,"ease":"Medium","step":"Typical entry: associate's degree; then long-term on-the-job training. Funeral directors need a state license: usually age 21, an accredited mortuary science program, a board exam, and a 1–3 year internship."}
+- override 39-5011 Barbers: {"pay":[30,38,68],"edu":1,"ease":"Medium","d":{"en":0.6},"trv":"Rare","wlb":"Demanding","step":"Typical entry: postsecondary nondegree award. Every state requires a barber license, usually after 600–1,500+ hours of barber school and a state exam."}
 - override 41-2012 Gambling Change Persons and Booth Cashiers: {"pay":[27,36,51],"edu":0,"ease":"Easy","step":"Typical entry: no formal educational credential; then short-term on-the-job training. A state or tribal gaming license, a background check, and usually a drug test are required."}
+- override 43-3041 Gambling Cage Workers: {"pay":[32,38,47],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then short-term on-the-job training. Most states with casinos require a gaming license and background check."}
 - override 43-4011 Brokerage Clerks: {"pay":[54,66,91],"edu":0,"ease":"Easy","titles":"Registered Sales Assistant, Sales Assistant, Trading Assistant, Brokerage Clerk"}
+- override 45-2011 Agricultural Inspectors: {"pay":[40,50,72],"edu":2,"ease":"Medium","d":{"tr":0.25},"trv":"Some","wlb":"Mixed"}
 - override 45-2041 Graders and Sorters, Agricultural Products: {"pay":[32,36,41],"edu":0,"ease":"Easy","sk":["handson","safety"],"d":{"v":0.3},"trv":"Rare","wlb":"Mixed"}
 - override 45-2093 Farmworkers, Farm, Ranch, and Aquacultural Animals: {"pay":[29,37,50],"edu":0,"ease":"Easy","sk":["handson","safety","training"]}
 - override 45-4022 Logging Equipment Operators: {"pay":[40,50,68],"edu":0,"ease":"Easy","d":{"cu":0.25},"trv":"Rare","wlb":"Demanding","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Logger safety training is often expected, and a commercial driver's license (CDL) helps."}
 - override 49-9063 Musical Instrument Repairers and Tuners: {"pay":[34,46,65],"edu":1,"ease":"Easy"}
 - override 51-2011 Aircraft Structure, Surfaces, Rigging, and Systems Assemblers: {"pay":[53,65,95],"edu":0,"ease":"Easy","sk":["handson","training","teaching"]}
 - override 51-2031 Engine and Other Machine Assemblers: {"pay":[42,54,76],"edu":0,"ease":"Easy","sk":["handson"]}
+- override 51-2051 Fiberglass Laminators and Fabricators: {"pay":[38,47,59],"edu":0,"ease":"Easy","sk":["handson","safety"],"d":{"th":0.9},"trv":"Rare","wlb":"Demanding","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. A respirator fit test is usually required."}
 - override 51-3091 Food and Tobacco Roasting, Baking, and Drying Machine Operators and Tenders: {"pay":[35,45,57],"edu":0,"ease":"Easy","d":{"pr":0.15,"cu":0.25},"trv":"Rare","wlb":"Demanding"}
 - override 51-3093 Food Cooking Machine Operators and Tenders: {"pay":[34,42,51],"edu":0,"ease":"Easy","d":{"au":0.4},"trv":"Rare","wlb":"Mixed"}
 - override 51-4034 Lathe and Turning Machine Tool Setters, Operators, and Tenders, Metal and Plastic: {"pay":[40,51,65],"edu":0,"ease":"Easy","d":{"cu":0.25,"pr":0.2},"trv":"Rare","wlb":"Demanding"}
 - override 51-4122 Welding, Soldering, and Brazing Machine Setters, Operators, and Tenders: {"pay":[39,48,62],"edu":0,"ease":"Easy","titles":"Robotic Welding Operator, Spot Welder, Welding Machine Operator, Machine Operator"}
 - override 51-4193 Plating Machine Setters, Operators, and Tenders, Metal and Plastic: {"pay":[36,44,55],"edu":0,"ease":"Easy","sk":["handson","safety","training","operations"]}
 - override 51-5113 Print Binding and Finishing Workers: {"pay":[35,42,54],"edu":0,"ease":"Easy","sub":{"factory":0.7}}
+- override 51-6052 Tailors, Dressmakers, and Custom Sewers: {"pay":[33,42,57],"edu":0,"ease":"Easy","d":{"en":0.35},"trv":"Rare","wlb":"Mixed"}
 - override 51-6064 Textile Winding, Twisting, and Drawing Out Machine Setters, Operators, and Tenders: {"pay":[34,39,46],"edu":0,"ease":"Easy","d":{"v":0.3},"trv":"Rare","wlb":"Mixed"}
 - override 51-6093 Upholsterers: {"pay":[35,46,59],"edu":0,"ease":"Easy","d":{"pr":0.15},"trv":"Rare","wlb":"Mixed"}
+- override 51-7021 Furniture Finishers: {"pay":[35,45,55],"edu":0,"ease":"Easy","d":{"v":0.55},"trv":"Rare","wlb":"Mixed"}
 - override 51-8013 Power Plant Operators: {"pay":[71,102,126],"edu":0,"ease":"Medium"}
 - override 51-8091 Chemical Plant and System Operators: {"pay":[54,78,105],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Employers often want 2–3 years of industrial or military experience or a process technology degree, plus a TWIC security card."}
 - override 51-8092 Gas Plant Operators: {"pay":[69,88,108],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; then long-term on-the-job training. Employers often give aptitude tests, and most plants run rotating 12-hour day and night shifts."}
@@ -94,10 +114,12 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 51-9071 Jewelers and Precious Stone and Metal Workers: {"pay":[38,53,79],"edu":0,"ease":"Easy","sk":["handson","design","customer","sales"],"d":{"th":0.85},"trv":"Rare","wlb":"Demanding"}
 - override 51-9081 Dental Laboratory Technicians: {"pay":[39,50,70],"edu":0,"ease":"Easy","sk":["handson","healthcare","training","pm","teaching","customer"]}
 - override 51-9141 Semiconductor Processing Technicians: {"pay":[42,51,74],"edu":0,"ease":"Easy","d":{"h":0.7},"trv":"Rare","wlb":"Demanding"}
+- override 51-9192 Cleaning, Washing, and Metal Pickling Equipment Operators and Tenders: {"pay":[36,44,54],"edu":0,"ease":"Easy","d":{"v":0.4},"trv":"Rare","wlb":"Mixed"}
 - override 51-9195 Molders, Shapers, and Casters, Except Metal and Plastic: {"pay":[38,46,57],"edu":0,"ease":"Easy","sk":["handson","safety","training"],"sub":{"factory":0.7}}
 - override 51-9197 Tire Builders: {"pay":[44,57,70],"edu":0,"ease":"Easy","titles":"Green Tire Builder, Retread Technician, Tire Builder, Tire Retreader","d":{"h":0.7},"trv":"Rare","wlb":"Demanding"}
 - override 53-2012 Commercial Pilots: {"pay":[72,123,229],"edu":1,"ease":"Hard"}
 - override 53-2021 Air Traffic Controllers: {"pay":[91,148,203],"edu":1,"ease":"Hard","d":{"h":0.75},"trv":"Rare","wlb":"Demanding","step":"Typical entry: associate's degree; then long-term on-the-job training. Applicants must be U.S. citizens, apply before age 31, pass the ATSA aptitude test, a medical exam and a security check, and finish the FAA Academy; controllers must retire at 56."}
+- override 53-2022 Airfield Operations Specialists: {"pay":[39,57,90],"edu":0,"ease":"Easy","d":{"th":0.7},"trv":"Rare","wlb":"Demanding","step":"Typical entry: high school diploma or equivalent; then long-term on-the-job training. A TSA background check is required, and many airports prefer an aviation degree."}
 - override 53-3054 Taxi Drivers: {"pay":[36,42,68],"edu":0,"ease":"Easy","titles":"Taxi Driver, Cab Driver, Rideshare Driver, Uber or Lyft Driver"}
 - override 53-4011 Locomotive Engineers: {"pay":[68,81,101],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; less than 5 years of experience in a related job; then moderate-term on-the-job training. Most start as railroad conductors."}
 - override 53-5011 Sailors and Marine Oilers: {"pay":[38,52,76],"edu":0,"ease":"Medium"}
