@@ -91,6 +91,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 39-1013 First-Line Supervisors of Gambling Services Workers: {"pay":[46,64,80],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; less than 5 years of experience in a related job. A state or tribal gaming license is required, and most supervisors first work 1–3 years as dealers."}
 - override 39-1014 First-Line Supervisors of Entertainment and Recreation Workers, Except Gambling Services: {"pay":[37,49,71],"edu":0,"ease":"Medium"}
 - override 39-2011 Animal Trainers: {"pay":[32,40,65],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. No state license is required; the optional CPDT-KA certification needs 300 hours of training experience plus an exam."}
+- override 39-3012 Gambling and Sports Book Writers and Runners: {"pay":[25,35,47],"edu":0,"ease":"Easy","titles":"Casino Floor Runner, Keno Runner, Racebook Writer, Sportsbook Writer"}
 - override 39-3093 Locker Room, Coatroom, and Dressing Room Attendants: {"pay":[29,36,49],"edu":0,"ease":"Easy","d":{"th":0.75},"trv":"Rare","wlb":"Mixed"}
 - override 39-4021 Funeral Attendants: {"pay":[29,36,46],"edu":0,"ease":"Easy","titles":"Funeral Assistant, Funeral Attendant, Funeral Home Assistant, Transfer Care Specialist"}
 - override 39-4031 Morticians, Undertakers, and Funeral Arrangers: {"pay":[38,55,80],"edu":1,"ease":"Medium","step":"Typical entry: associate's degree; then long-term on-the-job training. Funeral directors need a state license: usually age 21, an accredited mortuary science program, a board exam, and a 1–3 year internship."}
@@ -108,14 +109,17 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 51-2051 Fiberglass Laminators and Fabricators: {"pay":[38,47,59],"edu":0,"ease":"Easy","sk":["handson","safety"],"d":{"th":0.9},"trv":"Rare","wlb":"Demanding","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. A respirator fit test is usually required."}
 - override 51-3091 Food and Tobacco Roasting, Baking, and Drying Machine Operators and Tenders: {"pay":[35,45,57],"edu":0,"ease":"Easy","d":{"pr":0.15,"cu":0.25},"trv":"Rare","wlb":"Demanding"}
 - override 51-3093 Food Cooking Machine Operators and Tenders: {"pay":[34,42,51],"edu":0,"ease":"Easy","d":{"au":0.4},"trv":"Rare","wlb":"Mixed"}
+- override 51-4022 Forging Machine Setters, Operators, and Tenders, Metal and Plastic: {"pay":[40,49,64],"edu":0,"ease":"Easy","titles":"Forge Operator, Forge Press Operator, Hammer Operator, Process Technician (Process Tech)"}
 - override 51-4034 Lathe and Turning Machine Tool Setters, Operators, and Tenders, Metal and Plastic: {"pay":[40,51,65],"edu":0,"ease":"Easy","d":{"cu":0.25,"pr":0.2},"trv":"Rare","wlb":"Demanding"}
 - override 51-4122 Welding, Soldering, and Brazing Machine Setters, Operators, and Tenders: {"pay":[39,48,62],"edu":0,"ease":"Easy","titles":"Robotic Welding Operator, Spot Welder, Welding Machine Operator, Machine Operator"}
 - override 51-4193 Plating Machine Setters, Operators, and Tenders, Metal and Plastic: {"pay":[36,44,55],"edu":0,"ease":"Easy","sk":["handson","safety","training","operations"]}
 - override 51-5113 Print Binding and Finishing Workers: {"pay":[35,42,54],"edu":0,"ease":"Easy","sub":{"factory":0.7}}
 - override 51-6052 Tailors, Dressmakers, and Custom Sewers: {"pay":[33,42,57],"edu":0,"ease":"Easy","d":{"en":0.35},"trv":"Rare","wlb":"Mixed"}
+- override 51-6062 Textile Cutting Machine Setters, Operators, and Tenders: {"pay":[31,39,47],"edu":0,"ease":"Easy","sk":["handson","safety","training"]}
 - override 51-6064 Textile Winding, Twisting, and Drawing Out Machine Setters, Operators, and Tenders: {"pay":[34,39,46],"edu":0,"ease":"Easy","d":{"v":0.3},"trv":"Rare","wlb":"Mixed"}
 - override 51-6093 Upholsterers: {"pay":[35,46,59],"edu":0,"ease":"Easy","d":{"pr":0.15},"trv":"Rare","wlb":"Mixed"}
 - override 51-7021 Furniture Finishers: {"pay":[35,45,55],"edu":0,"ease":"Easy","d":{"v":0.55},"trv":"Rare","wlb":"Mixed"}
+- override 51-8012 Power Distributors and Dispatchers: {"pay":[81,107,143],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; then long-term on-the-job training. Operators whose work can affect the power grid must pass a NERC System Operator Certification exam."}
 - override 51-8013 Power Plant Operators: {"pay":[71,102,126],"edu":0,"ease":"Medium"}
 - override 51-8091 Chemical Plant and System Operators: {"pay":[54,78,105],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Employers often want 2–3 years of industrial or military experience or a process technology degree, plus a TWIC security card."}
 - override 51-8092 Gas Plant Operators: {"pay":[69,88,108],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; then long-term on-the-job training. Employers often give aptitude tests, and most plants run rotating 12-hour day and night shifts."}
@@ -240,3 +244,4 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - General Internal Medicine Physicians: median $257k, code ISR, edu 3
 - Prosthodontists: median $311k, code RIS, edu 3
 - Neurologists: median $249k, code ISR, edu 3
+- override 53-7121 Tank Car, Truck, and Ship Loaders: {"pay":[43,59,77],"edu":0,"ease":"Easy","titles":"Loader Operator, Rail Car Loader, Tank Car Loader, Truck Loader"}
