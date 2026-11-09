@@ -727,6 +727,17 @@ const OVERRIDES = {
   "33-9011": { stepNote: "Training and certification rules vary by state." },
   // Medical appliance technicians: Certified Orthotist and Prosthetist are clinician jobs.
   "51-9082": { titles: "Central Fabrication Technician, Orthotic Technician (Orthotic Tech), Prosthetic Technician (Prosthetic Tech)", stepNote: "ABC technician certification is optional: an accredited program, or a high school diploma plus 2 years of supervised bench work, then an exam." },
+  // --- From the research batch of 2026-11-09 (PR #55) ---
+  // Power dispatchers: several years of on-the-job training, and grid operators need NERC certification (BLS).
+  "51-8012": { ease: "Medium", stepNote: "Operators whose work can affect the power grid must pass a NERC System Operator Certification exam." },
+  // Loaders: barge tankermen need a Coast Guard credential, which this job's training level doesn't cover.
+  "53-7121": { titles: "Loader Operator, Rail Car Loader, Tank Car Loader, Truck Loader" },
+  // Forging operators: craft blacksmithing is a different job.
+  "51-4022": { titles: "Forge Operator, Forge Press Operator, Hammer Operator, Process Technician (Process Tech)" },
+  // Sports book writers and runners: "Casino Attendant" is much broader than this job.
+  "39-3012": { titles: "Casino Floor Runner, Keno Runner, Racebook Writer, Sportsbook Writer" },
+  // Textile cutting machine operators: skill list was empty.
+  "51-6062": { sk: ["handson", "safety", "training"] },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
