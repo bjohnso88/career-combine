@@ -703,6 +703,30 @@ const OVERRIDES = {
   "27-2021": { ease: "Hard" },
   "23-1021": { stepNote: "A law license is required; federal administrative law judges must be licensed attorneys." },
   "43-3041": { stepNote: "Most states with casinos require a gaming license and background check." },
+  // --- From the research batch of 2026-11-06 (PR #53) ---
+  // Court reporters: about a third are freelancers who travel to depositions; school ends in 225 wpm tests.
+  "27-3092": { d: { tr: 0.25 }, ease: "Medium", stepNote: "Many states require a license or certification (state CSR or NCRA); school usually takes 2–3 years and ends with speed tests of about 225 words per minute." },
+  // Music directors: 58% work for religious organizations; BLS says only some travel.
+  "27-2041": { d: { tr: 0.2 } },
+  // Curators at large museums may travel a lot (BLS).
+  "25-4012": { d: { tr: 0.2 } },
+  // Environmental engineering technicians: remote field sites.
+  "17-3025": { d: { tr: 0.25 }, stepNote: "OSHA HAZWOPER safety training is often required." },
+  // Aerospace technicians: instrument setup, wiring and hardware tests.
+  "17-3021": { d: { th: 0.65 }, stepNote: "Defense jobs may require a security clearance, which usually means U.S. citizenship." },
+  // Adhesive bonding operators: machine tending with little presenting.
+  "51-9191": { d: { pr: 0.15 } },
+  // Auto damage appraisers: field inspections.
+  "13-1032": { d: { th: 0.45 }, stepNote: "Many states license auto damage appraisers or adjusters, and employers usually want 3–5 years of collision estimating experience." },
+  // Epidemiologists: statistical coding in R or SAS is routine.
+  "19-1041": { d: { c: 0.3 } },
+  "53-3011": { stepNote: "Employers usually require a clean driving record, often age 21+, an emergency vehicle operator course (EVOC), CPR, and a background check." },
+  "13-1011": { stepNote: "Sports agents must register with each league's players union (the NFL, for example, requires a graduate degree or years of negotiating experience, a fee and an exam); California licenses talent agencies." },
+  "53-4022": { stepNote: "Railroads require age 21+, a background check, and random drug and alcohol tests." },
+  "25-4013": { stepNote: "Conservators usually need a 2–4 year master's in conservation, and only a handful of U.S. programs exist." },
+  "33-9011": { stepNote: "Training and certification rules vary by state." },
+  // Medical appliance technicians: Certified Orthotist and Prosthetist are clinician jobs.
+  "51-9082": { titles: "Central Fabrication Technician, Orthotic Technician (Orthotic Tech), Prosthetic Technician (Prosthetic Tech)", stepNote: "ABC technician certification is optional: an accredited program, or a high school diploma plus 2 years of supervised bench work, then an exam." },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
