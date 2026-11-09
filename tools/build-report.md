@@ -148,6 +148,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 53-7011 Conveyor Operators and Tenders: {"pay":[37,42,54],"edu":0,"ease":"Easy","d":{"pr":0.1},"trv":"Rare","wlb":"Demanding"}
 - override 53-7021 Crane and Tower Operators: {"pay":[48,68,93],"edu":0,"ease":"Medium"}
 - override 53-7073 Wellhead Pumpers: {"pay":[48,70,90],"edu":0,"ease":"Easy","d":{"tr":0.4},"trv":"Regular","wlb":"Demanding","step":"Typical entry: high school diploma or equivalent; less than 5 years of experience in a related job; then moderate-term on-the-job training. A valid driver's license and a good driving record are required."}
+- override 53-7121 Tank Car, Truck, and Ship Loaders: {"pay":[43,59,77],"edu":0,"ease":"Easy","titles":"Loader Operator, Rail Car Loader, Tank Car Loader, Truck Loader"}
 
 ## Result
 - 756 careers written to careers-bls.js
@@ -244,4 +245,3 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - General Internal Medicine Physicians: median $257k, code ISR, edu 3
 - Prosthodontists: median $311k, code RIS, edu 3
 - Neurologists: median $249k, code ISR, edu 3
-- override 53-7121 Tank Car, Truck, and Ship Loaders: {"pay":[43,59,77],"edu":0,"ease":"Easy","titles":"Loader Operator, Rail Car Loader, Tank Car Loader, Truck Loader"}
