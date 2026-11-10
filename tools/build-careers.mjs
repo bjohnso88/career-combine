@@ -738,6 +738,17 @@ const OVERRIDES = {
   "39-3012": { titles: "Casino Floor Runner, Keno Runner, Racebook Writer, Sportsbook Writer" },
   // Textile cutting machine operators: skill list was empty.
   "51-6062": { sk: ["handson", "safety", "training"] },
+  // --- From the research batch of 2026-11-09 (PR #57) ---
+  // Ship engineers: Coast Guard credential plus years of sea time or a maritime academy degree (BLS).
+  "53-5031": { ease: "Medium", titles: "Ferry Engineer, Port Engineer, Towboat Engineer, Tug Boat Engineer", stepNote: "A Coast Guard Merchant Mariner Credential with an engine endorsement and a TWIC card are required; most get there through a 4-year maritime academy or years at sea (an oiler needs at least 3 years to become third engineer)." },
+  // Cooling and freezing operators: "Refrigeration Technician" usually means HVAC/R techs, a different job.
+  "51-9193": { titles: "Certified Refrigeration Operator, Freezer Operator, Freezer Person, Refrigeration Operator" },
+  // Traffic technicians: BLS's job is traffic studies; signal work is electrical and needs IMSA certification.
+  "53-6041": { titles: "Traffic Control Technician (Traffic Control Tech), Traffic Signal Technician (TST), Traffic Survey Technician (Traffic Survey Tech), Transportation Technician (Transportation Tech)", stepNote: "Traffic signal jobs usually also want electronics training and IMSA certification." },
+  // Geological technicians: O*NET Job Zone 4; oil and gas postings often want a geology degree.
+  "19-4043": { stepNote: "Many postings, especially in oil and gas, prefer a bachelor's in geology or a related science." },
+  // Archivists: a registrar is a related but different museum job.
+  "25-4011": { titles: "Archivist, Digital Archivist, Records Manager, State Archivist" },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
