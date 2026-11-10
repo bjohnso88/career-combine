@@ -51,6 +51,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 19-1041 Epidemiologists: {"pay":[66,87,126],"edu":3,"ease":"Hard","d":{"c":0.3},"trv":"Rare","wlb":"Demanding"}
 - override 19-2042 Geoscientists, Except Hydrologists and Geographers: {"pay":[67,102,170],"edu":2,"ease":"Medium","d":{"tr":0.3},"trv":"Regular","wlb":"Demanding","step":"Typical entry: bachelor's degree. About 38 states license Professional Geologists (ASBOG exams), which is needed to sign public reports."}
 - override 19-4013 Food Science Technicians: {"pay":[43,52,71],"edu":1,"ease":"Easy","d":{"th":0.55},"trv":"Some","wlb":"Demanding"}
+- override 19-4043 Geological Technicians, Except Hydrologic Technicians: {"pay":[40,53,86],"edu":1,"ease":"Medium","step":"Typical entry: associate's degree; then moderate-term on-the-job training. Many postings, especially in oil and gas, prefer a bachelor's in geology or a related science."}
 - override 19-4092 Forensic Science Technicians: {"pay":[53,72,106],"edu":2,"ease":"Medium","step":"Typical entry: bachelor's degree; then moderate-term on-the-job training. A proficiency exam or lab approval may be needed before working cases alone, and some states license analysts."}
 - override 19-5012 Occupational Health and Safety Technicians: {"pay":[49,62,90],"edu":0,"ease":"Easy","titles":"Construction Safety Consultant, Industrial Hygiene Technician, Safety Specialist, Safety Technician"}
 - override 21-2021 Directors, Religious Activities and Education: {"pay":[39,52,86],"edu":2,"ease":"Medium","d":{"h":0.6},"trv":"Rare","wlb":"Demanding"}
@@ -59,6 +60,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 25-2023 Career/Technical Education Teachers, Middle School: {"pay":[54,65,91],"edu":2,"ease":"Medium","d":{"th":0.45},"trv":"Rare","wlb":"Demanding"}
 - override 25-2051 Special Education Teachers, Preschool: {"pay":[49,65,111],"edu":2,"ease":"Medium","d":{"tr":0.2},"trv":"Some","wlb":"Mixed"}
 - override 25-3031 Substitute Teachers, Short-Term: {"pay":[31,42,60],"edu":1,"ease":"Medium"}
+- override 25-4011 Archivists: {"pay":[45,65,97],"edu":3,"ease":"Hard","titles":"Archivist, Digital Archivist, Records Manager, State Archivist"}
 - override 25-4012 Curators: {"pay":[45,63,95],"edu":3,"ease":"Hard","d":{"tr":0.2},"trv":"Some","wlb":"Demanding"}
 - override 25-4013 Museum Technicians and Conservators: {"pay":[37,51,78],"edu":2,"ease":"Hard","step":"Typical entry: bachelor's degree. Conservators usually need a 2–4 year master's in conservation, and only a handful of U.S. programs exist."}
 - override 27-1014 Special Effects Artists and Animators: {"pay":[67,102,158],"edu":2,"ease":"Hard","sk":["design","media","programming"],"d":{"c":0.35},"trv":"Rare","wlb":"Demanding"}
@@ -131,6 +133,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 51-9141 Semiconductor Processing Technicians: {"pay":[42,51,74],"edu":0,"ease":"Easy","d":{"h":0.7},"trv":"Rare","wlb":"Demanding"}
 - override 51-9191 Adhesive Bonding Machine Operators and Tenders: {"pay":[34,46,57],"edu":0,"ease":"Easy","d":{"pr":0.15},"trv":"Rare","wlb":"Demanding"}
 - override 51-9192 Cleaning, Washing, and Metal Pickling Equipment Operators and Tenders: {"pay":[36,44,54],"edu":0,"ease":"Easy","d":{"v":0.4},"trv":"Rare","wlb":"Mixed"}
+- override 51-9193 Cooling and Freezing Equipment Operators and Tenders: {"pay":[35,41,56],"edu":0,"ease":"Easy","titles":"Certified Refrigeration Operator, Freezer Operator, Freezer Person, Refrigeration Operator"}
 - override 51-9195 Molders, Shapers, and Casters, Except Metal and Plastic: {"pay":[38,46,57],"edu":0,"ease":"Easy","sk":["handson","safety","training"],"sub":{"factory":0.7}}
 - override 51-9197 Tire Builders: {"pay":[44,57,70],"edu":0,"ease":"Easy","titles":"Green Tire Builder, Retread Technician, Tire Builder, Tire Retreader","d":{"h":0.7},"trv":"Rare","wlb":"Demanding"}
 - override 53-2012 Commercial Pilots: {"pay":[72,123,229],"edu":1,"ease":"Hard"}
@@ -142,7 +145,9 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 53-4022 Railroad Brake, Signal, and Switch Operators and Locomotive Firers: {"pay":[52,69,82],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Railroads require age 21+, a background check, and random drug and alcohol tests."}
 - override 53-5011 Sailors and Marine Oilers: {"pay":[38,52,76],"edu":0,"ease":"Medium"}
 - override 53-5021 Captains, Mates, and Pilots of Water Vessels: {"pay":[56,92,149],"edu":1,"ease":"Hard"}
+- override 53-5031 Ship Engineers: {"pay":[70,110,151],"edu":1,"ease":"Medium","titles":"Ferry Engineer, Port Engineer, Towboat Engineer, Tug Boat Engineer","step":"Typical entry: postsecondary nondegree award; less than 5 years of experience in a related job. A Coast Guard Merchant Mariner Credential with an engine endorsement and a TWIC card are required; most get there through a 4-year maritime academy or years at sea (an oiler needs at least 3 years to become third engineer)."}
 - override 53-6032 Aircraft Service Attendants: {"pay":[35,40,52],"edu":0,"ease":"Easy","d":{"cu":0.3,"pr":0.2},"trv":"Rare","wlb":"Demanding"}
+- override 53-6041 Traffic Technicians: {"pay":[43,59,80],"edu":0,"ease":"Easy","titles":"Traffic Control Technician (Traffic Control Tech), Traffic Signal Technician (TST), Traffic Survey Technician (Traffic Survey Tech), Transportation Technician (Transportation Tech)","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Traffic signal jobs usually also want electronics training and IMSA certification."}
 - override 53-6051 Transportation Inspectors: {"pay":[50,92,124],"edu":0,"ease":"Medium","titles":"Aviation Safety Inspector, Marine Cargo Surveyor, Petroleum Inspector, Railroad Safety Inspector","d":{"tr":0.5},"trv":"Regular","wlb":"Demanding","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Most inspectors first spend years in the industry they inspect; FAA aviation safety inspectors, for example, need pilot or mechanic certificates and long experience."}
 - override 53-6061 Passenger Attendants: {"pay":[30,38,44],"edu":0,"ease":"Easy","d":{"pr":0.3},"trv":"Rare","wlb":"Mixed"}
 - override 53-7011 Conveyor Operators and Tenders: {"pay":[37,42,54],"edu":0,"ease":"Easy","d":{"pr":0.1},"trv":"Rare","wlb":"Demanding"}
