@@ -106,6 +106,9 @@ if (fs.existsSync(epFile)) {
       const type = String(col(row, /Occupation type/i) || "Line item");
       if (!/^\d\d-\d{4}$/.test(code) || !/line item/i.test(type)) continue;
       ep[code] = {
+        // Total jobs in the base year (the first "Employment, YYYY" column), counting self-employed
+        // workers; OEWS counts only wage and salary jobs.
+        emp: num(col(row, /^Employment, \d{4}$/i)),
         growth: num(col(row, /Employment change, percent/i)),
         openings: num(col(row, /openings/i)),
         edu: col(row, /Typical education/i) || null,
@@ -469,14 +472,16 @@ for (const soc of Object.keys(oews).sort()) {
     bls: {
       soc, title: o.title, year: OEWS_YEAR,
       pay: { p10: fmtK(o.p.p10), p25: fmtK(o.p.p25), med: fmtK(o.p.med), p75: fmtK(o.p.p75), p90: fmtK(o.p.p90) },
-      emp: o.emp, growth: e?.growth ?? null, openings: e?.openings != null ? Math.round(e.openings * 1000) : null,
+      emp: e?.emp != null ? Math.round(e.emp * 1000) : o.emp, growth: e?.growth ?? null, openings: e?.openings != null ? Math.round(e.openings * 1000) : null,
       edu: e?.edu || null, exp: e?.exp || null, ojt: e?.ojt || null,
       url: `https://www.bls.gov/oes/current/oes${soc.replace("-", "")}.htm`,
       onet: onetCode ? `https://www.onetonline.org/link/summary/${onetCode}` : null,
     },
   });
 }
-// Employment Projections report openings in thousands; growth is a percent.
+// Employment Projections report employment and openings in thousands; growth is a percent.
+// Job counts come from Employment Projections when available (they include self-employed workers
+// and match the growth figures); otherwise from OEWS.
 
 /* ---------------- reviewed overrides ----------------
    A few fingerprint values that career research (careers-research.js, same id) showed are off,
