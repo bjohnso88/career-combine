@@ -761,6 +761,19 @@ const OVERRIDES = {
   "19-4051": { titles: "Health Physics Technician (HP Tech), Nuclear Auxiliary Operator, Nuclear Equipment Operator (NEO), Radiation Protection Technician (RPT)" },
   // Forest workers: forest rangers and tree farmers usually fall under other occupations.
   "45-4011": { titles: "Forestry Support Specialist, Reforestation Worker, Tree Planter" },
+  // --- From the research batch of 2026-11-11 (PR #62) ---
+  // Drilling machine operators: CNC machinists are a separate, higher-skill occupation.
+  "51-4032": { titles: "CNC Drilling Operator (Computer Numerical Control Drilling Operator), Drill Operator, Drill Setup Operator, Machine Operator" },
+  // Desktop publishers: a publisher usually runs a publication business.
+  "43-9031": { titles: "Compositor, Computer Typesetter, Desktop Publishing Specialist, Electronic Console Display Operator" },
+  // Statistical assistants: actuarial analysts are usually entry-level actuaries with exams.
+  "43-9111": { titles: "Actuarial Assistant, Actuarial Technician (Actuarial Tech), Research Assistant, Statistical Clerk" },
+  // Door-to-door sales: summer sales teams report 50–70 hour weeks.
+  "41-9091": { wlb: "Mixed" },
+  // Choreographers: BLS says travel may be required.
+  "27-2032": { d: { tr: 0.2 } },
+  // Transit and railroad police: academy and state license; freight railroads want prior police experience.
+  "33-3052": { ease: "Medium", stepNote: "Officers must finish a police academy and hold a state peace officer license; freight railroads often want about 18 months of prior police experience." },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
