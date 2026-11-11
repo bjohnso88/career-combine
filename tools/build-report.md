@@ -70,6 +70,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 27-1023 Floral Designers: {"pay":[31,37,48],"edu":0,"ease":"Easy","sub":{"art":0.7}}
 - override 27-2021 Athletes and Sports Competitors: {"pay":[32,67,426],"edu":0,"ease":"Hard"}
 - override 27-2023 Umpires, Referees, and Other Sports Officials: {"pay":[29,41,70],"edu":0,"ease":"Easy","wlb":"Mixed","d":{"tr":0.3},"trv":"Regular"}
+- override 27-2032 Choreographers: {"pay":[38,55,107],"edu":0,"ease":"Easy","d":{"tr":0.2},"trv":"Some","wlb":"Mixed"}
 - override 27-2041 Music Directors and Composers: {"pay":[46,74,135],"edu":2,"ease":"Medium","d":{"tr":0.2},"trv":"Some","wlb":"Mixed"}
 - override 27-3011 Broadcast Announcers and Radio Disc Jockeys: {"pay":[32,47,107],"edu":2,"ease":"Hard"}
 - override 27-3023 News Analysts, Reporters, and Journalists: {"pay":[41,62,121],"edu":2,"ease":"Medium","wlb":"Demanding"}
@@ -88,6 +89,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 33-2021 Fire Inspectors and Investigators: {"pay":[53,76,107],"edu":1,"ease":"Medium","step":"Typical entry: postsecondary nondegree award; 5 years or more of experience in a related job; then moderate-term on-the-job training. State certification (NFPA 1031 for inspectors, 1033 for investigators) is usually required."}
 - override 33-3011 Bailiffs: {"pay":[38,57,86],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Many sheriff's offices require a peace officer license and law enforcement experience, plus a background check, polygraph and physical test."}
 - override 33-3021 Detectives and Criminal Investigators: {"pay":[62,94,141],"edu":0,"ease":"Hard"}
+- override 33-3052 Transit and Railroad Police: {"pay":[63,90,123],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Officers must finish a police academy and hold a state peace officer license; freight railroads often want about 18 months of prior police experience."}
 - override 33-9011 Animal Control Workers: {"pay":[35,46,63],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Training and certification rules vary by state."}
 - override 33-9021 Private Detectives and Investigators: {"pay":[39,51,86],"edu":0,"ease":"Medium"}
 - override 37-3012 Pesticide Handlers, Sprayers, and Applicators, Vegetation: {"pay":[37,46,56],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Most states require a pesticide applicator license (a core exam plus a category exam)."}
@@ -96,12 +98,17 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 39-2011 Animal Trainers: {"pay":[32,40,65],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. No state license is required; the optional CPDT-KA certification needs 300 hours of training experience plus an exam."}
 - override 39-3012 Gambling and Sports Book Writers and Runners: {"pay":[25,35,47],"edu":0,"ease":"Easy","titles":"Casino Floor Runner, Keno Runner, Racebook Writer, Sportsbook Writer"}
 - override 39-3093 Locker Room, Coatroom, and Dressing Room Attendants: {"pay":[29,36,49],"edu":0,"ease":"Easy","d":{"th":0.75},"trv":"Rare","wlb":"Mixed"}
+- override 39-4011 Embalmers: {"pay":[43,59,72],"edu":1,"ease":"Medium","step":"Typical entry: associate's degree; then long-term on-the-job training. Most states require a license: an accredited mortuary science program, the national board exam, and a 1–3 year apprenticeship."}
 - override 39-4021 Funeral Attendants: {"pay":[29,36,46],"edu":0,"ease":"Easy","titles":"Funeral Assistant, Funeral Attendant, Funeral Home Assistant, Transfer Care Specialist"}
 - override 39-4031 Morticians, Undertakers, and Funeral Arrangers: {"pay":[38,55,80],"edu":1,"ease":"Medium","step":"Typical entry: associate's degree; then long-term on-the-job training. Funeral directors need a state license: usually age 21, an accredited mortuary science program, a board exam, and a 1–3 year internship."}
 - override 39-5011 Barbers: {"pay":[30,38,68],"edu":1,"ease":"Medium","d":{"en":0.6},"trv":"Rare","wlb":"Demanding","step":"Typical entry: postsecondary nondegree award. Every state requires a barber license, usually after 600–1,500+ hours of barber school and a state exam."}
 - override 41-2012 Gambling Change Persons and Booth Cashiers: {"pay":[27,36,51],"edu":0,"ease":"Easy","step":"Typical entry: no formal educational credential; then short-term on-the-job training. A state or tribal gaming license, a background check, and usually a drug test are required."}
+- override 41-9091 Door-to-Door Sales Workers, News and Street Vendors, and Related Workers: {"pay":[34,41,49],"edu":0,"ease":"Easy","wlb":"Mixed"}
+- override 43-2021 Telephone Operators: {"pay":[34,42,57],"edu":0,"ease":"Easy","titles":"Directory Assistance Operator (Directory Assistance Op), PBX Operator, Phone Operator (Telephone Operator), TELECOM Op (Telecommunications Operator)"}
 - override 43-3041 Gambling Cage Workers: {"pay":[32,38,47],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then short-term on-the-job training. Most states with casinos require a gaming license and background check."}
 - override 43-4011 Brokerage Clerks: {"pay":[54,66,91],"edu":0,"ease":"Easy","titles":"Registered Sales Assistant, Sales Assistant, Trading Assistant, Brokerage Clerk"}
+- override 43-9031 Desktop Publishers: {"pay":[40,55,85],"edu":1,"ease":"Easy","titles":"Compositor, Computer Typesetter, Desktop Publishing Specialist, Electronic Console Display Operator"}
+- override 43-9111 Statistical Assistants: {"pay":[39,50,73],"edu":2,"ease":"Medium","titles":"Actuarial Assistant, Actuarial Technician (Actuarial Tech), Research Assistant, Statistical Clerk"}
 - override 45-2011 Agricultural Inspectors: {"pay":[40,50,72],"edu":2,"ease":"Medium","d":{"tr":0.25},"trv":"Some","wlb":"Mixed"}
 - override 45-2041 Graders and Sorters, Agricultural Products: {"pay":[32,36,41],"edu":0,"ease":"Easy","sk":["handson","safety"],"d":{"v":0.3},"trv":"Rare","wlb":"Mixed"}
 - override 45-2093 Farmworkers, Farm, Ranch, and Aquacultural Animals: {"pay":[29,37,50],"edu":0,"ease":"Easy","sk":["handson","safety","training"]}
@@ -114,6 +121,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 51-3091 Food and Tobacco Roasting, Baking, and Drying Machine Operators and Tenders: {"pay":[35,45,57],"edu":0,"ease":"Easy","d":{"pr":0.15,"cu":0.25},"trv":"Rare","wlb":"Demanding"}
 - override 51-3093 Food Cooking Machine Operators and Tenders: {"pay":[34,42,51],"edu":0,"ease":"Easy","d":{"au":0.4},"trv":"Rare","wlb":"Mixed"}
 - override 51-4022 Forging Machine Setters, Operators, and Tenders, Metal and Plastic: {"pay":[40,49,64],"edu":0,"ease":"Easy","titles":"Forge Operator, Forge Press Operator, Hammer Operator, Process Technician (Process Tech)"}
+- override 51-4032 Drilling and Boring Machine Tool Setters, Operators, and Tenders, Metal and Plastic: {"pay":[39,49,63],"edu":0,"ease":"Easy","titles":"CNC Drilling Operator (Computer Numerical Control Drilling Operator), Drill Operator, Drill Setup Operator, Machine Operator"}
 - override 51-4034 Lathe and Turning Machine Tool Setters, Operators, and Tenders, Metal and Plastic: {"pay":[40,51,65],"edu":0,"ease":"Easy","d":{"cu":0.25,"pr":0.2},"trv":"Rare","wlb":"Demanding"}
 - override 51-4122 Welding, Soldering, and Brazing Machine Setters, Operators, and Tenders: {"pay":[39,48,62],"edu":0,"ease":"Easy","titles":"Robotic Welding Operator, Spot Welder, Welding Machine Operator, Machine Operator"}
 - override 51-4193 Plating Machine Setters, Operators, and Tenders, Metal and Plastic: {"pay":[36,44,55],"edu":0,"ease":"Easy","sk":["handson","safety","training","operations"]}
@@ -145,6 +153,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 53-3011 Ambulance Drivers and Attendants, Except Emergency Medical Technicians: {"pay":[29,35,42],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Employers usually require a clean driving record, often age 21+, an emergency vehicle operator course (EVOC), CPR, and a background check."}
 - override 53-3054 Taxi Drivers: {"pay":[36,42,68],"edu":0,"ease":"Easy","titles":"Taxi Driver, Cab Driver, Rideshare Driver, Uber or Lyft Driver"}
 - override 53-4011 Locomotive Engineers: {"pay":[68,81,101],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; less than 5 years of experience in a related job; then moderate-term on-the-job training. Most start as railroad conductors."}
+- override 53-4013 Rail Yard Engineers, Dinkey Operators, and Hostlers: {"pay":[49,61,90],"edu":0,"ease":"Easy","titles":"Hostler, Rail Yard Engineer, Railcar Switcher, Yard Engineer"}
 - override 53-4022 Railroad Brake, Signal, and Switch Operators and Locomotive Firers: {"pay":[52,69,82],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Railroads require age 21+, a background check, and random drug and alcohol tests."}
 - override 53-5011 Sailors and Marine Oilers: {"pay":[38,52,76],"edu":0,"ease":"Medium"}
 - override 53-5021 Captains, Mates, and Pilots of Water Vessels: {"pay":[56,92,149],"edu":1,"ease":"Hard"}
@@ -155,6 +164,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 53-6061 Passenger Attendants: {"pay":[30,38,44],"edu":0,"ease":"Easy","d":{"pr":0.3},"trv":"Rare","wlb":"Mixed"}
 - override 53-7011 Conveyor Operators and Tenders: {"pay":[37,42,54],"edu":0,"ease":"Easy","d":{"pr":0.1},"trv":"Rare","wlb":"Demanding"}
 - override 53-7021 Crane and Tower Operators: {"pay":[48,68,93],"edu":0,"ease":"Medium"}
+- override 53-7071 Gas Compressor and Gas Pumping Station Operators: {"pay":[52,77,95],"edu":0,"ease":"Easy","titles":"Compressor Station Operator, Compressor Technician, LNG Plant Operator (Liquefied Natural Gas Plant Operator), Plant Operator"}
 - override 53-7073 Wellhead Pumpers: {"pay":[48,70,90],"edu":0,"ease":"Easy","d":{"tr":0.4},"trv":"Regular","wlb":"Demanding","step":"Typical entry: high school diploma or equivalent; less than 5 years of experience in a related job; then moderate-term on-the-job training. A valid driver's license and a good driving record are required."}
 - override 53-7121 Tank Car, Truck, and Ship Loaders: {"pay":[43,59,77],"edu":0,"ease":"Easy","titles":"Loader Operator, Rail Car Loader, Tank Car Loader, Truck Loader"}
 
