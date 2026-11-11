@@ -774,6 +774,15 @@ const OVERRIDES = {
   "27-2032": { d: { tr: 0.2 } },
   // Transit and railroad police: academy and state license; freight railroads want prior police experience.
   "33-3052": { ease: "Medium", stepNote: "Officers must finish a police academy and hold a state peace officer license; freight railroads often want about 18 months of prior police experience." },
+  // --- From the research batch of 2026-11-11 (PR #64) ---
+  // Embalmers: mortuary science degree, board exam and a 1–3 year apprenticeship.
+  "39-4011": { ease: "Medium", stepNote: "Most states require a license: an accredited mortuary science program, the national board exam, and a 1–3 year apprenticeship." },
+  // Telephone operators: 411 work is nearly gone; most jobs are hospital PBX operators.
+  "43-2021": { titles: "Directory Assistance Operator (Directory Assistance Op), PBX Operator, Phone Operator (Telephone Operator), TELECOM Op (Telecommunications Operator)" },
+  // Rail yard engineers: railroad engineers and switchmen are separate occupations.
+  "53-4013": { titles: "Hostler, Rail Yard Engineer, Railcar Switcher, Yard Engineer" },
+  // Gas compressor operators: "Filler" doesn't fit this job.
+  "53-7071": { titles: "Compressor Station Operator, Compressor Technician, LNG Plant Operator (Liquefied Natural Gas Plant Operator), Plant Operator" },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
