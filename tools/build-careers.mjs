@@ -754,6 +754,13 @@ const OVERRIDES = {
   "19-4043": { stepNote: "Many postings, especially in oil and gas, prefer a bachelor's in geology or a related science." },
   // Archivists: a registrar is a related but different museum job.
   "25-4011": { titles: "Archivist, Digital Archivist, Records Manager, State Archivist" },
+  // --- From the research batch of 2026-11-10 (PR #59) ---
+  // Reactor operators: years as a non-licensed operator, then 18–24 months of training and the NRC exam.
+  "51-8011": { ease: "Hard", stepNote: "Most first spend several years as non-licensed plant operators, then finish 18–24 months of training, a medical exam and the NRC operator exam; the license covers one plant and must be kept current." },
+  // Nuclear technicians: "Licensed Nuclear Operator" is the reactor operator job (51-8011).
+  "19-4051": { titles: "Health Physics Technician (HP Tech), Nuclear Auxiliary Operator, Nuclear Equipment Operator (NEO), Radiation Protection Technician (RPT)" },
+  // Forest workers: forest rangers and tree farmers usually fall under other occupations.
+  "45-4011": { titles: "Forestry Support Specialist, Reforestation Worker, Tree Planter" },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
