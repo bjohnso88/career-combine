@@ -52,6 +52,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 19-2042 Geoscientists, Except Hydrologists and Geographers: {"pay":[67,102,170],"edu":2,"ease":"Medium","d":{"tr":0.3},"trv":"Regular","wlb":"Demanding","step":"Typical entry: bachelor's degree. About 38 states license Professional Geologists (ASBOG exams), which is needed to sign public reports."}
 - override 19-4013 Food Science Technicians: {"pay":[43,52,71],"edu":1,"ease":"Easy","d":{"th":0.55},"trv":"Some","wlb":"Demanding"}
 - override 19-4043 Geological Technicians, Except Hydrologic Technicians: {"pay":[40,53,86],"edu":1,"ease":"Medium","step":"Typical entry: associate's degree; then moderate-term on-the-job training. Many postings, especially in oil and gas, prefer a bachelor's in geology or a related science."}
+- override 19-4051 Nuclear Technicians: {"pay":[86,110,129],"edu":1,"ease":"Easy","titles":"Health Physics Technician (HP Tech), Nuclear Auxiliary Operator, Nuclear Equipment Operator (NEO), Radiation Protection Technician (RPT)"}
 - override 19-4092 Forensic Science Technicians: {"pay":[53,72,106],"edu":2,"ease":"Medium","step":"Typical entry: bachelor's degree; then moderate-term on-the-job training. A proficiency exam or lab approval may be needed before working cases alone, and some states license analysts."}
 - override 19-5012 Occupational Health and Safety Technicians: {"pay":[49,62,90],"edu":0,"ease":"Easy","titles":"Construction Safety Consultant, Industrial Hygiene Technician, Safety Specialist, Safety Technician"}
 - override 21-2021 Directors, Religious Activities and Education: {"pay":[39,52,86],"edu":2,"ease":"Medium","d":{"h":0.6},"trv":"Rare","wlb":"Demanding"}
@@ -104,6 +105,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 45-2011 Agricultural Inspectors: {"pay":[40,50,72],"edu":2,"ease":"Medium","d":{"tr":0.25},"trv":"Some","wlb":"Mixed"}
 - override 45-2041 Graders and Sorters, Agricultural Products: {"pay":[32,36,41],"edu":0,"ease":"Easy","sk":["handson","safety"],"d":{"v":0.3},"trv":"Rare","wlb":"Mixed"}
 - override 45-2093 Farmworkers, Farm, Ranch, and Aquacultural Animals: {"pay":[29,37,50],"edu":0,"ease":"Easy","sk":["handson","safety","training"]}
+- override 45-4011 Forest and Conservation Workers: {"pay":[36,44,51],"edu":0,"ease":"Easy","titles":"Forestry Support Specialist, Reforestation Worker, Tree Planter"}
 - override 45-4022 Logging Equipment Operators: {"pay":[40,50,68],"edu":0,"ease":"Easy","d":{"cu":0.25},"trv":"Rare","wlb":"Demanding","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Logger safety training is often expected, and a commercial driver's license (CDL) helps."}
 - override 49-9063 Musical Instrument Repairers and Tuners: {"pay":[34,46,65],"edu":1,"ease":"Easy"}
 - override 51-2011 Aircraft Structure, Surfaces, Rigging, and Systems Assemblers: {"pay":[53,65,95],"edu":0,"ease":"Easy","sk":["handson","training","teaching"]}
@@ -121,6 +123,7 @@ Each trait is rescaled with a straight-line fit from O*NET's measure to the hand
 - override 51-6064 Textile Winding, Twisting, and Drawing Out Machine Setters, Operators, and Tenders: {"pay":[34,39,46],"edu":0,"ease":"Easy","d":{"v":0.3},"trv":"Rare","wlb":"Mixed"}
 - override 51-6093 Upholsterers: {"pay":[35,46,59],"edu":0,"ease":"Easy","d":{"pr":0.15},"trv":"Rare","wlb":"Mixed"}
 - override 51-7021 Furniture Finishers: {"pay":[35,45,55],"edu":0,"ease":"Easy","d":{"v":0.55},"trv":"Rare","wlb":"Mixed"}
+- override 51-8011 Nuclear Power Reactor Operators: {"pay":[104,123,140],"edu":0,"ease":"Hard","step":"Typical entry: high school diploma or equivalent; then long-term on-the-job training. Most first spend several years as non-licensed plant operators, then finish 18–24 months of training, a medical exam and the NRC operator exam; the license covers one plant and must be kept current."}
 - override 51-8012 Power Distributors and Dispatchers: {"pay":[81,107,143],"edu":0,"ease":"Medium","step":"Typical entry: high school diploma or equivalent; then long-term on-the-job training. Operators whose work can affect the power grid must pass a NERC System Operator Certification exam."}
 - override 51-8013 Power Plant Operators: {"pay":[71,102,126],"edu":0,"ease":"Medium"}
 - override 51-8091 Chemical Plant and System Operators: {"pay":[54,78,105],"edu":0,"ease":"Easy","step":"Typical entry: high school diploma or equivalent; then moderate-term on-the-job training. Employers often want 2–3 years of industrial or military experience or a process technology degree, plus a TWIC security card."}
