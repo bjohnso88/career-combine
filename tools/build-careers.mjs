@@ -783,6 +783,21 @@ const OVERRIDES = {
   "53-4013": { titles: "Hostler, Rail Yard Engineer, Railcar Switcher, Yard Engineer" },
   // Gas compressor operators: "Filler" doesn't fit this job.
   "53-7071": { titles: "Compressor Station Operator, Compressor Technician, LNG Plant Operator (Liquefied Natural Gas Plant Operator), Plant Operator" },
+  // --- From the research batch of 2026-11-11 (PR #65) ---
+  // Metal patternmakers: registered apprenticeships run about 5 years.
+  "51-4062": { ease: "Medium", stepNote: "Many learn through a registered patternmaker apprenticeship of about 5 years (Wisconsin's is 9,824 work hours plus 576 class hours)." },
+  // Wood patternmakers: same apprenticeship as metal patternmakers.
+  "51-7032": { ease: "Medium", stepNote: "Many learn through a registered patternmaker apprenticeship of about 5 years (Wisconsin's is 9,824 work hours plus 576 class hours)." },
+  // Timing device assemblers: watchmaker titles belong to Watch and Clock Repairers (49-9064).
+  "51-2061": { titles: "Calibration Specialist, Calibrator, Time Stamp Assembler" },
+  // Metal model makers: CNC machinists are a separate, much larger occupation.
+  "51-4061": { titles: "Metal Model Maker, Model Builder, Model Maker, Molding Technician (Molding Tech)" },
+  // Fabric patternmakers: "Designer" suggests fashion designers, a separate job.
+  "51-6092": { titles: "Pattern Designer, Pattern Maker, Pattern Technician, Production Pattern Maker" },
+  // Astronomers: outreach coordinators are science-communication roles.
+  "19-2011": { titles: "Astronomer, Astrophysicist, Research Astrophysicist" },
+  // Hoist and winch operators: "leadership" didn't fit.
+  "53-7041": { sk: ["handson", "safety", "training"] },
 };
 for (const c of careers) {
   const ov = OVERRIDES[c.bls.soc];
